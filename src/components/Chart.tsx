@@ -1,24 +1,24 @@
 import React from 'react';
 import { AdvancedRealTimeChart } from 'react-ts-tradingview-widgets';
 import { Pair } from '../types';
+import { useTheme } from '../context/ThemeContext';
 
 interface ChartProps {
   pair?: Pair;
 }
 
 export function Chart({ pair }: ChartProps) {
-  // Format pair symbol for TradingView (e.g., "BTC/USDC" -> "BINANCE:BTCUSDT")
-  // TradingView uses USDT pairs on Binance, not USDC
+  const { isDark } = useTheme();
   const base = pair ? pair.pair.split('/')[0] : 'BTC';
   const symbol = `BINANCE:${base}USDT`;
 
   return (
-    <section className="bg-white rounded-[16px] dream-shadow flex-grow relative overflow-hidden h-full min-h-0">
+    <section className="bg-dm-surface rounded-[16px] dream-shadow flex-grow relative overflow-hidden h-full min-h-0">
       <div className="w-full h-full">
         {/* @ts-ignore - passing favorites to override TradingView defaults */}
         <AdvancedRealTimeChart
           symbol={symbol}
-          theme="light"
+          theme={isDark ? "dark" : "light"}
           autosize
           allow_symbol_change={false}
           hide_side_toolbar={true}
