@@ -48,7 +48,7 @@ export function MobileCoinDetail({ pair, onBack, onOpenTrade }: MobileCoinDetail
 
         {/* Chart Area */}
         <div className="px-4 mb-8">
-          <div className="bg-dream-blue rounded-[32px] p-4 h-[280px] relative overflow-hidden shadow-sm">
+          <div className="bg-dream-blue rounded-2xl p-4 h-[280px] relative overflow-hidden shadow-sm">
              <div className="absolute inset-0 opacity-90">
                <Chart pair={pair} />
              </div>

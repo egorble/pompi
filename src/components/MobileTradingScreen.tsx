@@ -177,7 +177,8 @@ export function MobileTradingScreen({ pair, pairs, onSelectPair, onOpenChart, ba
               <input
                 type="range" min="1" max="100" value={leverage}
                 onChange={(e) => setLeverage(parseInt(e.target.value))}
-                className="w-full h-2 bg-dm-surface-raised rounded-lg appearance-none cursor-pointer accent-dream-blue mb-3"
+                className="w-full dream-slider text-dream-blue mb-3"
+                style={{ background: `linear-gradient(to right, color-mix(in srgb, currentColor 10%, transparent) 0%, currentColor ${leverage}%, var(--dm-surface-strong) ${leverage}%)` }}
               />
               <div className="flex justify-between text-[10px] text-dm-text3 font-bold mb-6">
                 <span>1x</span><span>25x</span><span>50x</span><span>75x</span><span>100x</span>
@@ -305,7 +306,8 @@ export function MobileTradingScreen({ pair, pairs, onSelectPair, onOpenChart, ba
             <input
               type="range" min="0" max="100" value={sliderValue}
               onChange={handleSliderChange}
-              className="w-full h-1 bg-dm-surface-strong rounded-lg appearance-none cursor-pointer accent-dream-blue"
+              className="w-full dream-slider text-dream-blue"
+              style={{ background: `linear-gradient(to right, color-mix(in srgb, currentColor 10%, transparent) 0%, currentColor ${sliderValue}%, var(--dm-surface-strong) ${sliderValue}%)` }}
             />
             <div className="flex justify-between text-[10px] font-bold text-dm-text3 mt-1">
               <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>

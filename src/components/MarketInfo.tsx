@@ -32,9 +32,9 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
   );
 
   return (
-    <section className="bg-dm-surface p-3 md:p-4 rounded-dream dream-shadow flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 shrink-0 relative z-40">
-      <div className="flex items-center gap-3 md:gap-4 relative" ref={dropdownRef}>
-        <div className="w-10 h-10 md:w-12 md:h-12 bg-dream-blue/15 rounded-full flex items-center justify-center shrink-0">
+    <section className="bg-dm-surface p-2.5 md:p-3 rounded-dream dream-shadow flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 shrink-0 relative z-40">
+      <div className="flex items-center gap-2 md:gap-3 relative" ref={dropdownRef}>
+        <div className="w-10 h-10 md:w-11 md:h-11 bg-dream-blue/15 rounded-xl flex items-center justify-center shrink-0">
           <span className="text-dream-blue font-bold text-lg md:text-xl">{pair.name.charAt(0)}</span>
         </div>
 
@@ -89,9 +89,8 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
                         setShowDropdown(false);
                         setSearchQuery('');
                       }}
-                      className={`w-full flex items-center justify-between p-2.5 rounded-xl transition-colors group ${
-                        isSelected ? 'bg-dream-blue/10 border border-dream-blue/20' : 'hover:bg-dm-surface-alt border border-transparent'
-                      }`}
+                      className={`w-full flex items-center justify-between p-2.5 rounded-xl transition-colors group ${isSelected ? 'bg-dream-blue/10 border border-dream-blue/20' : 'hover:bg-dm-surface-alt border border-transparent'
+                        }`}
                     >
                       <div className="text-left">
                         <p className="text-sm font-bold text-dm-text">{item.pair}</p>
@@ -116,7 +115,7 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
         </AnimatePresence>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 w-full lg:w-auto">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 w-full lg:w-auto">
         <div>
           <p className="text-[10px] uppercase font-bold text-dm-text3">Mark Price</p>
           <p className="font-bold text-base md:text-lg text-dm-text">{formatCurrency(pair.price)}</p>

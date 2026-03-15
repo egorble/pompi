@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ThemeProvider } from './context/ThemeContext';
 import { Navbar } from './components/Navbar';
+import { Sidebar } from './components/Sidebar';
 import { MarketInfo } from './components/MarketInfo';
 import { Chart } from './components/Chart';
 import { ExecutionPanel } from './components/ExecutionPanel';
@@ -12,6 +13,7 @@ import { MobileTradingScreen } from './components/MobileTradingScreen';
 import { MobileChartScreen } from './components/MobileChartScreen';
 import { Pair, Position } from './types';
 import { initialPairs, initialPositions } from './data';
+import { formatCurrency } from './utils';
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState<'Trade' | 'Positions' | 'Points'>('Trade');
@@ -36,8 +38,8 @@ function AppContent() {
       entryPrice: tradePrice,
       markPrice: selectedPair.price,
       liqPrice: trade.type === 'Long'
-        ? tradePrice * (1 - 1/trade.leverage)
-        : tradePrice * (1 + 1/trade.leverage),
+        ? tradePrice * (1 - 1 / trade.leverage)
+        : tradePrice * (1 + 1 / trade.leverage),
       pnl: 0,
       pnlPercent: 0,
     };
@@ -84,101 +86,110 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen lg:h-screen flex flex-col text-dm-text bg-dream-bg lg:overflow-hidden">
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        balance={balance}
-        onAddCash={handleAddCash}
-      />
+    <div className="min-h-screen lg:h-screen flex flex-row text-dm-text bg-dream-bg lg:overflow-hidden font-sans">
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      
+      <div className="flex-1 flex flex-col min-w-0">
+        <Navbar />
 
-      <main className="p-0 md:p-4 flex-1 overflow-y-auto lg:overflow-hidden relative pb-24 lg:pb-4">
-        <AnimatePresence mode="wait">
-          {activeTab === 'Trade' && (
-            <motion.div
-              key="trade"
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="h-full"
-            >
-              {/* Desktop View */}
-              <div className="hidden lg:grid grid-cols-12 gap-4 h-full">
-                <motion.div variants={itemVariants} className="col-span-7 flex flex-col gap-4 overflow-hidden">
-                  <MarketInfo
-                    pair={selectedPair}
-                    pairs={initialPairs}
-                    onSelectPair={setSelectedPair}
-                  />
-                  <Chart pair={selectedPair} />
-                </motion.div>
+        <main className="pl-0 pr-0 md:pr-4 lg:pr-6 py-0 md:py-4 lg:py-6 flex-1 overflow-y-auto lg:overflow-hidden relative pb-24 lg:pb-0">
+          <AnimatePresence mode="wait">
+            {activeTab === 'Trade' && (
+              <motion.div
+                key="trade"
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="h-full"
+              >
+                {/* Desktop View */}
+                <div className="hidden lg:flex flex-col gap-4 h-full min-h-0">
+                  <div className="grid grid-cols-12 gap-4 min-h-0 flex-1 overflow-hidden">
+                    <motion.div variants={itemVariants} className="col-span-9 flex flex-col gap-4 overflow-hidden min-h-0 h-full">
+                      <MarketInfo
+                        pair={selectedPair}
+                        pairs={initialPairs}
+                        onSelectPair={setSelectedPair}
+                      />
+                      <div className="flex gap-4 h-full min-h-0 pb-4">
+                        <div className="flex-1 flex flex-col gap-4">
+                           <Chart pair={selectedPair} />
+                        </div>
+                        <div className="w-[260px] flex-shrink-0">
+                           <OrderBook pair={selectedPair} />
+                        </div>
+                      </div>
+                    </motion.div>
 
-                <motion.div variants={itemVariants} className="col-span-2 flex flex-col gap-4 overflow-hidden">
-                  <OrderBook pair={selectedPair} />
-                </motion.div>
+                    <motion.div variants={itemVariants} className="col-span-3 flex flex-col gap-4 overflow-y-auto custom-scrollbar min-h-0 h-full pb-4 pr-2 lg:pr-0">
+                      <ExecutionPanel pair={selectedPair} onPlaceTrade={handlePlaceTrade} />
+                      <Positions
+                        positions={positions}
+                        onClose={handleClosePosition}
+                        onCloseAll={handleCloseAll}
+                      />
+                    </motion.div>
+                  </div>
+                </div>
 
-                <motion.div variants={itemVariants} className="col-span-3 flex flex-col gap-4 overflow-hidden">
-                  <ExecutionPanel pair={selectedPair} onPlaceTrade={handlePlaceTrade} />
-                </motion.div>
-              </div>
-
-              {/* Mobile View */}
-              <div className="lg:hidden h-full">
-                {showMobileChart ? (
-                  <MobileChartScreen
-                    pair={selectedPair}
-                    onBack={() => setShowMobileChart(false)}
-                  />
-                ) : (
-                  <MobileTradingScreen
-                    pair={selectedPair}
-                    pairs={initialPairs}
-                    onSelectPair={setSelectedPair}
-                    onOpenChart={() => setShowMobileChart(true)}
-                    balance={balance}
-                    onPlaceTrade={handlePlaceTrade}
-                  />
-                )}
-              </div>
-            </motion.div>
-          )}
-
-          {activeTab === 'Positions' && (
-            <motion.div
-              key="positions"
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="h-full overflow-y-auto no-scrollbar"
-            >
-              <motion.div variants={itemVariants}>
-                <Positions
-                  positions={positions}
-                  onClose={handleClosePosition}
-                  onCloseAll={handleCloseAll}
-                />
+                {/* Mobile View */}
+                <div className="lg:hidden h-full">
+                  {showMobileChart ? (
+                    <MobileChartScreen
+                      pair={selectedPair}
+                      onBack={() => setShowMobileChart(false)}
+                    />
+                  ) : (
+                    <MobileTradingScreen
+                      pair={selectedPair}
+                      pairs={initialPairs}
+                      onSelectPair={setSelectedPair}
+                      onOpenChart={() => setShowMobileChart(true)}
+                      balance={balance}
+                      onPlaceTrade={handlePlaceTrade}
+                    />
+                  )}
+                </div>
               </motion.div>
-            </motion.div>
-          )}
+            )}
 
-          {activeTab === 'Points' && (
-            <motion.div
-              key="points"
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="flex items-center justify-center h-full text-dm-text3 font-medium"
-            >
-              <motion.div variants={itemVariants}>
-                Points feature coming soon...
+            {activeTab === 'Positions' && (
+              <motion.div
+                key="positions"
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4"
+              >
+                <motion.div variants={itemVariants} className="max-w-5xl mx-auto pt-6">
+                  <Positions
+                    positions={positions}
+                    onClose={handleClosePosition}
+                    onCloseAll={handleCloseAll}
+                  />
+                </motion.div>
               </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </main>
+            )}
+
+            {activeTab === 'Points' && (
+              <motion.div
+                key="points"
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="flex items-center justify-center h-full text-dm-text3 font-medium"
+              >
+                <motion.div variants={itemVariants}>
+                  Points feature coming soon...
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </main>
+      </div>
 
       <BottomNav
         activeTab={activeTab}

@@ -26,9 +26,8 @@ export function BottomNav({ activeTab, setActiveTab, onOpenTrade }: BottomNavPro
             key={tab.id}
             whileTap={{ scale: 0.9 }}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex flex-col items-center gap-1 ${
-              isActive ? 'text-dream-blue' : 'text-dm-text3'
-            }`}
+            className={`flex flex-col items-center gap-1 ${isActive ? 'text-dream-blue' : 'text-dm-text3'
+              }`}
           >
             <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
             <span className="text-[10px] font-bold">{tab.label}</span>

@@ -2,45 +2,46 @@
 @import "tailwindcss";
 
 :root {
-  --dm-bg: #F5F5F5;
+  --dm-bg: #F4F6F8;
   --dm-surface: #FFFFFF;
   --dm-surface-alt: #F8FAFC;
   --dm-surface-raised: #F1F5F9;
   --dm-surface-strong: #E2E8F0;
-  --dm-inverse: #0F172A;
-  --dm-text: #0F172A;
+  --dm-inverse: #000000;
+  --dm-text: #0B0E14;
   --dm-text2: #64748B;
   --dm-text3: #94A3B8;
   --dm-border: #F1F5F9;
   --dm-border2: #E2E8F0;
-  --dm-shadow-color: rgba(0, 0, 0, 0.06);
-  --dm-glass-bg: rgba(255, 255, 255, 0.9);
-  --dm-glass-border: rgba(0, 0, 0, 0.06);
+  --dm-shadow-color: rgba(0, 0, 0, 0.04);
+  --dm-glass-bg: rgba(255, 255, 255, 0.85);
+  --dm-glass-border: rgba(0, 0, 0, 0.04);
 }
 
 .dark {
   --dm-bg: #0B0E14;
   --dm-surface: #13161F;
-  --dm-surface-alt: #191D29;
-  --dm-surface-raised: #222638;
-  --dm-surface-strong: #2D3148;
-  --dm-inverse: #E2E8F0;
-  --dm-text: #E2E8F0;
+  --dm-surface-alt: #1A1E29;
+  --dm-surface-raised: #222736;
+  --dm-surface-strong: #2D3346;
+  --dm-inverse: #D4FF00;
+  --dm-text: #F8FAFC;
   --dm-text2: #94A3B8;
   --dm-text3: #4B5563;
   --dm-border: #1E2235;
-  --dm-border2: #2D3148;
+  --dm-border2: #2D3346;
   --dm-shadow-color: rgba(0, 0, 0, 0.3);
-  --dm-glass-bg: rgba(19, 22, 31, 0.9);
-  --dm-glass-border: rgba(255, 255, 255, 0.06);
+  --dm-glass-bg: rgba(19, 22, 31, 0.85);
+  --dm-glass-border: rgba(255, 255, 255, 0.05);
 }
 
 @theme {
-  --color-dream-blue: #38BDF8;
-  --color-dream-green: #16A34A;
-  --color-dream-red: #EF4444;
+  --color-brand-accent: #82B1FF; /* Distinct Pastel blue for brand */
+  --color-dream-blue: #82B1FF; /* Distinct Pastel Blue */
+  --color-dream-green: #0ECB81; /* Standard positive trading green */
+  --color-dream-red: #F6465D; /* Standard negative trading red */
   --color-dream-bg: var(--dm-bg);
-  --color-dream-card: var(--dm-surface-alt);
+  --color-dream-card: var(--dm-surface); /* Make default cards solid surface */
   --color-dm-surface: var(--dm-surface);
   --color-dm-surface-alt: var(--dm-surface-alt);
   --color-dm-surface-raised: var(--dm-surface-raised);
@@ -51,14 +52,15 @@
   --color-dm-text3: var(--dm-text3);
   --color-dm-border: var(--dm-border);
   --color-dm-border2: var(--dm-border2);
-  --radius-dream: 24px;
+  --radius-dream: 16px;
   --font-sans: 'Inter', sans-serif;
 }
 
 @layer utilities {
   .dream-shadow {
-    box-shadow: 0 4px 16px 0 var(--dm-shadow-color);
+    box-shadow: 0 8px 32px -4px var(--dm-shadow-color), 0 4px 16px -4px var(--dm-shadow-color);
   }
+
   .glass-panel {
     background: var(--dm-glass-bg);
     backdrop-filter: blur(24px);
@@ -66,31 +68,40 @@
     border: 1px solid var(--dm-glass-border);
     box-shadow: 0 4px 16px 0 var(--dm-shadow-color);
   }
+
   .neon-button-green {
-    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+    box-shadow: 0 4px 12px rgba(14, 203, 129, 0.3);
   }
+
   .neon-button-green:hover {
-    box-shadow: 0 6px 20px rgba(22, 163, 74, 0.4);
+    box-shadow: 0 6px 20px rgba(14, 203, 129, 0.4);
   }
+
   .neon-button-red {
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    box-shadow: 0 4px 12px rgba(246, 70, 93, 0.3);
   }
+
   .neon-button-red:hover {
-    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    box-shadow: 0 6px 20px rgba(246, 70, 93, 0.4);
   }
+
   .custom-scrollbar::-webkit-scrollbar {
     width: 4px;
   }
+
   .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
   }
+
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: var(--dm-text3);
     border-radius: 10px;
   }
+
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -111,5 +122,37 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 input[type="number"] {
+  appearance: textfield;
   -moz-appearance: textfield;
+}
+
+/* Custom Sliders */
+.dream-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px; /* Slightly thicker than 2px to be visible but still thin */
+  outline: none;
+  border-radius: 2px;
+  background: var(--dm-surface-strong); /* Default background, overridden by inline style */
+}
+
+.dream-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: currentColor; /* Inherits text color */
+  cursor: pointer;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.dream-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: currentColor;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 6px currentColor;
 }

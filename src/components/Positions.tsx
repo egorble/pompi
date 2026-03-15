@@ -14,7 +14,7 @@ const cardVariants = {
   show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
 };
 
-function PositionCard({ pos, onClose }: { pos: Position; onClose: (id: string) => void }) {
+function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: (id: string) => void }) {
   const isPositive = pos.pnl >= 0;
   const assetSymbol = pos.pair.split('-')[0];
   const [expanded, setExpanded] = useState<false | 'tpsl' | 'close'>(false);
@@ -45,42 +45,41 @@ function PositionCard({ pos, onClose }: { pos: Position; onClose: (id: string) =
         {/* Header row */}
         <div className="flex items-center justify-between mb-2.5">
           <div className="flex items-center gap-2">
-            <span className="font-black text-[15px] text-dm-text">{pos.pair}</span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded-md font-bold bg-dm-surface-raised text-dm-text2">{pos.leverage}x</span>
-            <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold ${
-              pos.type === 'Long' ? 'bg-dream-green/10 text-dream-green' : 'bg-dream-red/10 text-dream-red'
-            }`}>{pos.type}</span>
+            <span className="font-black text-[13px] sm:text-[14px] text-dm-text truncate max-w-[80px] sm:max-w-none">{pos.pair}</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded-md font-bold bg-dm-surface-raised text-dm-text2 shrink-0">{pos.leverage}x</span>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold shrink-0 ${pos.type === 'Long' ? 'bg-dream-green/10 text-dream-green' : 'bg-dream-red/10 text-dream-red'
+              }`}>{pos.type}</span>
           </div>
           <span className="text-[11px] font-bold text-dm-text3">{pos.size.toFixed(4)} {assetSymbol}</span>
         </div>
 
         {/* PnL row */}
         <div className="flex items-baseline justify-between mb-3">
-          <span className={`text-2xl font-black tracking-tight ${isPositive ? 'text-dream-green' : 'text-dream-red'}`}>
+          <span className={`text-xl sm:text-2xl font-black tracking-tight ${isPositive ? 'text-dream-green' : 'text-dream-red'} truncate pr-2`}>
             {isPositive ? '+' : ''}{formatCurrency(pos.pnl)}
           </span>
-          <span className={`text-[13px] font-bold ${isPositive ? 'text-dream-green' : 'text-dream-red'}`}>
+          <span className={`text-[12px] font-bold ${isPositive ? 'text-dream-green' : 'text-dream-red'} shrink-0`}>
             {formatPercent(roi)}
           </span>
         </div>
 
         {/* Info grid */}
-        <div className="grid grid-cols-4 gap-x-3 gap-y-2 mb-3">
+        <div className="grid grid-cols-4 gap-1 mb-3">
           <div>
-            <p className="text-[9px] font-semibold text-dm-text3 uppercase tracking-wide">Entry</p>
-            <p className="text-[12px] font-bold text-dm-text mt-0.5">{formatCurrency(pos.entryPrice)}</p>
+            <p className="text-[8px] font-semibold text-dm-text3 uppercase tracking-wide">Entry</p>
+            <p className="text-[10px] sm:text-[11px] font-bold text-dm-text mt-0.5 whitespace-nowrap">{formatCurrency(pos.entryPrice)}</p>
           </div>
           <div>
-            <p className="text-[9px] font-semibold text-dm-text3 uppercase tracking-wide">Mark</p>
-            <p className="text-[12px] font-bold text-dm-text mt-0.5">{formatCurrency(pos.markPrice)}</p>
+            <p className="text-[8px] font-semibold text-dm-text3 uppercase tracking-wide">Mark</p>
+            <p className="text-[10px] sm:text-[11px] font-bold text-dm-text mt-0.5 whitespace-nowrap">{formatCurrency(pos.markPrice)}</p>
           </div>
           <div>
-            <p className="text-[9px] font-semibold text-dm-text3 uppercase tracking-wide">Liq.</p>
-            <p className="text-[12px] font-bold text-orange-500 mt-0.5">{formatCurrency(pos.liqPrice)}</p>
+            <p className="text-[8px] font-semibold text-dm-text3 uppercase tracking-wide">Liq.</p>
+            <p className="text-[10px] sm:text-[11px] font-bold text-orange-500 mt-0.5 whitespace-nowrap">{formatCurrency(pos.liqPrice)}</p>
           </div>
           <div className="text-right">
-            <p className="text-[9px] font-semibold text-dm-text3 uppercase tracking-wide">Margin</p>
-            <p className="text-[12px] font-bold text-dm-text mt-0.5">{formatCurrency(margin)}</p>
+            <p className="text-[8px] font-semibold text-dm-text3 uppercase tracking-wide">Margin</p>
+            <p className="text-[10px] sm:text-[11px] font-bold text-dm-text mt-0.5 whitespace-nowrap">{formatCurrency(margin)}</p>
           </div>
         </div>
 
@@ -155,17 +154,15 @@ function PositionCard({ pos, onClose }: { pos: Position; onClose: (id: string) =
                 />
                 <button
                   onClick={() => setExpanded('tpsl')}
-                  className={`relative z-10 flex-1 py-2 rounded-lg text-[11px] font-bold transition-colors ${
-                    expanded === 'tpsl' ? 'text-dm-text' : 'text-dm-text3 hover:text-dm-text2'
-                  }`}
+                  className={`relative z-10 flex-1 py-2 rounded-lg text-[11px] font-bold transition-colors ${expanded === 'tpsl' ? 'text-dm-text' : 'text-dm-text3 hover:text-dm-text2'
+                    }`}
                 >
                   TP / SL
                 </button>
                 <button
                   onClick={() => setExpanded('close')}
-                  className={`relative z-10 flex-1 py-2 rounded-lg text-[11px] font-bold transition-colors ${
-                    expanded === 'close' ? 'text-dm-text' : 'text-dm-text3 hover:text-dm-text2'
-                  }`}
+                  className={`relative z-10 flex-1 py-2 rounded-lg text-[11px] font-bold transition-colors ${expanded === 'close' ? 'text-dm-text' : 'text-dm-text3 hover:text-dm-text2'
+                    }`}
                 >
                   Close
                 </button>
@@ -297,9 +294,8 @@ function PositionCard({ pos, onClose }: { pos: Position; onClose: (id: string) =
                         <button
                           key={t}
                           onClick={() => setCloseType(t)}
-                          className={`relative z-10 flex-1 py-2 rounded-lg text-[11px] font-bold transition-colors ${
-                            closeType === t ? 'text-dm-text' : 'text-dm-text3 hover:text-dm-text2'
-                          }`}
+                          className={`relative z-10 flex-1 py-2 rounded-lg text-[11px] font-bold transition-colors ${closeType === t ? 'text-dm-text' : 'text-dm-text3 hover:text-dm-text2'
+                            }`}
                         >
                           {t}
                         </button>
@@ -358,11 +354,10 @@ function PositionCard({ pos, onClose }: { pos: Position; onClose: (id: string) =
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => setClosePercent(v)}
-                            className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold transition-colors ${
-                              closePercent === v
-                                ? 'bg-dream-blue text-white'
-                                : 'bg-dm-surface-alt border border-dm-border text-dm-text3 hover:text-dm-text hover:border-dm-border2'
-                            }`}
+                            className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold transition-colors ${closePercent === v
+                              ? 'bg-dream-blue text-white'
+                              : 'bg-dm-surface-alt border border-dm-border text-dm-text3 hover:text-dm-text hover:border-dm-border2'
+                              }`}
                           >
                             {v}%
                           </motion.button>
@@ -387,9 +382,8 @@ function PositionCard({ pos, onClose }: { pos: Position; onClose: (id: string) =
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => onClose(pos.id)}
-                      className={`w-full font-bold py-3 rounded-xl text-[13px] uppercase tracking-wide text-white ${
-                        pos.type === 'Long' ? 'bg-dream-red hover:bg-dream-red/90' : 'bg-dream-green hover:bg-dream-green/90'
-                      } transition-colors`}
+                      className={`w-full font-bold py-3 rounded-xl text-[13px] uppercase tracking-wide text-white ${pos.type === 'Long' ? 'bg-dream-red hover:bg-dream-red/90' : 'bg-dream-green hover:bg-dream-green/90'
+                        } transition-colors`}
                     >
                       Close {pos.type} — {closeType}{closePercent < 100 ? ` (${closePercent}%)` : ''}
                     </motion.button>
@@ -448,35 +442,11 @@ export function Positions({ positions, onClose, onCloseAll }: PositionsProps) {
         )}
       </div>
 
-      {/* Two independent columns so expanding one card doesn't affect the other column */}
-      <div className="hidden md:flex gap-3">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-          className="flex-1 flex flex-col gap-3"
-        >
-          {positions.filter((_, i) => i % 2 === 0).map((pos) => (
-            <PositionCard key={pos.id} pos={pos} onClose={onClose} />
-          ))}
-        </motion.div>
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-          className="flex-1 flex flex-col gap-3"
-        >
-          {positions.filter((_, i) => i % 2 === 1).map((pos) => (
-            <PositionCard key={pos.id} pos={pos} onClose={onClose} />
-          ))}
-        </motion.div>
-      </div>
-      {/* Single column on mobile */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="flex flex-col gap-3 md:hidden"
+        className="flex flex-col gap-3"
       >
         {positions.map((pos) => (
           <PositionCard key={pos.id} pos={pos} onClose={onClose} />

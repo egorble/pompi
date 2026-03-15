@@ -13,8 +13,8 @@ export function Chart({ pair }: ChartProps) {
   const symbol = `BINANCE:${base}USDT`;
 
   return (
-    <section className="bg-dm-surface rounded-[16px] dream-shadow flex-grow relative overflow-hidden h-full min-h-0">
-      <div className="w-full h-full">
+    <section className="bg-dm-surface rounded-2xl dream-shadow flex-grow relative overflow-hidden h-full min-h-0">
+      <div className="absolute -top-[2px] -right-[2px] -bottom-[2px] -left-[2px]">
         {/* @ts-ignore - passing favorites to override TradingView defaults */}
         <AdvancedRealTimeChart
           symbol={symbol}

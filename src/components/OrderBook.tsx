@@ -51,7 +51,7 @@ export function OrderBook({ pair }: OrderBookProps) {
   };
 
   return (
-    <section className="bg-dm-surface rounded-[24px] dream-shadow flex-grow overflow-hidden flex flex-col min-h-[400px]">
+    <section className="bg-dm-surface rounded-2xl dream-shadow flex-grow overflow-hidden flex flex-col min-h-[400px]">
       {/* Tabs */}
       <div className="flex items-center justify-between px-4 pt-3 border-b border-dm-border shrink-0">
         <div className="flex gap-4">
@@ -59,9 +59,8 @@ export function OrderBook({ pair }: OrderBookProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setActiveTab('ORDER_BOOK')}
-            className={`pb-3 text-xs font-bold transition-colors relative ${
-              activeTab === 'ORDER_BOOK' ? 'text-dream-blue' : 'text-dm-text3 hover:text-dm-text2'
-            }`}
+            className={`pb-3 text-xs font-bold transition-colors relative ${activeTab === 'ORDER_BOOK' ? 'text-dream-blue' : 'text-dm-text3 hover:text-dm-text2'
+              }`}
           >
             ORDER BOOK
             {activeTab === 'ORDER_BOOK' && (
@@ -72,9 +71,8 @@ export function OrderBook({ pair }: OrderBookProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setActiveTab('TRADE_HISTORY')}
-            className={`pb-3 text-xs font-bold transition-colors relative ${
-              activeTab === 'TRADE_HISTORY' ? 'text-dream-blue' : 'text-dm-text3 hover:text-dm-text2'
-            }`}
+            className={`pb-3 text-xs font-bold transition-colors relative ${activeTab === 'TRADE_HISTORY' ? 'text-dream-blue' : 'text-dm-text3 hover:text-dm-text2'
+              }`}
           >
             TRADE HISTORY
             {activeTab === 'TRADE_HISTORY' && (

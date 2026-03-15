@@ -37,8 +37,8 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
   const orderPrice = orderType === 'Limit' ? (parseFloat(priceStr) || pair.price) : pair.price;
 
   const liqPrice = side === 'Long'
-    ? orderPrice * (1 - 1/leverage)
-    : orderPrice * (1 + 1/leverage);
+    ? orderPrice * (1 - 1 / leverage)
+    : orderPrice * (1 + 1 / leverage);
   const executionFee = sizeUsd * 0.0012;
 
   const handleTrade = () => {
@@ -59,10 +59,10 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
   };
 
   return (
-    <section className="bg-dm-surface p-3 md:p-4 rounded-[24px] dream-shadow shrink-0">
+    <section className="bg-dm-surface p-2.5 md:p-3 rounded-2xl dream-shadow shrink-0">
       {/* Top Row: Margin, Leverage, Mode */}
       <div ref={leverageRef}>
-        <div className="flex gap-2 mb-4">
+        <div className="flex gap-2 mb-3">
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.95 }}
@@ -76,11 +76,10 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowLeverageDropdown(!showLeverageDropdown)}
-            className={`flex-1 py-1.5 px-2 border rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1 ${
-              showLeverageDropdown
-                ? 'bg-dm-surface border-dm-border2 text-dream-blue'
-                : 'bg-dm-surface hover:bg-dm-surface-alt border-dm-border2 text-dream-blue'
-            }`}
+            className={`flex-1 py-1.5 px-2 border rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1 ${showLeverageDropdown
+              ? 'bg-dm-surface border-dm-border2 text-dream-blue'
+              : 'bg-dm-surface hover:bg-dm-surface-alt border-dm-border2 text-dream-blue'
+              }`}
           >
             {leverage}x
           </motion.button>
@@ -94,7 +93,7 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
               exit={{ height: 0, opacity: 0, marginBottom: 0 }}
               className="overflow-hidden"
             >
-              <div className="p-4 bg-dm-surface border border-dm-border2 rounded-2xl shadow-sm">
+              <div className="p-4 bg-dm-surface border border-dm-border2 rounded-xl shadow-sm">
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-sm font-bold text-dm-text2">Leverage</span>
                   <span className="text-sm font-extrabold text-dream-blue">{leverage}x</span>
@@ -105,7 +104,8 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
                   max="100"
                   value={leverage}
                   onChange={(e) => setLeverage(parseInt(e.target.value))}
-                  className="w-full accent-dream-blue h-2 bg-dm-surface-raised rounded-lg appearance-none cursor-pointer mb-3"
+                  className="w-full dream-slider text-dream-blue mb-3"
+                  style={{ background: `linear-gradient(to right, color-mix(in srgb, currentColor 10%, transparent) 0%, currentColor ${leverage}%, var(--dm-surface-strong) ${leverage}%)` }}
                 />
                 <div className="flex justify-between text-xs text-dm-text3 font-bold">
                   <span>1x</span>
@@ -119,9 +119,9 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
       </div>
 
       {/* Long / Short Toggle with Animation */}
-      <div className="relative flex p-1 bg-dm-surface rounded-2xl mb-4 border border-dm-border2">
+      <div className="relative flex p-1 bg-dm-surface rounded-xl mb-3 border border-dm-border2">
         <motion.div
-          className="absolute inset-y-1 w-[calc(50%-4px)] z-0 rounded-xl shadow-sm"
+          className="absolute inset-y-1 w-[calc(50%-4px)] z-0 rounded-lg shadow-sm"
           animate={{
             left: side === 'Long' ? '4px' : 'calc(50%)',
             backgroundColor: side === 'Long' ? '#16A34A' : '#EF4444',
@@ -131,32 +131,29 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => setSide('Long')}
-          className={`relative z-10 flex-1 py-2.5 rounded-xl font-extrabold text-sm transition-colors ${
-            side === 'Long' ? 'text-white' : 'text-dm-text3 hover:text-dm-text2'
-          }`}
+          className={`relative z-10 flex-1 py-2.5 rounded-lg font-extrabold text-sm transition-colors ${side === 'Long' ? 'text-white' : 'text-dm-text3 hover:text-dm-text2'
+            }`}
         >
           Long
         </motion.button>
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => setSide('Short')}
-          className={`relative z-10 flex-1 py-2.5 rounded-xl font-extrabold text-sm transition-colors ${
-            side === 'Short' ? 'text-white' : 'text-dm-text3 hover:text-dm-text2'
-          }`}
+          className={`relative z-10 flex-1 py-2.5 rounded-lg font-extrabold text-sm transition-colors ${side === 'Short' ? 'text-white' : 'text-dm-text3 hover:text-dm-text2'
+            }`}
         >
           Short
         </motion.button>
       </div>
 
       {/* Market / Limit Tabs */}
-      <div className="flex gap-4 mb-4 border-b border-dm-border px-1">
+      <div className="flex gap-4 mb-3 border-b border-dm-border px-1">
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setOrderType('Market')}
-          className={`pb-2 text-sm font-bold relative transition-colors ${
-            orderType === 'Market' ? 'text-dm-text' : 'text-dm-text3 hover:text-dm-text2'
-          }`}
+          className={`pb-2 text-sm font-bold relative transition-colors ${orderType === 'Market' ? 'text-dm-text' : 'text-dm-text3 hover:text-dm-text2'
+            }`}
         >
           Market
           {orderType === 'Market' && (
@@ -167,9 +164,8 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setOrderType('Limit')}
-          className={`pb-2 text-sm font-bold relative transition-colors ${
-            orderType === 'Limit' ? 'text-dm-text' : 'text-dm-text3 hover:text-dm-text2'
-          }`}
+          className={`pb-2 text-sm font-bold relative transition-colors ${orderType === 'Limit' ? 'text-dm-text' : 'text-dm-text3 hover:text-dm-text2'
+            }`}
         >
           Limit
           {orderType === 'Limit' && (
@@ -184,7 +180,7 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
       </div>
 
       {/* Inputs */}
-      <div className="space-y-3 mb-4">
+      <div className="space-y-3 mb-3">
         <AnimatePresence>
           {orderType === 'Limit' && (
             <motion.div
@@ -231,14 +227,15 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
       </div>
 
       {/* Slider */}
-      <div className="flex items-center gap-3 mb-4 px-1">
+      <div className="flex items-center gap-3 mb-3 px-1">
         <input
           type="range"
           min="0"
           max="100"
           value={sizePercent}
           onChange={handleSizePercentChange}
-          className="flex-1 accent-dream-blue h-1.5 bg-dm-surface-strong rounded-lg appearance-none cursor-pointer"
+          className="flex-1 dream-slider text-dream-blue"
+          style={{ background: `linear-gradient(to right, color-mix(in srgb, currentColor 10%, transparent) 0%, currentColor ${sizePercent}%, var(--dm-surface-strong) ${sizePercent}%)` }}
         />
         <motion.div
           key={sizePercent}
@@ -251,7 +248,7 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
       </div>
 
       {/* Checkboxes */}
-      <div className="space-y-2.5 mb-5 px-1">
+      <div className="space-y-2 mb-4 px-1">
         <label className="flex items-center gap-2.5 cursor-pointer group">
           <motion.div
             whileTap={{ scale: 0.8 }}
@@ -291,11 +288,10 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.95 }}
         onClick={handleTrade}
-        className={`w-full py-3.5 rounded-2xl font-black text-base uppercase tracking-widest transition-all shadow-xl ${
-          side === 'Long'
-            ? 'bg-dream-green neon-button-green text-white'
-            : 'bg-dream-red neon-button-red text-white'
-        }`}
+        className={`w-full py-3.5 rounded-xl font-black text-base uppercase tracking-widest transition-all shadow-xl ${side === 'Long'
+          ? 'bg-dream-green neon-button-green text-white'
+          : 'bg-dream-red neon-button-red text-white'
+          }`}
       >
         {side === 'Long' ? 'Buy / Long' : 'Sell / Short'}
       </motion.button>

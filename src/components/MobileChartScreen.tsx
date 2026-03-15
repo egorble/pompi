@@ -46,10 +46,8 @@ export function MobileChartScreen({ pair, onBack }: MobileChartScreenProps) {
         </div>
 
         {/* Chart Area */}
-        <div className="px-4 mb-8">
-          <div className="rounded-[16px] h-[320px] relative overflow-hidden shadow-sm">
-            <Chart pair={pair} />
-          </div>
+        <div className="px-4 mb-8 h-[320px] relative">
+          <Chart pair={pair} />
         </div>
 
         {/* Timeframes */}
