@@ -187,7 +187,8 @@ export function TradeBottomSheet({ isOpen, onClose, pair, side, onPlaceTrade, ba
                       max="100"
                       value={leverage}
                       onChange={(e) => setLeverage(parseInt(e.target.value))}
-                      className="w-full accent-dream-blue h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer" 
+                      className="w-full dream-slider text-dream-blue"
+                      style={{ background: `linear-gradient(to right, color-mix(in srgb, currentColor 10%, transparent) 0%, currentColor ${leverage}%, var(--dm-surface-strong) ${leverage}%)` }}
                     />
                   </div>
                 </div>

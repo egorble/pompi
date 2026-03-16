@@ -139,20 +139,22 @@ input[type="number"] {
 .dream-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: currentColor; /* Inherits text color */
-  cursor: pointer;
-  box-shadow: 0 0 6px currentColor;
-}
-
-.dream-slider::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: currentColor;
   cursor: pointer;
-  border: none;
-  box-shadow: 0 0 6px currentColor;
+  border: 2px solid var(--dm-surface);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  margin-top: -6px; /* align center with the 4px track */
+}
+
+.dream-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: currentColor;
+  cursor: pointer;
+  border: 2px solid var(--dm-surface);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }

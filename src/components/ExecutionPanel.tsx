@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Pair } from '../types';
 import { formatCurrency } from '../utils';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRightLeft, ChevronDown } from 'lucide-react';
+import { ArrowRightLeft, ChevronDown, Minus, Check } from 'lucide-react';
 
 interface ExecutionPanelProps {
   pair: Pair;
@@ -18,8 +18,9 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
   const [leverage, setLeverage] = useState(25);
   const [showLeverageDropdown, setShowLeverageDropdown] = useState(false);
   const [sizePercent, setSizePercent] = useState(0);
-  const [reduceOnly, setReduceOnly] = useState(false);
   const [tpsl, setTpsl] = useState(false);
+  const [tpPrice, setTpPrice] = useState('');
+  const [slPrice, setSlPrice] = useState('');
 
   const leverageRef = useRef<HTMLDivElement>(null);
 
@@ -248,28 +249,84 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
       </div>
 
       {/* Checkboxes */}
-      <div className="space-y-2 mb-4 px-1">
-        <label className="flex items-center gap-2.5 cursor-pointer group">
+      <div className="flex justify-between items-center mb-2 pl-1 mt-4">
+        <span className="text-xs font-bold text-dm-text2 group-hover:text-dm-text transition-colors">TP/SL</span>
+        <label className="flex items-center cursor-pointer group">
           <motion.div
             whileTap={{ scale: 0.8 }}
-            className={`w-4 h-4 rounded flex items-center justify-center transition-colors ${reduceOnly ? 'bg-dream-blue' : 'bg-dm-surface-strong group-hover:bg-dm-surface-raised'}`}
+            className={`w-4 h-4 rounded flex items-center justify-center transition-colors relative ${tpsl ? 'bg-dream-blue' : 'border border-dm-border2 group-hover:bg-dm-surface-raised'}`}
           >
-            {reduceOnly && <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></motion.svg>}
+            {tpsl && (
+              <>
+                <Check size={12} strokeWidth={4} className="text-white absolute inset-0 m-auto block group-hover:hidden" />
+                <Minus size={12} strokeWidth={4} className="text-white absolute inset-0 m-auto hidden group-hover:block" />
+              </>
+            )}
           </motion.div>
-          <span className="text-xs font-bold text-dm-text2 group-hover:text-dm-text transition-colors">Reduce-only</span>
-          <input type="checkbox" className="hidden" checked={reduceOnly} onChange={(e) => setReduceOnly(e.target.checked)} />
-        </label>
-        <label className="flex items-center gap-2.5 cursor-pointer group">
-          <motion.div
-            whileTap={{ scale: 0.8 }}
-            className={`w-4 h-4 rounded flex items-center justify-center transition-colors ${tpsl ? 'bg-dream-blue' : 'bg-dm-surface-strong group-hover:bg-dm-surface-raised'}`}
-          >
-            {tpsl && <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></motion.svg>}
-          </motion.div>
-          <span className="text-xs font-bold text-dm-text2 group-hover:text-dm-text transition-colors">TP/SL</span>
           <input type="checkbox" className="hidden" checked={tpsl} onChange={(e) => setTpsl(e.target.checked)} />
         </label>
       </div>
+        
+      <AnimatePresence>
+        {tpsl && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="flex flex-col gap-3 pt-1 pb-3 px-1">
+              {/* TP Section */}
+              <div>
+                <div className="flex justify-end mb-1">
+                  <div className="flex items-center text-[10px] text-dm-text3 cursor-pointer hover:text-dm-text transition-colors font-bold">
+                    Mark <ChevronDown size={12} className="ml-0.5" />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <div className="flex-1 bg-transparent border border-dm-border rounded-lg flex items-center px-3 py-2 shadow-sm focus-within:border-dream-blue/30 focus-within:ring-1 focus-within:ring-dream-blue/20 transition-all">
+                    <input
+                      type="number" value={tpPrice} onChange={e => setTpPrice(e.target.value)} placeholder="Price TP"
+                      className="w-full bg-transparent text-left font-bold text-xs outline-none text-dm-text"
+                    />
+                  </div>
+                  <div className="flex-1 bg-transparent border border-dm-border rounded-lg flex items-center px-3 py-2 shadow-sm focus-within:border-dream-blue/30 focus-within:ring-1 focus-within:ring-dream-blue/20 transition-all">
+                    <input
+                      type="number" placeholder="Gain"
+                      className="w-full bg-transparent text-left font-bold text-xs outline-none text-dm-text"
+                    />
+                    <span className="text-dm-text text-xs font-bold ml-1">%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* SL Section */}
+              <div>
+                <div className="flex justify-end mb-1">
+                  <div className="flex items-center text-[10px] text-dm-text3 cursor-pointer hover:text-dm-text transition-colors font-bold">
+                    Mark <ChevronDown size={12} className="ml-0.5" />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <div className="flex-1 bg-transparent border border-dm-border rounded-lg flex items-center px-3 py-2 shadow-sm focus-within:border-dream-blue/30 focus-within:ring-1 focus-within:ring-dream-blue/20 transition-all">
+                    <input
+                      type="number" value={slPrice} onChange={e => setSlPrice(e.target.value)} placeholder="Price SL"
+                      className="w-full bg-transparent text-left font-bold text-xs outline-none text-dm-text"
+                    />
+                  </div>
+                  <div className="flex-1 bg-transparent border border-dm-border rounded-lg flex items-center px-3 py-2 shadow-sm focus-within:border-dream-blue/30 focus-within:ring-1 focus-within:ring-dream-blue/20 transition-all">
+                    <input
+                      type="number" placeholder="Loss"
+                      className="w-full bg-transparent text-left font-bold text-xs outline-none text-dm-text"
+                    />
+                    <span className="text-dm-text text-xs font-bold ml-1">%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Stats */}
       <div className="space-y-1.5 py-2 px-1 mb-4">

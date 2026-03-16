@@ -7,6 +7,7 @@ interface PositionsProps {
   positions: Position[];
   onClose: (id: string) => void;
   onCloseAll: () => void;
+  layout?: 'list' | 'grid';
 }
 
 const cardVariants = {
@@ -345,7 +346,8 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
                       <input
                         type="range" min="1" max="100" value={closePercent}
                         onChange={(e) => setClosePercent(parseInt(e.target.value))}
-                        className="w-full h-1.5 bg-dm-surface-strong rounded-lg appearance-none cursor-pointer accent-dream-blue mb-1.5"
+                        className="w-full dream-slider text-dream-blue mb-1.5"
+                        style={{ background: `linear-gradient(to right, color-mix(in srgb, currentColor 10%, transparent) 0%, currentColor ${closePercent}%, var(--dm-surface-strong) ${closePercent}%)` }}
                       />
                       <div className="flex gap-1.5">
                         {[25, 50, 75, 100].map(v => (
@@ -413,7 +415,7 @@ const containerVariants = {
   show: { opacity: 1, transition: { staggerChildren: 0.06 } },
 };
 
-export function Positions({ positions, onClose, onCloseAll }: PositionsProps) {
+export function Positions({ positions, onClose, onCloseAll, layout = 'list' }: PositionsProps) {
   return (
     <section className="p-4">
       <div className="flex items-center justify-between mb-4">
@@ -442,16 +444,36 @@ export function Positions({ positions, onClose, onCloseAll }: PositionsProps) {
         )}
       </div>
 
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-        className="flex flex-col gap-3"
-      >
-        {positions.map((pos) => (
-          <PositionCard key={pos.id} pos={pos} onClose={onClose} />
-        ))}
-      </motion.div>
+      {layout === 'grid' ? (
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          className="flex flex-col md:flex-row items-start gap-4"
+        >
+          <div className="flex-1 flex flex-col gap-4 w-full">
+            {positions.filter((_, i) => i % 2 === 0).map((pos) => (
+              <PositionCard key={pos.id} pos={pos} onClose={onClose} />
+            ))}
+          </div>
+          <div className="flex-1 flex flex-col gap-4 w-full">
+            {positions.filter((_, i) => i % 2 === 1).map((pos) => (
+              <PositionCard key={pos.id} pos={pos} onClose={onClose} />
+            ))}
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          className="flex flex-col gap-3"
+        >
+          {positions.map((pos) => (
+            <PositionCard key={pos.id} pos={pos} onClose={onClose} />
+          ))}
+        </motion.div>
+      )}
 
       {positions.length === 0 && (
         <motion.div

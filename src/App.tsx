@@ -163,11 +163,12 @@ function AppContent() {
                 exit="exit"
                 className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4"
               >
-                <motion.div variants={itemVariants} className="max-w-5xl mx-auto pt-6">
+                <motion.div variants={itemVariants} className="max-w-5xl flex flex-col mx-auto pt-6 pb-20 lg:pb-6">
                   <Positions
                     positions={positions}
                     onClose={handleClosePosition}
                     onCloseAll={handleCloseAll}
+                    layout="grid"
                   />
                 </motion.div>
               </motion.div>
