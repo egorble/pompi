@@ -14,7 +14,7 @@ import { MobileChartScreen } from './components/MobileChartScreen';
 import { StatsPanel } from './components/StatsPanel';
 import { Pair, Position } from './types';
 import { initialPairs, initialPositions } from './data';
-import { formatCurrency, getMarketId } from './utils';
+import { getMarketId } from './utils';
 import { useWebSocket } from './hooks/useWebSocket';
 import { useStore } from './store';
 import { apiClient } from './api/client';
@@ -27,7 +27,7 @@ function AppContent() {
   const [positions, setPositions] = useState<Position[]>(initialPositions);
   const [showMobileChart, setShowMobileChart] = useState(false);
 
-  const { setCurrentMarketId, walletAddress, lastPrice } = useStore();
+  const { setCurrentMarketId, walletAddress } = useStore();
 
   // Initialize WebSocket connection
   useWebSocket();
@@ -50,8 +50,9 @@ function AppContent() {
             const entryPriceNum = parseFloat(bp.entry_price) / 1e18;
             const leverageNum = collateralNum > 0 ? (sizeNum * entryPriceNum) / collateralNum : 1;
 
-            const markPrice = (bp.market_id === getMarketId(selectedPair.pair) && lastPrice > 0)
-              ? lastPrice
+            const currentPrice = useStore.getState().lastPrice;
+            const markPrice = (bp.market_id === getMarketId(selectedPair.pair) && currentPrice > 0)
+              ? currentPrice
               : entryPriceNum;
 
             const isLong = bp.side === 'Buy';
@@ -86,7 +87,7 @@ function AppContent() {
     fetchPositions();
     const interval = setInterval(fetchPositions, 5000);
     return () => clearInterval(interval);
-  }, [walletAddress, selectedPair, lastPrice]);
+  }, [walletAddress, selectedPair]);
 
   const handlePlaceTrade = async (trade: { type: 'Long' | 'Short', leverage: number, sizeUsd: number, price?: number }) => {
     const tradePrice = trade.price || selectedPair.price;
