@@ -59,6 +59,14 @@ class ApiClient {
   public async getPositions(trader: string): Promise<BackendPosition[]> {
     return this.request<BackendPosition[]>(`/positions/${trader}`);
   }
+
+  public async getOrderBook(marketId: string): Promise<{ market_id: string; asks: [number, number][]; bids: [number, number][]; timestamp: number }> {
+    return this.request(`/orderbook/${marketId}`);
+  }
+
+  public async getTrades(marketId: string): Promise<any[]> {
+    return this.request(`/trades/${marketId}`);
+  }
 }
 
 export const apiClient = new ApiClient(API_BASE_URL);

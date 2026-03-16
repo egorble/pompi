@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Pair } from '../types';
-import { formatCurrency } from '../utils';
+import { formatCurrency, getMarketId } from '../utils';
 import { ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useStore } from '../store';
+import { apiClient } from '../api/client';
 
 interface OrderBookProps {
   pair: Pair;
@@ -13,12 +14,47 @@ type Tab = 'ORDER_BOOK' | 'TRADE_HISTORY';
 
 export function OrderBook({ pair }: OrderBookProps) {
   const [activeTab, setActiveTab] = useState<Tab>('ORDER_BOOK');
-  const { orderBook, trades: storeTrades, lastPrice } = useStore();
+  const { orderBook, trades: storeTrades, lastPrice, setOrderBook, addTrade } = useStore();
+  const pollRef = useRef<NodeJS.Timeout | null>(null);
 
-  const spread = pair.price * 0.0005;
   const displayPrice = lastPrice > 0 ? lastPrice : pair.price;
+  const marketId = getMarketId(pair.pair);
 
-  // Use real data from store if available, fallback to mock
+  // Poll REST API for orderbook + trades every 2 seconds as fallback
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const ob = await apiClient.getOrderBook(marketId);
+        if (ob && (ob.asks?.length > 0 || ob.bids?.length > 0)) {
+          setOrderBook(ob);
+        }
+      } catch { /* backend offline */ }
+
+      try {
+        const trades = await apiClient.getTrades(marketId);
+        if (trades && trades.length > 0) {
+          // Add new trades that aren't already in store
+          const existingIds = new Set(storeTrades.map(t => `${t.price}-${t.time}`));
+          for (const t of trades.slice(-10)) {
+            const key = `${t.price}-${t.timestamp_ms}`;
+            if (!existingIds.has(key)) {
+              addTrade({
+                price: t.price,
+                size: t.size,
+                side: t.taker_side || 'Buy',
+                time: new Date(t.timestamp_ms || Date.now()).toISOString(),
+              });
+            }
+          }
+        }
+      } catch { /* no trades */ }
+    };
+
+    fetchData();
+    pollRef.current = setInterval(fetchData, 2000);
+    return () => { if (pollRef.current) clearInterval(pollRef.current); };
+  }, [marketId]);
+
   const hasRealData = orderBook.asks.length > 0 || orderBook.bids.length > 0;
 
   const asks = useMemo(() => {
@@ -30,12 +66,14 @@ export function OrderBook({ pair }: OrderBookProps) {
         depth: (a.size / maxSize) * 100,
       }));
     }
+    // No real data — show empty state with placeholder
+    const spread = pair.price * 0.0005;
     return Array.from({ length: 12 }).map((_, i) => ({
-      price: pair.price + spread * (12 - i),
+      price: displayPrice + spread * (12 - i),
       size: (Math.random() * 2 + 0.1).toFixed(6),
       depth: Math.random() * 100
     }));
-  }, [hasRealData, orderBook.asks, pair.price, spread]);
+  }, [hasRealData, orderBook.asks, displayPrice, pair.price]);
 
   const bids = useMemo(() => {
     if (hasRealData) {
@@ -46,12 +84,13 @@ export function OrderBook({ pair }: OrderBookProps) {
         depth: (b.size / maxSize) * 100,
       }));
     }
+    const spread = pair.price * 0.0005;
     return Array.from({ length: 12 }).map((_, i) => ({
-      price: pair.price - spread * (i + 1),
+      price: displayPrice - spread * (i + 1),
       size: (Math.random() * 2 + 0.1).toFixed(6),
       depth: Math.random() * 100
     }));
-  }, [hasRealData, orderBook.bids, pair.price, spread]);
+  }, [hasRealData, orderBook.bids, displayPrice, pair.price]);
 
   const trades = useMemo(() => {
     if (storeTrades.length > 0) {
@@ -62,13 +101,8 @@ export function OrderBook({ pair }: OrderBookProps) {
         isBuyerMaker: t.side === 'Sell',
       }));
     }
-    return Array.from({ length: 20 }).map((_, i) => ({
-      price: pair.price + (Math.random() - 0.5) * spread * 10,
-      size: (Math.random() * 0.5 + 0.01).toFixed(4),
-      time: new Date(Date.now() - i * 5000).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-      isBuyerMaker: Math.random() > 0.5
-    }));
-  }, [storeTrades, pair.price, spread]);
+    return [];
+  }, [storeTrades]);
 
   const baseCurrency = pair.pair.split('/')[0] || 'BTC';
   const quoteCurrency = pair.pair.split('/')[1] || 'USDC';
