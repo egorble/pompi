@@ -67,6 +67,38 @@ class ApiClient {
   public async getTrades(marketId: string): Promise<any[]> {
     return this.request(`/trades/${marketId}`);
   }
+
+  public async getTicker(marketId: string): Promise<MarketTicker> {
+    return this.request<MarketTicker>(`/markets/${marketId}/ticker`);
+  }
+
+  public async getAccount(address: string): Promise<AccountInfo> {
+    return this.request<AccountInfo>(`/account/${address}`);
+  }
+}
+
+export interface MarketTicker {
+  market_id: string;
+  price: number;
+  price_24h_ago: number;
+  change_24h_pct: number;
+  volume_24h_usd: number;
+  trade_count_24h: number;
+  open_interest_usd: number;
+  long_ratio: number;
+  short_ratio: number;
+  funding_rate_pct: number;
+  fee_open_bps: number;
+  fee_close_bps: number;
+  funding_interval_sec: number;
+  updated_at: number;
+}
+
+export interface AccountInfo {
+  address: string;
+  usdc_balance: number;
+  usdc_balance_raw: string;
+  token: string;
 }
 
 export const apiClient = new ApiClient(API_BASE_URL);

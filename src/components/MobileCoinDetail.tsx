@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Pair } from '../types';
-import { formatCurrency } from '../utils';
+import { formatCurrency, getMarketId } from '../utils';
 import { ArrowLeft, Star, TrendingUp, Activity, PieChart } from 'lucide-react';
 import { Chart } from './Chart';
+import { useStore } from '../store';
 
 interface MobileCoinDetailProps {
   pair: Pair;
@@ -12,7 +13,9 @@ interface MobileCoinDetailProps {
 }
 
 export function MobileCoinDetail({ pair, onBack, onOpenTrade }: MobileCoinDetailProps) {
-  const isPositive = pair.change >= 0;
+  const { tickers } = useStore();
+  const ticker = tickers[getMarketId(pair.pair)];
+  const isPositive = (ticker?.change_24h_pct ?? pair.change) >= 0;
 
   return (
     <div className="flex flex-col h-full bg-white relative z-50">
@@ -23,7 +26,7 @@ export function MobileCoinDetail({ pair, onBack, onOpenTrade }: MobileCoinDetail
         </button>
         <div className="flex items-center gap-2">
           <span className="font-extrabold text-lg text-slate-900">{pair.pair.split('/')[0]} USDC</span>
-          <span className="text-[10px] font-bold text-dream-blue bg-blue-50 px-1.5 py-0.5 rounded-md">50x</span>
+          <span className="text-[10px] font-bold text-dream-blue bg-blue-50 px-1.5 py-0.5 rounded-md">PERP</span>
         </div>
         <button className="p-2 -mr-2 text-slate-400 hover:text-yellow-400 transition-colors">
           <Star size={24} />
@@ -82,14 +85,14 @@ export function MobileCoinDetail({ pair, onBack, onOpenTrade }: MobileCoinDetail
               <Activity size={20} />
               <span className="font-bold">24h volume</span>
             </div>
-            <div className="font-bold text-slate-900">$3.1B</div>
+            <div className="font-bold text-slate-900">{ticker?.volume_24h_usd ? `$${ticker.volume_24h_usd.toLocaleString(undefined, {maximumFractionDigits: 0})}` : '—'}</div>
           </div>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3 text-slate-400">
               <PieChart size={20} />
               <span className="font-bold">Open interest</span>
             </div>
-            <div className="font-bold text-slate-900">$1.9B</div>
+            <div className="font-bold text-slate-900">{ticker?.open_interest_usd ? `$${ticker.open_interest_usd.toLocaleString(undefined, {maximumFractionDigits: 0})}` : '—'}</div>
           </div>
         </div>
       </div>

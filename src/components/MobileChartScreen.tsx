@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Pair } from '../types';
-import { formatCurrency } from '../utils';
+import { formatCurrency, getMarketId } from '../utils';
 import { ArrowLeft, Star, TrendingUp, Activity, PieChart } from 'lucide-react';
 import { Chart } from './Chart';
+import { useStore } from '../store';
 
 interface MobileChartScreenProps {
   pair: Pair;
@@ -11,7 +12,10 @@ interface MobileChartScreenProps {
 }
 
 export function MobileChartScreen({ pair, onBack }: MobileChartScreenProps) {
-  const isPositive = pair.change >= 0;
+  const { tickers, lastPrice } = useStore();
+  const ticker = tickers[getMarketId(pair.pair)];
+  const change24h = ticker?.change_24h_pct ?? pair.change;
+  const isPositive = change24h >= 0;
 
   return (
     <div className="flex flex-col h-full bg-dm-surface relative z-[60]">
@@ -22,7 +26,7 @@ export function MobileChartScreen({ pair, onBack }: MobileChartScreenProps) {
         </button>
         <div className="flex items-center gap-2">
           <span className="font-extrabold text-lg text-dm-text">{pair.pair.split('/')[0]} USDC</span>
-          <span className="text-[10px] font-bold text-dream-blue bg-dream-blue/10 px-1.5 py-0.5 rounded-md">50x</span>
+          <span className="text-[10px] font-bold text-dream-blue bg-dream-blue/10 px-1.5 py-0.5 rounded-md">PERP</span>
         </div>
         <button className="p-2 -mr-2 text-dm-text3 hover:text-yellow-400 transition-colors">
           <Star size={24} />
@@ -77,14 +81,14 @@ export function MobileChartScreen({ pair, onBack }: MobileChartScreenProps) {
               <Activity size={20} />
               <span className="font-bold">24h volume</span>
             </div>
-            <div className="font-bold text-dm-text">$3.1B</div>
+            <div className="font-bold text-dm-text">{ticker?.volume_24h_usd ? `$${ticker.volume_24h_usd.toLocaleString(undefined, {maximumFractionDigits: 0})}` : '—'}</div>
           </div>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3 text-dm-text3">
               <PieChart size={20} />
               <span className="font-bold">Open interest</span>
             </div>
-            <div className="font-bold text-dm-text">$1.9B</div>
+            <div className="font-bold text-dm-text">{ticker?.open_interest_usd ? `$${ticker.open_interest_usd.toLocaleString(undefined, {maximumFractionDigits: 0})}` : '—'}</div>
           </div>
         </div>
       </div>

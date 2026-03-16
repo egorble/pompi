@@ -85,7 +85,10 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
               <div className="max-h-80 overflow-y-auto custom-scrollbar p-2">
                 {filteredPairs.map((item) => {
                   const isSelected = pair.id === item.id;
-                  const itemIsPositive = item.change >= 0;
+                  const itemTicker = tickers[getMarketId(item.pair)];
+                  const itemPrice = itemTicker?.price || item.price;
+                  const itemChange = itemTicker?.change_24h_pct ?? item.change;
+                  const itemIsPositive = itemChange >= 0;
 
                   return (
                     <motion.button
@@ -105,9 +108,9 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
                         <p className="text-[10px] text-dm-text3 font-medium">{item.name}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-bold text-dm-text">{formatCurrency(item.price).replace('$', '')}</p>
+                        <p className="text-sm font-bold text-dm-text">{formatCurrency(itemPrice).replace('$', '')}</p>
                         <p className={`text-[10px] font-bold ${itemIsPositive ? 'text-dream-green' : 'text-dream-red'}`}>
-                          {formatPercent(item.change)}
+                          {formatPercent(itemChange)}
                         </p>
                       </div>
                     </motion.button>
