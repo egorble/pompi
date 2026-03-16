@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { AdvancedRealTimeChart } from 'react-ts-tradingview-widgets';
 import { Pair } from '../types';
 import { useTheme } from '../context/ThemeContext';
@@ -7,7 +7,8 @@ interface ChartProps {
   pair?: Pair;
 }
 
-export function Chart({ pair }: ChartProps) {
+// Memoize to prevent re-render on every price tick
+export const Chart = memo(function Chart({ pair }: ChartProps) {
   const { isDark } = useTheme();
   const base = pair ? pair.pair.split('/')[0] : 'BTC';
   const symbol = `BINANCE:${base}USDT`;
@@ -37,4 +38,7 @@ export function Chart({ pair }: ChartProps) {
       </div>
     </section>
   );
-}
+}, (prev, next) => {
+  // Only re-render when pair ID changes, not on every parent re-render
+  return prev.pair?.id === next.pair?.id;
+});

@@ -12,22 +12,23 @@ import { BottomNav } from './components/BottomNav';
 import { MobileTradingScreen } from './components/MobileTradingScreen';
 import { MobileChartScreen } from './components/MobileChartScreen';
 import { StatsPanel } from './components/StatsPanel';
+import { Dashboard } from './components/Dashboard';
 import { Pair, Position } from './types';
 import { initialPairs, initialPositions } from './data';
-import { formatCurrency, getMarketId } from './utils';
+import { getMarketId } from './utils';
 import { useWebSocket } from './hooks/useWebSocket';
 import { useStore } from './store';
 import { apiClient } from './api/client';
 import { Side, OrderType } from './api/types';
 
 function AppContent() {
-  const [activeTab, setActiveTab] = useState<'Trade' | 'Positions' | 'Points' | 'Stats'>('Trade');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'Trade' | 'Positions' | 'Points' | 'Stats'>('dashboard');
   const [balance, setBalance] = useState(12450.20);
   const [selectedPair, setSelectedPair] = useState<Pair>(initialPairs[0]);
   const [positions, setPositions] = useState<Position[]>(initialPositions);
   const [showMobileChart, setShowMobileChart] = useState(false);
 
-  const { setCurrentMarketId, walletAddress, lastPrice } = useStore();
+  const { setCurrentMarketId, walletAddress } = useStore();
 
   // Initialize WebSocket connection
   useWebSocket();
@@ -50,8 +51,9 @@ function AppContent() {
             const entryPriceNum = parseFloat(bp.entry_price) / 1e18;
             const leverageNum = collateralNum > 0 ? (sizeNum * entryPriceNum) / collateralNum : 1;
 
-            const markPrice = (bp.market_id === getMarketId(selectedPair.pair) && lastPrice > 0)
-              ? lastPrice
+            const currentPrice = useStore.getState().lastPrice;
+            const markPrice = (bp.market_id === getMarketId(selectedPair.pair) && currentPrice > 0)
+              ? currentPrice
               : entryPriceNum;
 
             const isLong = bp.side === 'Buy';
@@ -86,7 +88,7 @@ function AppContent() {
     fetchPositions();
     const interval = setInterval(fetchPositions, 5000);
     return () => clearInterval(interval);
-  }, [walletAddress, selectedPair, lastPrice]);
+  }, [walletAddress, selectedPair]);
 
   const handlePlaceTrade = async (trade: { type: 'Long' | 'Short', leverage: number, sizeUsd: number, price?: number }) => {
     const tradePrice = trade.price || selectedPair.price;
@@ -169,6 +171,21 @@ function AppContent() {
 
         <main className="pl-0 pr-0 md:pr-4 lg:pr-2 py-0 md:py-4 lg:py-6 flex-1 overflow-y-auto lg:overflow-hidden relative pb-24 lg:pb-0">
           <AnimatePresence mode="wait">
+            {activeTab === 'dashboard' && (
+              <motion.div
+                key="dashboard"
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="h-full pl-4 md:pl-4 pr-4 md:pr-4 pt-4 lg:pt-0"
+              >
+                <motion.div variants={itemVariants} className="max-w-7xl mx-auto h-full pb-20 lg:pb-6">
+                  <Dashboard />
+                </motion.div>
+              </motion.div>
+            )}
+
             {activeTab === 'Trade' && (
               <motion.div
                 key="trade"

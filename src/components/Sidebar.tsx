@@ -4,8 +4,8 @@ import { LayoutDashboard, Wallet, LineChart, BookOpen, Settings, Box, BarChart3,
 import { useTheme } from '../context/ThemeContext';
 
 interface SidebarProps {
-  activeTab: 'Trade' | 'Positions' | 'Points' | 'Stats';
-  setActiveTab: (tab: 'Trade' | 'Positions' | 'Points' | 'Stats') => void;
+  activeTab: 'dashboard' | 'Trade' | 'Positions' | 'Points' | 'Stats';
+  setActiveTab: (tab: 'dashboard' | 'Trade' | 'Positions' | 'Points' | 'Stats') => void;
 }
 
 export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
@@ -36,7 +36,7 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
             <div key={item.id} className="relative flex items-center justify-center w-full group">
               <button
                 onClick={() => {
-                  if (item.id === 'Trade' || item.id === 'Positions' || item.id === 'Points' || item.id === 'Stats') {
+                  if (item.id === 'Trade' || item.id === 'Positions' || item.id === 'Points' || item.id === 'Stats' || item.id === 'dashboard') {
                     setActiveTab(item.id as any);
                   }
                 }}

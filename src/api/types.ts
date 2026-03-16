@@ -38,12 +38,6 @@ export interface CreateOrderRequest {
   size: number;
 }
 
-export interface SetBalanceRequest {
-  user: string;
-  token: string;
-  amount: string; // U256 string
-}
-
 export interface BackendPosition {
   position_id: string;
   trader: string;

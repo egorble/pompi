@@ -1,17 +1,18 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Home, Briefcase, Star, BarChart3 } from 'lucide-react';
+import { LayoutDashboard, LineChart, Wallet, Star, BarChart3 } from 'lucide-react';
 
 interface BottomNavProps {
-  activeTab: 'Trade' | 'Positions' | 'Points' | 'Stats';
-  setActiveTab: (tab: 'Trade' | 'Positions' | 'Points' | 'Stats') => void;
+  activeTab: 'dashboard' | 'Trade' | 'Positions' | 'Points' | 'Stats';
+  setActiveTab: (tab: 'dashboard' | 'Trade' | 'Positions' | 'Points' | 'Stats') => void;
   onOpenTrade: () => void;
 }
 
 export function BottomNav({ activeTab, setActiveTab, onOpenTrade }: BottomNavProps) {
   const tabs = [
-    { id: 'Trade', icon: Home, label: 'Trade' },
-    { id: 'Positions', icon: Briefcase, label: 'Positions' },
+    { id: 'dashboard', icon: LayoutDashboard, label: 'Overview' },
+    { id: 'Trade', icon: LineChart, label: 'Trade' },
+    { id: 'Positions', icon: Wallet, label: 'Positions' },
     { id: 'Stats', icon: BarChart3, label: 'Stats' },
     { id: 'Points', icon: Star, label: 'Points' },
   ] as const;
@@ -26,8 +27,8 @@ export function BottomNav({ activeTab, setActiveTab, onOpenTrade }: BottomNavPro
           <motion.button
             key={tab.id}
             whileTap={{ scale: 0.9 }}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex flex-col items-center gap-1 ${isActive ? 'text-dream-blue' : 'text-dm-text3'
+            onClick={() => setActiveTab(tab.id as any)}
+            className={`flex flex-col items-center gap-1 ${isActive ? 'text-dm-text' : 'text-dm-text3'
               }`}
           >
             <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
