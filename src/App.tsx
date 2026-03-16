@@ -22,8 +22,6 @@ import { useStore } from './store';
 import { apiClient } from './api/client';
 import { Side, OrderType } from './api/types';
 import { AccountPanel } from './components/AccountPanel';
-import { Background } from './components/Background';
-
 function AppContent() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'Trade' | 'Positions' | 'OpenOrders' | 'Stats'>('dashboard');
   const [selectedPair, setSelectedPair] = useState<Pair>(initialPairs[0]);
@@ -177,8 +175,7 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen lg:h-screen flex flex-row text-dm-text bg-transparent lg:overflow-hidden font-sans relative">
-      <Background />
+    <div className="min-h-screen lg:h-screen flex flex-row text-dm-text bg-dm-bg lg:overflow-hidden font-sans relative">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onSettingsClick={() => setShowAccount(true)} />
 
       <div className="flex-1 flex flex-col min-w-0">

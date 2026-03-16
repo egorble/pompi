@@ -102,7 +102,7 @@ export function MobileTradingScreen({ pair, pairs, onSelectPair, onOpenChart, ba
               placeholder="Search pairs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-dm-surface-alt border border-dm-border rounded-xl py-2.5 pl-10 pr-4 text-sm font-medium text-dm-text placeholder:text-dm-text3 outline-none focus:border-dream-blue/30 focus:ring-2 focus:ring-dream-blue/20"
+              className="w-full bg-dm-surface-alt border border-dm-border rounded-2xl py-2.5 pl-10 pr-4 text-sm font-medium text-dm-text placeholder:text-dm-text3 outline-none focus:border-dream-blue/30 focus:ring-2 focus:ring-dream-blue/20"
             />
           </div>
         </div>
@@ -193,7 +193,7 @@ export function MobileTradingScreen({ pair, pairs, onSelectPair, onOpenChart, ba
               </div>
               <button
                 onClick={() => setShowLeverageSelector(false)}
-                className="w-full bg-dm-inverse text-dm-surface font-black py-4 rounded-xl text-lg uppercase tracking-wide"
+                className="w-full bg-dm-inverse text-dm-surface font-black py-4 rounded-2xl text-lg uppercase tracking-wide"
               >
                 Confirm
               </button>
@@ -416,7 +416,7 @@ export function MobileTradingScreen({ pair, pairs, onSelectPair, onOpenChart, ba
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={() => handleTrade('Long')}
-              className="w-full bg-dream-green text-white font-black py-3 rounded-xl text-sm uppercase tracking-wide"
+              className="w-full bg-dream-green text-white font-black py-3 rounded-2xl text-sm uppercase tracking-wide"
             >
               {tradeMode === 'Open' ? 'Open Long' : 'Close Long'}
             </motion.button>
@@ -427,7 +427,7 @@ export function MobileTradingScreen({ pair, pairs, onSelectPair, onOpenChart, ba
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={() => handleTrade('Short')}
-              className="w-full bg-dream-red text-white font-black py-3 rounded-xl text-sm uppercase tracking-wide"
+              className="w-full bg-dream-red text-white font-black py-3 rounded-2xl text-sm uppercase tracking-wide"
             >
               {tradeMode === 'Open' ? 'Open Short' : 'Close Short'}
             </motion.button>

@@ -99,7 +99,7 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
               exit={{ height: 0, opacity: 0, marginBottom: 0 }}
               className="overflow-hidden"
             >
-              <div className="p-4 bg-dm-surface border border-dm-border2 rounded-xl shadow-sm">
+              <div className="p-4 bg-dm-surface border border-dm-border2 rounded-2xl shadow-sm">
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-sm font-bold text-dm-text2">Leverage</span>
                   <span className="text-sm font-extrabold text-dream-blue">{leverage}x</span>
@@ -125,7 +125,7 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
       </div>
 
       {/* Long / Short Toggle with Animation */}
-      <div className="relative flex p-1 bg-dm-surface rounded-xl mb-3 border border-dm-border2">
+      <div className="relative flex p-1 bg-dm-surface rounded-2xl mb-3 border border-dm-border2">
         <motion.div
           className="absolute inset-y-1 w-[calc(50%-4px)] z-0 rounded-lg shadow-sm"
           animate={{
@@ -203,7 +203,7 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
                 type="number"
                 value={priceStr}
                 onChange={(e) => setPriceStr(e.target.value)}
-                className="w-full py-3 pl-16 pr-16 bg-dm-surface border border-dm-border2 rounded-xl font-bold text-sm text-right text-dm-text focus:border-dream-blue/30 focus:ring-2 focus:ring-dream-blue/20 outline-none transition-all"
+                className="w-full py-3 pl-16 pr-16 bg-dm-surface border border-dm-border2 rounded-2xl font-bold text-sm text-right text-dm-text focus:border-dream-blue/30 focus:ring-2 focus:ring-dream-blue/20 outline-none transition-all"
               />
               <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
                 <span className="text-dm-text2 font-bold text-sm">USDC</span>
@@ -223,7 +223,7 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
               setSizeStr(e.target.value);
               setSizePercent(Math.min(100, Math.max(0, (parseFloat(e.target.value) || 0) / 100)));
             }}
-            className="w-full py-3 pl-16 pr-20 bg-dm-surface border border-dm-border2 rounded-xl font-bold text-sm text-right text-dm-text focus:border-dream-blue/30 focus:ring-2 focus:ring-dream-blue/20 outline-none transition-all"
+            className="w-full py-3 pl-16 pr-20 bg-dm-surface border border-dm-border2 rounded-2xl font-bold text-sm text-right text-dm-text focus:border-dream-blue/30 focus:ring-2 focus:ring-dream-blue/20 outline-none transition-all"
           />
           <div className="absolute inset-y-0 right-4 flex items-center gap-1 pointer-events-none">
             <span className="text-dm-text2 font-bold text-sm">USDC</span>
@@ -350,7 +350,7 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.95 }}
         onClick={handleTrade}
-        className={`w-full py-3.5 rounded-xl font-black text-base uppercase tracking-widest transition-all shadow-xl ${side === 'Long'
+        className={`w-full py-3.5 rounded-2xl font-black text-base uppercase tracking-widest transition-all shadow-xl ${side === 'Long'
           ? 'bg-dream-green neon-button-green text-white'
           : 'bg-dream-red neon-button-red text-white'
           }`}

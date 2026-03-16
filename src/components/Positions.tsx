@@ -36,10 +36,10 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
   return (
     <motion.div
       variants={cardVariants}
-      className="bg-dm-surface border border-dm-border rounded-xl dream-shadow relative overflow-hidden"
+      className="premium-card rounded-2xl relative overflow-hidden shadow-sm"
     >
-      {/* Accent stripe */}
-      <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-xl ${pos.type === 'Long' ? 'bg-dream-green' : 'bg-dream-red'}`} />
+      {/* Thinner, elegant accent stripe with subtle glow */}
+      <div className={`absolute left-0 top-0 bottom-0 w-[2px] ${pos.type === 'Long' ? 'bg-dream-green shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-dream-red shadow-[0_0_10px_rgba(239,68,68,0.5)]'}`} />
 
       {/* Main content */}
       <div className="p-4 pl-5">
@@ -119,7 +119,7 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setExpanded('tpsl')}
-              className="flex-1 py-2.5 rounded-lg text-[12px] font-bold bg-transparent border border-dm-border text-dm-text2 hover:text-dm-text hover:border-dm-border2 transition-colors"
+              className="flex-1 py-2.5 rounded-2xl text-[12px] font-bold bg-dm-surface-alt text-dm-text2 hover:text-dm-text hover:bg-dm-surface-raised transition-colors"
             >
               TP / SL
             </motion.button>
@@ -127,7 +127,7 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setExpanded('close')}
-              className="flex-1 py-2.5 rounded-lg text-[12px] font-bold bg-transparent border border-dm-border text-dm-text2 hover:text-dm-text hover:border-dm-border2 transition-colors"
+              className="flex-1 py-2.5 rounded-2xl text-[12px] font-bold bg-dm-surface-alt text-dm-text2 hover:text-dm-text hover:bg-dm-surface-raised transition-colors"
             >
               Close
             </motion.button>

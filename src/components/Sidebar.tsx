@@ -23,7 +23,7 @@ export function Sidebar({ activeTab, setActiveTab, onSettingsClick }: SidebarPro
 
   return (
     <div className="hidden lg:flex flex-col w-[80px] shrink-0 bg-transparent h-screen py-6 items-center z-50">
-      <div className="mb-10 text-dm-bg w-12 h-12 bg-brand-accent rounded-xl flex items-center justify-center shadow-sm">
+      <div className="mb-10 text-dm-bg w-12 h-12 bg-brand-accent rounded-2xl flex items-center justify-center shadow-sm">
         {/* Placeholder for Logo */}
         <Box size={24} className="text-black fill-current" />
       </div>
@@ -43,7 +43,7 @@ export function Sidebar({ activeTab, setActiveTab, onSettingsClick }: SidebarPro
                     setActiveTab(item.id as any);
                   }
                 }}
-                className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 border border-transparent shadow-sm ${
+                className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 border border-transparent shadow-sm ${
                   isActive 
                     ? 'bg-brand-accent text-black shadow-brand-accent/20' 
                     : 'bg-dm-surface text-dm-text hover:bg-brand-accent/10'
@@ -59,11 +59,11 @@ export function Sidebar({ activeTab, setActiveTab, onSettingsClick }: SidebarPro
       <div className="mt-auto flex flex-col gap-2 relative z-50">
         <button 
           onClick={toggle}
-          className="w-12 h-12 rounded-xl flex items-center justify-center bg-dm-surface text-dm-text2 hover:text-dm-text hover:bg-dm-surface-alt transition-all duration-200 shadow-sm"
+          className="w-12 h-12 rounded-2xl flex items-center justify-center bg-dm-surface text-dm-text2 hover:text-dm-text hover:bg-dm-surface-alt transition-all duration-200 shadow-sm"
         >
           {isDark ? <Sun size={20} /> : <Moon size={20} />}
         </button>
-        <button className="w-12 h-12 rounded-xl flex items-center justify-center bg-dm-surface text-dm-text2 hover:text-dm-text hover:bg-dm-surface-alt transition-all duration-200 shadow-sm">
+        <button className="w-12 h-12 rounded-2xl flex items-center justify-center bg-dm-surface text-dm-text2 hover:text-dm-text hover:bg-dm-surface-alt transition-all duration-200 shadow-sm">
            <HeadphonesIcon size={20} />
         </button>
       </div>

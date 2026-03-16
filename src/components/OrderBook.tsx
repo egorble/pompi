@@ -126,7 +126,7 @@ export function OrderBook({ pair }: OrderBookProps) {
   };
 
   return (
-    <section className="bg-dm-surface rounded-2xl dream-shadow flex-grow overflow-hidden flex flex-col">
+    <section className="premium-card rounded-2xl shadow-sm flex-grow overflow-hidden flex flex-col">
       {/* Tabs */}
       <div className="flex items-center justify-between px-3 pt-3 border-b border-dm-border shrink-0">
         <div className="flex gap-4">

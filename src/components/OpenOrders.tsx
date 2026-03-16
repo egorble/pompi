@@ -27,15 +27,15 @@ function OrderCard({ order, onCancel }: { key?: string | number; order: Order; o
   return (
     <motion.div
       variants={cardVariants}
-      className="bg-dm-surface border border-dm-border rounded-2xl dream-shadow relative overflow-hidden"
+      className="premium-card rounded-2xl relative overflow-hidden shadow-sm"
     >
-      {/* Accent stripe */}
-      <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl ${isBuy ? 'bg-dream-green' : 'bg-dream-red'}`} />
+      {/* Thinner, elegant accent stripe with subtle glow */}
+      <div className={`absolute left-0 top-0 bottom-0 w-[2px] ${isBuy ? 'bg-dream-green shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-dream-red shadow-[0_0_10px_rgba(239,68,68,0.5)]'}`} />
 
       <div className="p-4 pl-5">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <span className="font-black text-[14px] text-dm-text">{order.pair}</span>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2.5">
+            <span className="font-bold text-[15px] text-dm-text">{order.pair}</span>
             <span className={`text-[10px] px-2 py-0.5 rounded-md font-bold ${isBuy ? 'bg-dream-green/10 text-dream-green' : 'bg-dream-red/10 text-dream-red'}`}>
               {order.side}
             </span>
@@ -43,7 +43,7 @@ function OrderCard({ order, onCancel }: { key?: string | number; order: Order; o
               {order.type}
             </span>
           </div>
-          <span className="text-[11px] font-bold text-dm-text3">{order.size} {assetSymbol}</span>
+          <span className="text-[12px] font-bold text-dm-text2">{order.size} <span className="text-dm-text3">{assetSymbol}</span></span>
         </div>
 
         <div className="grid grid-cols-2 gap-y-3 gap-x-2 mb-4">
@@ -62,7 +62,7 @@ function OrderCard({ order, onCancel }: { key?: string | number; order: Order; o
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => onCancel(order.id)}
-            className="w-full py-2.5 rounded-xl text-[12px] font-bold bg-dm-surface-alt border border-dm-border text-dm-text2 hover:text-white hover:bg-dream-red hover:border-dream-red transition-colors"
+            className="w-full py-2.5 rounded-2xl text-[12px] font-bold bg-dm-surface-alt text-dm-text2 hover:text-dream-red hover:bg-dream-red/10 transition-colors"
           >
             Cancel Order
           </motion.button>

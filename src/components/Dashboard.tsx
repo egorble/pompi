@@ -73,10 +73,7 @@ export function Dashboard() {
         {/* Left Column: Equity & Summary */}
         <div className="md:col-span-8 flex flex-col gap-6">
           
-          <motion.div variants={cardVariants} className="bg-dm-surface rounded-[32px] p-8 dream-shadow relative overflow-hidden flex flex-col justify-center min-h-[240px]">
-            {/* Background elements to match the reference */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-accent/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
-            <div className="absolute bottom-0 right-20 w-48 h-48 bg-dream-green/5 rounded-full blur-3xl -mb-10"></div>
+          <motion.div variants={cardVariants} className="premium-card rounded-2xl p-8 shadow-sm relative overflow-hidden flex flex-col justify-center min-h-[240px]">
 
             <div className="relative z-10 w-2/3">
               <h2 className="text-dm-text2 font-semibold text-lg mb-2">Total Equity</h2>
@@ -104,13 +101,13 @@ export function Dashboard() {
 
           {/* Additional details */}
           <div className="grid grid-cols-2 gap-6">
-            <motion.div variants={cardVariants} className="bg-dm-surface rounded-[32px] p-6 dream-shadow relative overflow-hidden">
+            <motion.div variants={cardVariants} className="premium-card rounded-2xl p-6 shadow-sm relative overflow-hidden">
                <div className="relative z-10">
                   <div className="text-sm text-dm-text2 font-semibold mb-1">Free Collateral</div>
                   <div className="text-2xl font-bold text-dm-text">{formatCurrency(freeCollateral)}</div>
                </div>
             </motion.div>
-            <motion.div variants={cardVariants} className="bg-dm-surface rounded-[32px] p-6 dream-shadow relative overflow-hidden">
+            <motion.div variants={cardVariants} className="premium-card rounded-2xl p-6 shadow-sm relative overflow-hidden">
                <div className="relative z-10">
                   <div className="text-sm text-dm-text2 font-semibold mb-1">Maintenance Margin</div>
                   <div className="text-2xl font-bold text-dm-text">{formatCurrency(maintenanceMargin)}</div>
@@ -122,7 +119,7 @@ export function Dashboard() {
 
         {/* Right Column: Margin & Risk */}
         <div className="md:col-span-4 flex flex-col gap-6">
-          <motion.div variants={cardVariants} className="bg-dm-surface rounded-[32px] p-6 dream-shadow flex-1 flex flex-col relative overflow-hidden">
+          <motion.div variants={cardVariants} className="premium-card rounded-2xl p-6 shadow-sm flex-1 flex flex-col relative overflow-hidden">
             <h3 className="text-dm-text font-bold text-lg mb-6">Account Margin</h3>
             
             <div className="flex flex-col gap-6 mb-8 flex-1">

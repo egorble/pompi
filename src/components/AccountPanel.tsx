@@ -150,7 +150,7 @@ export function AccountPanel({ isOpen, onClose }: AccountPanelProps) {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-dream-blue/10 flex items-center justify-center">
+                      <div className="w-9 h-9 rounded-2xl bg-dream-blue/10 flex items-center justify-center">
                         <Wallet size={18} className="text-dream-blue" />
                       </div>
                       <div>
@@ -198,7 +198,7 @@ export function AccountPanel({ isOpen, onClose }: AccountPanelProps) {
                           initial={{ opacity: 0, y: -4 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -4 }}
-                          className="absolute top-full left-0 right-0 mt-1 bg-dm-surface border border-dm-border2 rounded-xl shadow-lg overflow-hidden z-10"
+                          className="absolute top-full left-0 right-0 mt-1 bg-dm-surface border border-dm-border2 rounded-2xl shadow-lg overflow-hidden z-10"
                         >
                           {supportedChains.map(chain => (
                             <button
@@ -227,7 +227,7 @@ export function AccountPanel({ isOpen, onClose }: AccountPanelProps) {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleConnect}
-                  className="w-full py-3 rounded-xl bg-dream-blue text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg"
+                  className="w-full py-3 rounded-2xl bg-dream-blue text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg"
                 >
                   <Wallet size={16} />
                   Connect Wallet
@@ -289,7 +289,7 @@ export function AccountPanel({ isOpen, onClose }: AccountPanelProps) {
                     {isConnected && assets.map(asset => (
                       <div
                         key={asset.symbol}
-                        className="flex items-center justify-between p-3 bg-dm-surface-alt rounded-xl border border-dm-border hover:border-dm-border2 transition-colors"
+                        className="flex items-center justify-between p-3 bg-dm-surface-alt rounded-2xl border border-dm-border hover:border-dm-border2 transition-colors"
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-lg bg-dm-surface-raised flex items-center justify-center text-xs font-extrabold text-dm-text">
@@ -356,7 +356,7 @@ export function AccountPanel({ isOpen, onClose }: AccountPanelProps) {
                           </div>
                         </div>
 
-                        <div className="p-4 bg-dm-surface-alt rounded-xl border border-dm-border space-y-3">
+                        <div className="p-4 bg-dm-surface-alt rounded-2xl border border-dm-border space-y-3">
                           <div className="flex items-center gap-2">
                             <ArrowDownToLine size={14} className="text-dream-green" />
                             <span className="text-xs font-bold text-dm-text">Send {depositAsset} to this address</span>
@@ -438,7 +438,7 @@ export function AccountPanel({ isOpen, onClose }: AccountPanelProps) {
                               value={withdrawAmount}
                               onChange={e => setWithdrawAmount(e.target.value)}
                               placeholder="0.00"
-                              className="w-full py-3 pl-4 pr-16 bg-dm-surface-alt border border-dm-border2 rounded-xl font-bold text-sm text-dm-text focus:border-dream-blue/30 focus:ring-2 focus:ring-dream-blue/20 outline-none transition-all"
+                              className="w-full py-3 pl-4 pr-16 bg-dm-surface-alt border border-dm-border2 rounded-2xl font-bold text-sm text-dm-text focus:border-dream-blue/30 focus:ring-2 focus:ring-dream-blue/20 outline-none transition-all"
                             />
                             <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
                               <span className="text-dm-text2 font-bold text-xs">{withdrawAsset}</span>
@@ -458,11 +458,11 @@ export function AccountPanel({ isOpen, onClose }: AccountPanelProps) {
                             type="text"
                             placeholder="0x..."
                             defaultValue={address}
-                            className="w-full py-3 pl-4 pr-4 bg-dm-surface-alt border border-dm-border2 rounded-xl font-medium text-xs text-dm-text focus:border-dream-blue/30 focus:ring-2 focus:ring-dream-blue/20 outline-none transition-all"
+                            className="w-full py-3 pl-4 pr-4 bg-dm-surface-alt border border-dm-border2 rounded-2xl font-medium text-xs text-dm-text focus:border-dream-blue/30 focus:ring-2 focus:ring-dream-blue/20 outline-none transition-all"
                           />
                         </div>
 
-                        <div className="space-y-1.5 p-3 bg-dm-surface-alt rounded-xl border border-dm-border">
+                        <div className="space-y-1.5 p-3 bg-dm-surface-alt rounded-2xl border border-dm-border">
                           <div className="flex justify-between text-[11px]">
                             <span className="text-dm-text3 font-medium">Network Fee</span>
                             <span className="font-bold text-dm-text2">~$0.50</span>
@@ -476,7 +476,7 @@ export function AccountPanel({ isOpen, onClose }: AccountPanelProps) {
                         <motion.button
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.95 }}
-                          className="w-full py-3 rounded-xl bg-dream-red text-white font-bold text-sm flex items-center justify-center gap-2 neon-button-red"
+                          className="w-full py-3 rounded-2xl bg-dream-red text-white font-bold text-sm flex items-center justify-center gap-2 neon-button-red"
                         >
                           <ArrowUpFromLine size={16} />
                           Withdraw {withdrawAsset}
@@ -498,7 +498,7 @@ export function AccountPanel({ isOpen, onClose }: AccountPanelProps) {
                     {mockHistory.map(record => (
                       <div
                         key={record.id}
-                        className="flex items-center justify-between p-3 bg-dm-surface-alt rounded-xl border border-dm-border hover:border-dm-border2 transition-colors"
+                        className="flex items-center justify-between p-3 bg-dm-surface-alt rounded-2xl border border-dm-border hover:border-dm-border2 transition-colors"
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${

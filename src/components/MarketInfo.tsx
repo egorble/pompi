@@ -40,10 +40,10 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
   );
 
   return (
-    <section className="bg-dm-surface p-2.5 md:p-3 rounded-dream dream-shadow flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 shrink-0 relative z-40">
-      <div className="flex items-center gap-2 md:gap-3 relative" ref={dropdownRef}>
-        <div className="w-10 h-10 md:w-11 md:h-11 bg-dream-blue/15 rounded-xl flex items-center justify-center shrink-0">
-          <span className="text-dream-blue font-bold text-lg md:text-xl">{pair.name.charAt(0)}</span>
+    <section className="premium-card rounded-[16px] p-3 md:p-4 flex flex-col lg:flex-row items-center justify-between gap-4 shrink-0 relative z-40 w-full mb-2">
+      <div className="flex items-center gap-3 relative" ref={dropdownRef}>
+        <div className="w-12 h-12 bg-[#1A2540] rounded-[10px] flex items-center justify-center shrink-0">
+          <span className="text-[#3366FF] font-bold text-xl">{pair.name.charAt(0)}</span>
         </div>
 
         <div
@@ -52,12 +52,12 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
         >
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
             <div className="flex items-center gap-2">
-              <h2 className="font-bold text-xl md:text-2xl text-dm-text group-hover:text-dream-blue transition-colors">
+              <h2 className="font-bold text-xl md:text-[22px] text-dm-text group-hover:text-brand-accent transition-colors leading-tight tracking-tight">
                 {pair.pair.replace('/USDC', '-PERP')}
               </h2>
-              <ChevronDown size={20} className={`text-dm-text3 transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
+              <ChevronDown size={18} className={`text-dm-text3 transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
             </div>
-            <p className="text-dm-text3 text-xs md:text-sm font-medium">{pair.name} / USDC</p>
+            <p className="text-dm-text3 text-sm font-medium leading-tight mt-0.5">{pair.name} / USDC</p>
           </motion.div>
         </div>
 
@@ -67,7 +67,7 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="absolute top-full left-0 mt-4 w-72 bg-dm-surface rounded-2xl shadow-2xl border border-dm-border overflow-hidden z-50"
+              className="absolute top-full left-0 mt-4 w-72 bg-dm-surface rounded-[16px] shadow-2xl border border-dm-border overflow-hidden z-50"
             >
               <div className="p-3 border-b border-dm-border">
                 <div className="relative">
@@ -77,7 +77,7 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
                     placeholder="Search pairs..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-dm-surface-alt border-none rounded-xl py-2 pl-9 pr-4 text-sm font-medium text-dm-text focus:ring-2 focus:ring-dream-blue/20 placeholder:text-dm-text3 outline-none"
+                    className="w-full bg-dm-surface-alt border-none rounded-[10px] py-2 pl-9 pr-4 text-sm font-medium text-dm-text focus:ring-2 focus:ring-brand-accent/20 placeholder:text-dm-text3 outline-none"
                   />
                 </div>
               </div>
@@ -100,7 +100,7 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
                         setShowDropdown(false);
                         setSearchQuery('');
                       }}
-                      className={`w-full flex items-center justify-between p-2.5 rounded-xl transition-colors group ${isSelected ? 'bg-dream-blue/10 border border-dream-blue/20' : 'hover:bg-dm-surface-alt border border-transparent'
+                       className={`w-full flex items-center justify-between p-2.5 rounded-[10px] transition-colors group ${isSelected ? 'bg-brand-accent/10 border border-brand-accent/20' : 'hover:bg-dm-surface-alt border border-transparent'
                         }`}
                     >
                       <div className="text-left">
@@ -126,24 +126,24 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
         </AnimatePresence>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 w-full lg:w-auto">
-        <div>
-          <p className="text-[10px] uppercase font-bold text-dm-text3">Mark Price {isConnected && <span className="inline-block w-1.5 h-1.5 rounded-full bg-dream-green ml-1" />}</p>
-          <p className="font-bold text-base md:text-lg text-dm-text">{formatCurrency(displayPrice)}</p>
+      <div className="flex items-center gap-8 md:gap-12 w-full lg:w-auto">
+        <div className="flex flex-col gap-1">
+          <p className="text-[10px] font-bold text-dm-text3 uppercase tracking-wider">Mark Price</p>
+          <p className="font-bold text-lg md:text-[20px] text-dm-text tracking-tight">{formatCurrency(displayPrice)}</p>
         </div>
-        <div>
-          <p className="text-[10px] uppercase font-bold text-dm-text3">24h Change</p>
-          <p className={`font-bold text-base md:text-lg ${isPositive ? 'text-dream-green' : 'text-dream-red'}`}>
+        <div className="flex flex-col gap-1">
+          <p className="text-[10px] font-bold text-dm-text3 uppercase tracking-wider">24h Change</p>
+          <p className={`font-bold text-lg md:text-[20px] tracking-tight ${isPositive ? 'text-dream-green' : 'text-dream-red'}`}>
             {formatPercent(change24h)}
           </p>
         </div>
-        <div>
-          <p className="text-[10px] uppercase font-bold text-dm-text3">24h Volume</p>
-          <p className="font-bold text-base md:text-lg text-dm-text">{volume24h}</p>
+        <div className="flex flex-col gap-1">
+          <p className="text-[10px] font-bold text-dm-text3 uppercase tracking-wider">24h Volume</p>
+          <p className="font-bold text-lg md:text-[20px] text-dm-text tracking-tight">{volume24h}</p>
         </div>
-        <div>
-          <p className="text-[10px] uppercase font-bold text-dm-text3">Funding Rate</p>
-          <p className="font-bold text-base md:text-lg text-dream-blue">{fundingRate.toFixed(4)}%</p>
+        <div className="flex flex-col gap-1">
+          <p className="text-[10px] font-bold text-dm-text3 uppercase tracking-wider">Funding Rate</p>
+          <p className="font-bold text-lg md:text-[20px] text-brand-accent tracking-tight">{fundingRate.toFixed(4)}%</p>
         </div>
       </div>
     </section>

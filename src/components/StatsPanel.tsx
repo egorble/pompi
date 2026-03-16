@@ -74,7 +74,7 @@ export function StatsPanel() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="bg-dm-surface rounded-2xl p-4 dream-shadow"
+            className="premium-card rounded-2xl p-4 shadow-sm"
           >
             <p className="text-[10px] uppercase font-bold text-dm-text3 mb-1">{card.label}</p>
             <p className="text-lg font-black text-dm-text">{card.value}</p>
@@ -82,7 +82,7 @@ export function StatsPanel() {
         ))}
       </div>
 
-      <div className="bg-dm-surface rounded-2xl dream-shadow overflow-hidden">
+      <div className="premium-card rounded-2xl shadow-sm overflow-hidden">
         <div className="px-4 py-3 border-b border-dm-border">
           <h3 className="text-sm font-bold text-dm-text">Recent Activity</h3>
         </div>

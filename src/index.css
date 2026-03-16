@@ -2,44 +2,54 @@
 @import "tailwindcss";
 
 :root {
-  --dm-bg: #F4F6F8;
+  /* Light mode stays clean and bright, but less harsh */
+  --dm-bg: #F8FAFC;
   --dm-surface: #FFFFFF;
-  --dm-surface-alt: #F8FAFC;
-  --dm-surface-raised: #F1F5F9;
-  --dm-surface-strong: #E2E8F0;
+  --dm-surface-alt: #F1F5F9;
+  --dm-surface-raised: #E2E8F0;
+  --dm-surface-strong: #CBD5E1;
   --dm-inverse: #000000;
   --dm-text: #0B0E14;
-  --dm-text2: #64748B;
+  --dm-text2: #475569;
   --dm-text3: #94A3B8;
-  --dm-border: #F1F5F9;
-  --dm-border2: #E2E8F0;
-  --dm-shadow-color: rgba(0, 0, 0, 0.04);
+  --dm-border: #E2E8F0;
+  --dm-border2: #CBD5E1;
+  --dm-shadow-color: rgba(0, 0, 0, 0.05);
   --dm-glass-bg: rgba(255, 255, 255, 0.85);
   --dm-glass-border: rgba(0, 0, 0, 0.04);
 }
 
 .dark {
-  --dm-bg: #000000;
-  --dm-surface: #0A0A0A;
-  --dm-surface-alt: #121212;
-  --dm-surface-raised: #1A1A1A;
-  --dm-surface-strong: #262626;
+  /* Core deep space theme */
+  --dm-bg: #030407; /* Extremely dark blue-black for main canvas */
+  --dm-surface: #0B0D13; /* Primary card background - slightly lifted */
+  --dm-surface-alt: #10131A; /* Secondary surface */
+  --dm-surface-raised: #151821; /* Interactive/hover surface */
+  --dm-surface-strong: #1B1F2A; /* Pressed or strong surface */
   --dm-inverse: #FFFFFF;
-  --dm-text: #FAFAFA;
-  --dm-text2: #A3A3A3;
-  --dm-text3: #737373;
-  --dm-border: #1A1A1A;
-  --dm-border2: #262626;
-  --dm-shadow-color: rgba(0, 0, 0, 0.8);
-  --dm-glass-bg: rgba(10, 10, 10, 0.75);
-  --dm-glass-border: rgba(255, 255, 255, 0.06);
+  
+  /* Text */
+  --dm-text: #FFFFFF; /* Crisp white for values */
+  --dm-text2: #808A9D; /* Muted cool grey for labels */
+  --dm-text3: #5B6373; /* Even more subtle for metadata */
+  
+  /* Borders - very subtle to not break immersion */
+  --dm-border: rgba(255, 255, 255, 0.04);
+  --dm-border2: rgba(255, 255, 255, 0.08);
+  
+  /* Shadows and glows */
+  --dm-shadow-color: rgba(0, 0, 0, 0.6);
+  --dm-glow-subtle: rgba(255, 255, 255, 0.02);
 }
 
 @theme {
-  --color-brand-accent: #2962FF; /* Sharper electric blue */
-  --color-dream-blue: #2962FF;
-  --color-dream-green: #10B981; /* Emerald green */
-  --color-dream-red: #EF4444; /* Standard red */
+  --color-brand-accent: #3366FF; /* Vibrant electric blue */
+  --color-brand-accent-glow: rgba(51, 102, 255, 0.4);
+  --color-dream-green: #00E676; /* Vivid neon green */
+  --color-dream-green-glow: rgba(0, 230, 118, 0.2);
+  --color-dream-red: #FF3D00; /* Vibrant neon orange/red */
+  --color-dream-red-glow: rgba(255, 61, 0, 0.2);
+  
   --color-dream-bg: var(--dm-bg);
   --color-dream-card: var(--dm-surface);
   --color-dm-surface: var(--dm-surface);
@@ -52,38 +62,87 @@
   --color-dm-text3: var(--dm-text3);
   --color-dm-border: var(--dm-border);
   --color-dm-border2: var(--dm-border2);
-  --radius-dream: 8px; /* Sharper corners */
+  
+  --radius-dream: 16px;
   --font-sans: 'Inter', sans-serif;
 }
 
 @layer utilities {
-  .dream-shadow {
-    box-shadow: 0 4px 20px -2px var(--dm-shadow-color), 0 2px 8px -2px var(--dm-shadow-color);
+  /* Premium Card Setup */
+  .premium-card {
+    background: var(--dm-surface);
+    border: 1px solid var(--dm-border);
+    /* Subtle inner top-highlight to look like light hitting an edge */
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.03), 
+                0 8px 32px 0 var(--dm-shadow-color);
+  }
+  
+  .dark .premium-card {
+    /* Faint radial gradient inside the card to break the solid color */
+    background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.015) 0%, transparent 40%),
+                var(--dm-surface);
   }
 
-  .glass-panel {
-    background: var(--dm-glass-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--dm-glass-border);
-    box-shadow: 0 4px 12px 0 var(--dm-shadow-color);
+  .premium-card-hover {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .premium-card-hover:hover {
+    border-color: var(--dm-border2);
+    /* Lifting effect */
+    transform: translateY(-2px);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), 
+                0 12px 40px 0 var(--dm-shadow-color);
+  }
+
+  /* Interactive Elements */
+  .premium-button {
+    background: var(--dm-surface-alt);
+    border: 1px solid var(--dm-border);
+    transition: all 0.2s;
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.02);
+  }
+
+  .premium-button:hover {
+    background: var(--dm-surface-raised);
+    border-color: var(--dm-border2);
+  }
+
+  .premium-button:active {
+    transform: scale(0.98);
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  /* Text treatments */
+  .text-value {
+    color: var(--dm-text);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .text-label {
+    color: var(--dm-text2);
+    font-weight: 500;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
   }
 
   /* Subtler interactions */
   .neon-button-green {
-    box-shadow: none;
+    box-shadow: 0 0 20px -5px var(--color-dream-green-glow);
   }
 
   .neon-button-green:hover {
-    box-shadow: 0 2px 12px rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 30px -5px var(--color-dream-green-glow);
   }
 
   .neon-button-red {
-    box-shadow: none;
+    box-shadow: 0 0 20px -5px var(--color-dream-red-glow);
   }
 
   .neon-button-red:hover {
-    box-shadow: 0 2px 12px rgba(239, 68, 68, 0.2);
+    box-shadow: 0 0 30px -5px var(--color-dream-red-glow);
   }
 
   .custom-scrollbar::-webkit-scrollbar {
@@ -95,7 +154,7 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--dm-text3);
+    background: var(--dm-border2);
     border-radius: 10px;
   }
 
@@ -112,7 +171,10 @@
 body {
   font-family: 'Inter', sans-serif;
   background-color: var(--dm-bg);
+  /* Subdued noise texture for the ultimate premium dark feel */
+  background-image: radial-gradient(circle at 50% 0%, rgba(51, 102, 255, 0.03) 0%, transparent 50%);
   color: var(--dm-text);
+  min-height: 100vh;
 }
 
 /* Hide number input spin buttons */
