@@ -21,6 +21,7 @@ import { useWebSocket } from './hooks/useWebSocket';
 import { useStore } from './store';
 import { apiClient } from './api/client';
 import { Side, OrderType } from './api/types';
+import { AccountPanel } from './components/AccountPanel';
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'Trade' | 'Positions' | 'OpenOrders' | 'Stats'>('dashboard');
@@ -28,6 +29,7 @@ function AppContent() {
   const [positions, setPositions] = useState<Position[]>(initialPositions);
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [showMobileChart, setShowMobileChart] = useState(false);
+  const [showAccount, setShowAccount] = useState(false);
 
   const { setCurrentMarketId, walletAddress, setTicker, setUsdcBalance, usdcBalance } = useStore();
 
@@ -144,21 +146,10 @@ function AppContent() {
   };
 
   const handleClosePosition = (id: string) => {
-    const pos = positions.find(p => p.id === id);
-    if (pos) {
-      const margin = (pos.size * pos.entryPrice) / pos.leverage;
-      setBalance(prev => prev + margin + pos.pnl);
-    }
     setPositions(prev => prev.filter(p => p.id !== id));
   };
 
   const handleCloseAll = () => {
-    let totalReturn = 0;
-    positions.forEach(pos => {
-      const margin = (pos.size * pos.entryPrice) / pos.leverage;
-      totalReturn += margin + pos.pnl;
-    });
-    setBalance(prev => prev + totalReturn);
     setPositions([]);
   };
 
@@ -186,7 +177,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen lg:h-screen flex flex-row text-dm-text bg-dream-bg lg:overflow-hidden font-sans">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onSettingsClick={() => setShowAccount(true)} />
 
       <div className="flex-1 flex flex-col min-w-0">
         <Navbar />
@@ -331,6 +322,8 @@ function AppContent() {
         setActiveTab={setActiveTab}
         onOpenTrade={() => setActiveTab('Trade')}
       />
+
+      <AccountPanel isOpen={showAccount} onClose={() => setShowAccount(false)} />
     </div>
   );
 }
