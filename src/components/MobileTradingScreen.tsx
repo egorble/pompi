@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Pair } from '../types';
-import { formatCurrency } from '../utils';
+import { formatCurrency, getMarketId } from '../utils';
 import { BarChart2, ChevronDown, MoreHorizontal, Plus, Minus, Info, X, Check, ArrowLeft, Search } from 'lucide-react';
+import { useStore } from '../store';
 
 interface MobileTradingScreenProps {
   pair: Pair;
@@ -14,6 +15,11 @@ interface MobileTradingScreenProps {
 }
 
 export function MobileTradingScreen({ pair, pairs, onSelectPair, onOpenChart, balance, onPlaceTrade }: MobileTradingScreenProps) {
+  const { tickers } = useStore();
+  const ticker = tickers[getMarketId(pair.pair)];
+  const longRatio = ticker?.long_ratio ?? 50;
+  const shortRatio = ticker?.short_ratio ?? 50;
+
   const [view, setView] = useState<'pairs' | 'trading'>('pairs');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -470,11 +476,11 @@ export function MobileTradingScreen({ pair, pairs, onSelectPair, onOpenChart, ba
           {/* Long/Short Ratio */}
           <div className="mt-auto pt-2 shrink-0">
             <div className="flex justify-between text-[10px] font-bold mb-1">
-              <span className="text-dream-green">L 52%</span>
-              <span className="text-dream-red">48% S</span>
+              <span className="text-dream-green">L {longRatio.toFixed(0)}%</span>
+              <span className="text-dream-red">{shortRatio.toFixed(0)}% S</span>
             </div>
             <div className="h-1.5 w-full bg-dm-surface-raised rounded-full overflow-hidden flex">
-              <div className="h-full bg-dream-green" style={{ width: '52%' }} />
+              <div className="h-full bg-dream-green" style={{ width: `${longRatio}%` }} />
               <div className="h-full bg-dream-red" style={{ width: '48%' }} />
             </div>
           </div>

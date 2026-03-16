@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Pair } from '../types';
-import { formatCurrency } from '../utils';
+import { formatCurrency, getMarketId } from '../utils';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRightLeft, ChevronDown, Minus, Check } from 'lucide-react';
+import { useStore } from '../store';
 
 interface ExecutionPanelProps {
   pair: Pair;
@@ -10,6 +11,11 @@ interface ExecutionPanelProps {
 }
 
 export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
+  const { usdcBalance, tickers, lastPrice } = useStore();
+  const ticker = tickers[getMarketId(pair.pair)];
+  const livePrice = lastPrice > 0 ? lastPrice : (ticker?.price || pair.price);
+  const feeBps = ticker?.fee_open_bps || 10;
+  const availableBalance = usdcBalance > 0 ? usdcBalance : 10000;
   const [side, setSide] = useState<'Long' | 'Short'>('Long');
   const [orderType, setOrderType] = useState<'Market' | 'Limit'>('Market');
   const [marginMode, setMarginMode] = useState<'Cross' | 'Isolated'>('Cross');
@@ -35,12 +41,12 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
   }, []);
 
   const sizeUsd = parseFloat(sizeStr) || 0;
-  const orderPrice = orderType === 'Limit' ? (parseFloat(priceStr) || pair.price) : pair.price;
+  const orderPrice = orderType === 'Limit' ? (parseFloat(priceStr) || livePrice) : livePrice;
 
   const liqPrice = side === 'Long'
     ? orderPrice * (1 - 1 / leverage)
     : orderPrice * (1 + 1 / leverage);
-  const executionFee = sizeUsd * 0.0012;
+  const executionFee = sizeUsd * (feeBps / 10000);
 
   const handleTrade = () => {
     if (sizeUsd <= 0) return;
@@ -55,8 +61,7 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
   const handleSizePercentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const percent = parseInt(e.target.value);
     setSizePercent(percent);
-    const available = 10000;
-    setSizeStr(((available * percent) / 100).toString());
+    setSizeStr(((availableBalance * percent) / 100).toString());
   };
 
   return (
@@ -177,7 +182,7 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
 
       <div className="flex justify-between items-center text-xs mb-2 px-1">
         <span className="text-dm-text3 font-medium">Available Balance</span>
-        <span className="font-bold text-dm-text2">10,000.00 USDC</span>
+        <span className="font-bold text-dm-text2">{availableBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USDC</span>
       </div>
 
       {/* Inputs */}

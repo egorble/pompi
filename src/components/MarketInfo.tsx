@@ -4,6 +4,7 @@ import { formatCurrency, formatPercent } from '../utils';
 import { ChevronDown, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useStore } from '../store';
+import { getMarketId } from '../utils';
 
 interface MarketInfoProps {
   pair: Pair;
@@ -12,9 +13,13 @@ interface MarketInfoProps {
 }
 
 export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
-  const { lastPrice, isConnected } = useStore();
-  const displayPrice = lastPrice > 0 ? lastPrice : pair.price;
-  const isPositive = pair.change >= 0;
+  const { lastPrice, isConnected, tickers } = useStore();
+  const ticker = tickers[getMarketId(pair.pair)];
+  const displayPrice = lastPrice > 0 ? lastPrice : (ticker?.price || pair.price);
+  const change24h = ticker?.change_24h_pct ?? pair.change;
+  const volume24h = ticker && ticker.volume_24h_usd > 0 ? `$${ticker.volume_24h_usd.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : pair.volume;
+  const fundingRate = ticker?.funding_rate_pct ?? pair.funding;
+  const isPositive = change24h >= 0;
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -126,16 +131,16 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
         <div>
           <p className="text-[10px] uppercase font-bold text-dm-text3">24h Change</p>
           <p className={`font-bold text-base md:text-lg ${isPositive ? 'text-dream-green' : 'text-dream-red'}`}>
-            {formatPercent(pair.change)}
+            {formatPercent(change24h)}
           </p>
         </div>
         <div>
           <p className="text-[10px] uppercase font-bold text-dm-text3">24h Volume</p>
-          <p className="font-bold text-base md:text-lg text-dm-text">{pair.volume}</p>
+          <p className="font-bold text-base md:text-lg text-dm-text">{volume24h}</p>
         </div>
         <div>
           <p className="text-[10px] uppercase font-bold text-dm-text3">Funding Rate</p>
-          <p className="font-bold text-base md:text-lg text-dream-blue">{pair.funding.toFixed(4)}%</p>
+          <p className="font-bold text-base md:text-lg text-dream-blue">{fundingRate.toFixed(4)}%</p>
         </div>
       </div>
     </section>
