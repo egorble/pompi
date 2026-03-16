@@ -22,10 +22,10 @@ export function Sidebar({ activeTab, setActiveTab, onSettingsClick }: SidebarPro
   ];
 
   return (
-    <div className="hidden lg:flex flex-col w-[80px] shrink-0 bg-transparent h-screen py-6 items-center z-50">
-      <div className="mb-10 text-dm-bg w-12 h-12 bg-brand-accent rounded-2xl flex items-center justify-center shadow-sm">
+    <div className="hidden lg:flex flex-col w-[64px] shrink-0 bg-transparent border-r border-dm-border h-screen py-4 items-center z-50">
+      <div className="mb-8 text-dm-bg w-10 h-10 bg-brand-accent rounded-sm flex items-center justify-center">
         {/* Placeholder for Logo */}
-        <Box size={24} className="text-black fill-current" />
+        <Box size={20} className="text-black fill-current" />
       </div>
       
       <div className="flex flex-col gap-2 flex-1">
@@ -43,13 +43,11 @@ export function Sidebar({ activeTab, setActiveTab, onSettingsClick }: SidebarPro
                     setActiveTab(item.id as any);
                   }
                 }}
-                className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 border border-transparent shadow-sm ${
-                  isActive 
-                    ? 'bg-brand-accent text-black shadow-brand-accent/20' 
-                    : 'bg-dm-surface text-dm-text hover:bg-brand-accent/10'
+                className={`relative w-10 h-10 rounded-sm flex items-center justify-center transition-all duration-200 border border-transparent overflow-hidden ${
+                  isActive ? 'bg-brand-accent text-black' : 'bg-transparent text-dm-text hover:bg-dm-surface-alt'
                 }`}
               >
-                <Icon size={20} className={isActive ? 'text-black' : 'text-dm-text'} strokeWidth={isActive ? 2.5 : 2} />
+                <Icon size={18} className="relative z-10" strokeWidth={isActive ? 2.5 : 2} />
               </button>
             </div>
           );
@@ -59,12 +57,12 @@ export function Sidebar({ activeTab, setActiveTab, onSettingsClick }: SidebarPro
       <div className="mt-auto flex flex-col gap-2 relative z-50">
         <button 
           onClick={toggle}
-          className="w-12 h-12 rounded-2xl flex items-center justify-center bg-dm-surface text-dm-text2 hover:text-dm-text hover:bg-dm-surface-alt transition-all duration-200 shadow-sm"
+          className="w-10 h-10 rounded-sm flex items-center justify-center bg-transparent text-dm-text2 hover:text-dm-text hover:bg-dm-surface-alt transition-all duration-200"
         >
-          {isDark ? <Sun size={20} /> : <Moon size={20} />}
+          {isDark ? <Sun size={18} /> : <Moon size={18} />}
         </button>
-        <button className="w-12 h-12 rounded-2xl flex items-center justify-center bg-dm-surface text-dm-text2 hover:text-dm-text hover:bg-dm-surface-alt transition-all duration-200 shadow-sm">
-           <HeadphonesIcon size={20} />
+        <button className="w-10 h-10 rounded-sm flex items-center justify-center bg-transparent text-dm-text2 hover:text-dm-text hover:bg-dm-surface-alt transition-all duration-200">
+           <HeadphonesIcon size={18} />
         </button>
       </div>
     </div>

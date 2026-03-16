@@ -24,16 +24,16 @@ export function BottomNav({ activeTab, setActiveTab, onOpenTrade }: BottomNavPro
         const isActive = activeTab === tab.id;
 
         return (
-          <motion.button
+          <button
             key={tab.id}
-            whileTap={{ scale: 0.9 }}
             onClick={() => setActiveTab(tab.id as any)}
-            className={`flex flex-col items-center gap-1 ${isActive ? 'text-dm-text' : 'text-dm-text3'
-              }`}
+            className={`relative flex flex-col items-center gap-1 w-16 h-14 justify-center transition-colors duration-200 ${
+              isActive ? 'text-brand-accent border-t-2 border-brand-accent bg-dm-surface-alt/50 w-full' : 'text-dm-text3 hover:text-dm-text2 border-t-2 border-transparent w-full'
+            }`}
           >
-            <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-            <span className="text-[10px] font-bold">{tab.label}</span>
-          </motion.button>
+            <Icon size={isActive ? 20 : 20} strokeWidth={isActive ? 2.5 : 2} className="relative z-10 transition-all duration-200" />
+            <span className={`text-[9px] uppercase tracking-wider transition-all duration-200 ${isActive ? 'font-bold' : 'font-medium'}`}>{tab.label}</span>
+          </button>
         );
       })}
     </div>

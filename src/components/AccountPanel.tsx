@@ -227,7 +227,7 @@ export function AccountPanel({ isOpen, onClose }: AccountPanelProps) {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleConnect}
-                  className="w-full py-3 rounded-2xl bg-dream-blue text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg"
+                  className="w-full py-3 rounded-2xl bg-brand-accent text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg neon-button-blue"
                 >
                   <Wallet size={16} />
                   Connect Wallet

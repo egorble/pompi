@@ -65,7 +65,7 @@ export function StatsPanel() {
 
   return (
     <section>
-      <h2 className="font-bold text-xl text-dm-text mb-4">Platform Stats</h2>
+      <h2 className="text-xs font-bold text-dm-text3 uppercase tracking-wider mb-4">Platform Stats</h2>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         {statCards.map((card, i) => (
@@ -74,25 +74,29 @@ export function StatsPanel() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="premium-card rounded-2xl p-4 shadow-sm"
+            className="premium-card rounded-sm p-3 relative overflow-hidden group"
           >
-            <p className="text-[10px] uppercase font-bold text-dm-text3 mb-1">{card.label}</p>
-            <p className="text-lg font-black text-dm-text">{card.value}</p>
+            <div className="absolute inset-0 bg-gradient-to-br from-dream-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-dream-blue/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10">
+              <p className="text-[9px] uppercase tracking-wide font-bold text-dm-text3 mb-1">{card.label}</p>
+              <p className="text-base font-bold text-dm-text">{card.value}</p>
+            </div>
           </motion.div>
         ))}
       </div>
 
-      <div className="premium-card rounded-2xl shadow-sm overflow-hidden">
-        <div className="px-4 py-3 border-b border-dm-border">
-          <h3 className="text-sm font-bold text-dm-text">Recent Activity</h3>
+      <div className="premium-card rounded-sm overflow-hidden">
+        <div className="px-3 py-2 border-b border-dm-border">
+          <h3 className="text-[11px] font-bold text-dm-text3 uppercase tracking-wide">Recent Activity</h3>
         </div>
 
         {stats.recent_trades && stats.recent_trades.length > 0 ? (
           <div className="divide-y divide-dm-border">
             {stats.recent_trades.slice().reverse().map((trade, i) => (
-              <div key={i} className="flex items-center justify-between px-4 py-2.5 text-[12px] hover:bg-dm-surface-alt transition-colors">
-                <span className="font-bold text-dm-text w-20">{trade.market_id}</span>
-                <span className="font-medium text-dm-text2">{formatCurrency(trade.price)}</span>
+              <div key={i} className="flex items-center justify-between px-3 py-2 text-[11px] hover:bg-dm-surface-strong transition-colors">
+                <span className="font-bold text-dm-text w-16">{trade.market_id}</span>
+                <span className="font-bold text-dm-text2">{formatCurrency(trade.price)}</span>
                 <span className="font-medium text-dm-text2">{trade.size.toFixed(4)}</span>
                 <span className={`font-bold ${
                   trade.taker_side === 'Buy' || trade.taker_side === 'Long'
@@ -101,14 +105,14 @@ export function StatsPanel() {
                 }`}>
                   {trade.taker_side}
                 </span>
-                <span className="text-dm-text3 text-[11px]">
+                <span className="text-dm-text3 text-[10px]">
                   {new Date(trade.timestamp_ms).toLocaleTimeString()}
                 </span>
               </div>
             ))}
           </div>
         ) : (
-          <div className="px-4 py-8 text-center text-dm-text3 text-sm font-medium">
+          <div className="px-3 py-6 text-center text-dm-text3 text-xs font-medium">
             No recent trades recorded
           </div>
         )}

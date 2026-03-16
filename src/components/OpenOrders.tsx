@@ -27,42 +27,42 @@ function OrderCard({ order, onCancel }: { key?: string | number; order: Order; o
   return (
     <motion.div
       variants={cardVariants}
-      className="premium-card rounded-2xl relative overflow-hidden shadow-sm"
+      className="premium-card relative overflow-hidden"
     >
-      {/* Thinner, elegant accent stripe with subtle glow */}
-      <div className={`absolute left-0 top-0 bottom-0 w-[2px] ${isBuy ? 'bg-dream-green shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-dream-red shadow-[0_0_10px_rgba(239,68,68,0.5)]'}`} />
+      {/* Thinner, elegant accent stripe */}
+      <div className={`absolute left-0 top-0 bottom-0 w-[2px] ${isBuy ? 'bg-dream-green' : 'bg-dream-red'}`} />
 
-      <div className="p-4 pl-5">
+      <div className="p-3 pl-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2.5">
-            <span className="font-bold text-[15px] text-dm-text">{order.pair}</span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-md font-bold ${isBuy ? 'bg-dream-green/10 text-dream-green' : 'bg-dream-red/10 text-dream-red'}`}>
+            <span className="font-bold text-xs uppercase tracking-wide text-dm-text">{order.pair}</span>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-sm font-bold ${isBuy ? 'bg-dream-green/10 text-dream-green' : 'bg-dream-red/10 text-dream-red'}`}>
               {order.side}
             </span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-md font-bold border ${typeColor}`}>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-sm font-bold border ${typeColor}`}>
               {order.type}
             </span>
           </div>
-          <span className="text-[12px] font-bold text-dm-text2">{order.size} <span className="text-dm-text3">{assetSymbol}</span></span>
+          <span className="text-[11px] font-bold text-dm-text2">{order.size} <span className="text-dm-text3">{assetSymbol}</span></span>
         </div>
 
         <div className="grid grid-cols-2 gap-y-3 gap-x-2 mb-4">
           <div className="text-left">
-            <p className="text-[10px] font-semibold text-dm-text3 uppercase tracking-wide">Trig. Price</p>
-            <p className="text-[13px] font-bold text-dm-text mt-0.5">{formatCurrency(order.price)}</p>
+            <p className="text-[9px] font-semibold text-dm-text3 uppercase tracking-wide">Trig. Price</p>
+            <p className="text-xs font-bold text-dm-text mt-0.5">{formatCurrency(order.price)}</p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] font-semibold text-dm-text3 uppercase tracking-wide">Filled</p>
-            <p className="text-[13px] font-bold text-dm-text mt-0.5">{(order.filled / order.size * 100).toFixed(2)}%</p>
+            <p className="text-[9px] font-semibold text-dm-text3 uppercase tracking-wide">Filled</p>
+            <p className="text-xs font-bold text-dm-text mt-0.5">{(order.filled / order.size * 100).toFixed(2)}%</p>
           </div>
         </div>
 
         <div className="flex gap-2">
           <motion.button
             whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => onCancel(order.id)}
-            className="w-full py-2.5 rounded-2xl text-[12px] font-bold bg-dm-surface-alt text-dm-text2 hover:text-dream-red hover:bg-dream-red/10 transition-colors"
+            className="w-full py-1.5 rounded-sm text-[11px] font-bold uppercase tracking-wide bg-dm-surface-alt border border-dm-border text-dm-text2 hover:text-white hover:border-dream-red/50 hover:bg-dream-red transition-all"
           >
             Cancel Order
           </motion.button>
@@ -85,16 +85,16 @@ export function OpenOrders({ orders, onCancel, onCancelAll, layout = 'list' }: O
     : orders.filter(o => o.type === filterType);
 
   return (
-    <section className="p-4">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
+    <section>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
         <div className="flex items-center gap-3">
-          <h2 className="font-bold text-xl text-dm-text">Open Orders</h2>
+          <h2 className="text-xs font-bold text-dm-text3 uppercase tracking-wider">Open Orders</h2>
           {orders.length > 0 && (
             <motion.span
               key={orders.length}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="text-xs font-bold bg-dream-blue/10 text-dream-blue px-2 py-0.5 rounded-full"
+              className="text-[10px] font-bold bg-dm-surface-raised border border-dm-border text-dm-text2 px-1.5 py-0.5 rounded-sm"
             >
               {orders.length}
             </motion.span>
@@ -103,15 +103,22 @@ export function OpenOrders({ orders, onCancel, onCancelAll, layout = 'list' }: O
         
         <div className="flex items-center gap-2 w-full sm:w-auto">
           {/* Order Type Filter */}
-          <div className="flex bg-dm-surface-alt rounded-lg p-0.5 border border-dm-border flex-1 sm:flex-none">
-            {['All', 'Limit', 'Take Profit', 'Stop Loss'].map(type => (
+          <div className="flex relative bg-dm-surface-alt rounded-sm p-0.5 border border-dm-border flex-1 sm:flex-none">
+            {['All', 'Limit', 'Take Profit', 'Stop Loss'].map((type, i) => (
               <button
                 key={type}
                 onClick={() => setFilterType(type)}
-                className={`py-1.5 px-3 rounded-md text-[11px] font-bold transition-colors whitespace-nowrap flex-1 sm:flex-none ${
-                   filterType === type ? 'bg-dm-surface text-dm-text shadow-sm' : 'text-dm-text3 hover:text-dm-text2'
+                className={`relative z-10 py-1.5 px-3 rounded-sm text-[10px] uppercase tracking-wide font-bold transition-all whitespace-nowrap flex-1 sm:flex-none ${
+                   filterType === type ? 'text-white' : 'text-dm-text3 hover:text-dm-text2'
                 }`}
               >
+                {filterType === type && (
+                  <motion.div
+                    layoutId="openOrdersFilter"
+                    className="absolute inset-0 bg-dm-surface-strong border border-dm-border rounded-sm -z-10"
+                    transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                  />
+                )}
                 {type === 'Take Profit' ? 'TP' : type === 'Stop Loss' ? 'SL' : type}
               </button>
             ))}
@@ -120,9 +127,9 @@ export function OpenOrders({ orders, onCancel, onCancelAll, layout = 'list' }: O
           {orders.length > 0 && (
             <motion.button
               whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.95 }}
+              whileTap={{ scale: 0.98 }}
               onClick={onCancelAll}
-              className="bg-dm-surface-raised hover:bg-dream-red/10 px-4 py-2 rounded-lg text-[11px] font-bold text-dm-text2 hover:text-dream-red transition-colors shrink-0"
+              className="bg-transparent border border-dm-border hover:bg-dream-red hover:border-dream-red/50 hover:text-white px-3 py-1.5 rounded-sm text-[10px] uppercase tracking-wider font-bold text-dm-text2 transition-all shrink-0"
             >
               Cancel All
             </motion.button>

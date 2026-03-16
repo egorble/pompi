@@ -2,36 +2,36 @@
 @import "tailwindcss";
 
 :root {
-  /* Light mode stays clean and bright, but less harsh */
-  --dm-bg: #F8FAFC;
+  /* Light mode - cool blue tinted slate */
+  --dm-bg: #F0F4F8;
   --dm-surface: #FFFFFF;
-  --dm-surface-alt: #F1F5F9;
-  --dm-surface-raised: #E2E8F0;
-  --dm-surface-strong: #CBD5E1;
+  --dm-surface-alt: #E2E8F0;
+  --dm-surface-raised: #CBD5E1;
+  --dm-surface-strong: #94A3B8;
   --dm-inverse: #000000;
-  --dm-text: #0B0E14;
-  --dm-text2: #475569;
-  --dm-text3: #94A3B8;
+  --dm-text: #0F172A;
+  --dm-text2: #334155;
+  --dm-text3: #64748B;
   --dm-border: #E2E8F0;
   --dm-border2: #CBD5E1;
-  --dm-shadow-color: rgba(0, 0, 0, 0.05);
+  --dm-shadow-color: rgba(15, 23, 42, 0.05);
   --dm-glass-bg: rgba(255, 255, 255, 0.85);
-  --dm-glass-border: rgba(0, 0, 0, 0.04);
+  --dm-glass-border: rgba(15, 23, 42, 0.04);
 }
 
 .dark {
-  /* Core deep space theme */
-  --dm-bg: #030407; /* Extremely dark blue-black for main canvas */
-  --dm-surface: #0B0D13; /* Primary card background - slightly lifted */
-  --dm-surface-alt: #10131A; /* Secondary surface */
-  --dm-surface-raised: #151821; /* Interactive/hover surface */
-  --dm-surface-strong: #1B1F2A; /* Pressed or strong surface */
+  /* Core deep space theme - premium dark blue */
+  --dm-bg: #0A0F1C; /* Deep blue-black */
+  --dm-surface: #111827; /* Very dark blue gray */
+  --dm-surface-alt: #1F2937; /* Lighter blue gray */
+  --dm-surface-raised: #374151; /* Interactive */
+  --dm-surface-strong: #4B5563; /* Pressed */
   --dm-inverse: #FFFFFF;
   
   /* Text */
-  --dm-text: #FFFFFF; /* Crisp white for values */
-  --dm-text2: #808A9D; /* Muted cool grey for labels */
-  --dm-text3: #5B6373; /* Even more subtle for metadata */
+  --dm-text: #F8FAFC; /* Crisp bright blue-white */
+  --dm-text2: #94A3B8; /* Muted slate blue */
+  --dm-text3: #64748B; /* Darker slate */
   
   /* Borders - very subtle to not break immersion */
   --dm-border: rgba(255, 255, 255, 0.04);
@@ -49,6 +49,8 @@
   --color-dream-green-glow: rgba(0, 230, 118, 0.2);
   --color-dream-red: #FF3D00; /* Vibrant neon orange/red */
   --color-dream-red-glow: rgba(255, 61, 0, 0.2);
+  --color-dream-blue: var(--color-brand-accent);
+  --color-dream-blue-glow: var(--color-brand-accent-glow);
   
   --color-dream-bg: var(--dm-bg);
   --color-dream-card: var(--dm-surface);
@@ -63,7 +65,7 @@
   --color-dm-border: var(--dm-border);
   --color-dm-border2: var(--dm-border2);
   
-  --radius-dream: 16px;
+  --radius-dream: 4px;
   --font-sans: 'Inter', sans-serif;
 }
 
@@ -72,27 +74,20 @@
   .premium-card {
     background: var(--dm-surface);
     border: 1px solid var(--dm-border);
-    /* Subtle inner top-highlight to look like light hitting an edge */
-    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.03), 
-                0 8px 32px 0 var(--dm-shadow-color);
+    box-shadow: none;
+    border-radius: var(--radius-dream);
   }
   
   .dark .premium-card {
-    /* Faint radial gradient inside the card to break the solid color */
-    background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.015) 0%, transparent 40%),
-                var(--dm-surface);
+    background: var(--dm-surface);
   }
 
   .premium-card-hover {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: border-color 0.15s ease-in-out;
   }
 
   .premium-card-hover:hover {
-    border-color: var(--dm-border2);
-    /* Lifting effect */
-    transform: translateY(-2px);
-    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), 
-                0 12px 40px 0 var(--dm-shadow-color);
+    border-color: var(--dm-surface-strong);
   }
 
   /* Interactive Elements */
@@ -145,6 +140,14 @@
     box-shadow: 0 0 30px -5px var(--color-dream-red-glow);
   }
 
+  .neon-button-blue {
+    box-shadow: 0 0 20px -5px var(--color-dream-blue-glow);
+  }
+
+  .neon-button-blue:hover {
+    box-shadow: 0 0 30px -5px var(--color-dream-blue-glow);
+  }
+
   .custom-scrollbar::-webkit-scrollbar {
     width: 4px;
   }
@@ -171,8 +174,7 @@
 body {
   font-family: 'Inter', sans-serif;
   background-color: var(--dm-bg);
-  /* Subdued noise texture for the ultimate premium dark feel */
-  background-image: radial-gradient(circle at 50% 0%, rgba(51, 102, 255, 0.03) 0%, transparent 50%);
+  /* Solid, strict background color */
   color: var(--dm-text);
   min-height: 100vh;
 }
