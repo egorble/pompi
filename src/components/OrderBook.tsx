@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Pair } from '../types';
 import { formatCurrency } from '../utils';
 import { ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useStore } from '../store';
 
 interface OrderBookProps {
   pair: Pair;
@@ -12,27 +13,62 @@ type Tab = 'ORDER_BOOK' | 'TRADE_HISTORY';
 
 export function OrderBook({ pair }: OrderBookProps) {
   const [activeTab, setActiveTab] = useState<Tab>('ORDER_BOOK');
+  const { orderBook, trades: storeTrades, lastPrice } = useStore();
 
   const spread = pair.price * 0.0005;
+  const displayPrice = lastPrice > 0 ? lastPrice : pair.price;
 
-  const asks = Array.from({ length: 12 }).map((_, i) => ({
-    price: pair.price + spread * (12 - i),
-    size: (Math.random() * 2 + 0.1).toFixed(6),
-    depth: Math.random() * 100
-  }));
+  // Use real data from store if available, fallback to mock
+  const hasRealData = orderBook.asks.length > 0 || orderBook.bids.length > 0;
 
-  const bids = Array.from({ length: 12 }).map((_, i) => ({
-    price: pair.price - spread * (i + 1),
-    size: (Math.random() * 2 + 0.1).toFixed(6),
-    depth: Math.random() * 100
-  }));
+  const asks = useMemo(() => {
+    if (hasRealData) {
+      const maxSize = Math.max(...orderBook.asks.map(a => a.size), 0.1);
+      return orderBook.asks.slice(0, 12).map(a => ({
+        price: a.price,
+        size: a.size.toFixed(6),
+        depth: (a.size / maxSize) * 100,
+      }));
+    }
+    return Array.from({ length: 12 }).map((_, i) => ({
+      price: pair.price + spread * (12 - i),
+      size: (Math.random() * 2 + 0.1).toFixed(6),
+      depth: Math.random() * 100
+    }));
+  }, [hasRealData, orderBook.asks, pair.price, spread]);
 
-  const trades = Array.from({ length: 20 }).map((_, i) => ({
-    price: pair.price + (Math.random() - 0.5) * spread * 10,
-    size: (Math.random() * 0.5 + 0.01).toFixed(4),
-    time: new Date(Date.now() - i * 5000).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-    isBuyerMaker: Math.random() > 0.5
-  }));
+  const bids = useMemo(() => {
+    if (hasRealData) {
+      const maxSize = Math.max(...orderBook.bids.map(b => b.size), 0.1);
+      return orderBook.bids.slice(0, 12).map(b => ({
+        price: b.price,
+        size: b.size.toFixed(6),
+        depth: (b.size / maxSize) * 100,
+      }));
+    }
+    return Array.from({ length: 12 }).map((_, i) => ({
+      price: pair.price - spread * (i + 1),
+      size: (Math.random() * 2 + 0.1).toFixed(6),
+      depth: Math.random() * 100
+    }));
+  }, [hasRealData, orderBook.bids, pair.price, spread]);
+
+  const trades = useMemo(() => {
+    if (storeTrades.length > 0) {
+      return storeTrades.slice(0, 20).map(t => ({
+        price: t.price,
+        size: t.size.toFixed(4),
+        time: new Date(t.time).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        isBuyerMaker: t.side === 'Sell',
+      }));
+    }
+    return Array.from({ length: 20 }).map((_, i) => ({
+      price: pair.price + (Math.random() - 0.5) * spread * 10,
+      size: (Math.random() * 0.5 + 0.01).toFixed(4),
+      time: new Date(Date.now() - i * 5000).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+      isBuyerMaker: Math.random() > 0.5
+    }));
+  }, [storeTrades, pair.price, spread]);
 
   const baseCurrency = pair.pair.split('/')[0] || 'BTC';
   const quoteCurrency = pair.pair.split('/')[1] || 'USDC';
@@ -121,8 +157,8 @@ export function OrderBook({ pair }: OrderBookProps) {
                 animate={{ scale: 1, opacity: 1 }}
                 className="py-2 px-4 flex items-center gap-2 shrink-0 bg-dm-surface-alt border-y border-dm-border my-1"
               >
-                <span className="text-lg font-bold text-dm-text">{pair.price.toFixed(1)}</span>
-                <span className="text-xs font-medium text-dm-text2 underline decoration-dashed underline-offset-2">${pair.price.toFixed(1)}</span>
+                <span className="text-lg font-bold text-dm-text">{displayPrice.toFixed(1)}</span>
+                <span className="text-xs font-medium text-dm-text2 underline decoration-dashed underline-offset-2">${displayPrice.toFixed(1)}</span>
               </motion.div>
 
               {/* Buys (Green) */}

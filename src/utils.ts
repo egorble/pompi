@@ -10,3 +10,7 @@ export const formatCurrency = (value: number, minDecimals = 2) => {
 export const formatPercent = (value: number) => {
   return (value > 0 ? '+' : '') + value.toFixed(2) + '%';
 };
+
+export const getMarketId = (pair: string): string => {
+  return pair.replace('/USDC', '-USD');
+};

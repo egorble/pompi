@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { LayoutDashboard, Wallet, LineChart, BookOpen, Settings, Box, HeadphonesIcon, Sun, Moon } from 'lucide-react';
+import { LayoutDashboard, Wallet, LineChart, BookOpen, Settings, Box, BarChart3, HeadphonesIcon, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 interface SidebarProps {
-  activeTab: 'Trade' | 'Positions' | 'Points';
-  setActiveTab: (tab: 'Trade' | 'Positions' | 'Points') => void;
+  activeTab: 'Trade' | 'Positions' | 'Points' | 'Stats';
+  setActiveTab: (tab: 'Trade' | 'Positions' | 'Points' | 'Stats') => void;
 }
 
 export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
@@ -15,8 +15,8 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
     { id: 'dashboard', icon: LayoutDashboard },
     { id: 'Trade', icon: LineChart },
     { id: 'Positions', icon: Wallet },
+    { id: 'Stats', icon: BarChart3 },
     { id: 'Points', icon: Box },
-    { id: 'academy', icon: BookOpen },
     { id: 'settings', icon: Settings },
   ];
 
@@ -36,7 +36,7 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
             <div key={item.id} className="relative flex items-center justify-center w-full group">
               <button
                 onClick={() => {
-                  if (item.id === 'Trade' || item.id === 'Positions' || item.id === 'Points') {
+                  if (item.id === 'Trade' || item.id === 'Positions' || item.id === 'Points' || item.id === 'Stats') {
                     setActiveTab(item.id as any);
                   }
                 }}

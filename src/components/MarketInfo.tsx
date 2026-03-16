@@ -3,6 +3,7 @@ import { Pair } from '../types';
 import { formatCurrency, formatPercent } from '../utils';
 import { ChevronDown, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useStore } from '../store';
 
 interface MarketInfoProps {
   pair: Pair;
@@ -11,6 +12,8 @@ interface MarketInfoProps {
 }
 
 export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
+  const { lastPrice, isConnected } = useStore();
+  const displayPrice = lastPrice > 0 ? lastPrice : pair.price;
   const isPositive = pair.change >= 0;
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -117,8 +120,8 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 w-full lg:w-auto">
         <div>
-          <p className="text-[10px] uppercase font-bold text-dm-text3">Mark Price</p>
-          <p className="font-bold text-base md:text-lg text-dm-text">{formatCurrency(pair.price)}</p>
+          <p className="text-[10px] uppercase font-bold text-dm-text3">Mark Price {isConnected && <span className="inline-block w-1.5 h-1.5 rounded-full bg-dream-green ml-1" />}</p>
+          <p className="font-bold text-base md:text-lg text-dm-text">{formatCurrency(displayPrice)}</p>
         </div>
         <div>
           <p className="text-[10px] uppercase font-bold text-dm-text3">24h Change</p>

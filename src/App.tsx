@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ThemeProvider } from './context/ThemeContext';
 import { Navbar } from './components/Navbar';
@@ -11,24 +11,103 @@ import { Positions } from './components/Positions';
 import { BottomNav } from './components/BottomNav';
 import { MobileTradingScreen } from './components/MobileTradingScreen';
 import { MobileChartScreen } from './components/MobileChartScreen';
+import { StatsPanel } from './components/StatsPanel';
 import { Pair, Position } from './types';
 import { initialPairs, initialPositions } from './data';
-import { formatCurrency } from './utils';
+import { formatCurrency, getMarketId } from './utils';
+import { useWebSocket } from './hooks/useWebSocket';
+import { useStore } from './store';
+import { apiClient } from './api/client';
+import { Side, OrderType } from './api/types';
 
 function AppContent() {
-  const [activeTab, setActiveTab] = useState<'Trade' | 'Positions' | 'Points'>('Trade');
+  const [activeTab, setActiveTab] = useState<'Trade' | 'Positions' | 'Points' | 'Stats'>('Trade');
   const [balance, setBalance] = useState(12450.20);
   const [selectedPair, setSelectedPair] = useState<Pair>(initialPairs[0]);
   const [positions, setPositions] = useState<Position[]>(initialPositions);
   const [showMobileChart, setShowMobileChart] = useState(false);
 
-  const handleAddCash = () => {
-    setBalance(prev => prev + 1000);
-  };
+  const { setCurrentMarketId, walletAddress, lastPrice } = useStore();
 
-  const handlePlaceTrade = (trade: { type: 'Long' | 'Short', leverage: number, sizeUsd: number, price?: number }) => {
+  // Initialize WebSocket connection
+  useWebSocket();
+
+  // Sync market ID with store
+  useEffect(() => {
+    setCurrentMarketId(getMarketId(selectedPair.pair));
+  }, [selectedPair, setCurrentMarketId]);
+
+  // Fetch positions from backend
+  useEffect(() => {
+    const fetchPositions = async () => {
+      try {
+        const backendPositions = await apiClient.getPositions(walletAddress);
+        const mapped = backendPositions
+          .filter(bp => bp.status !== 'Closed')
+          .map(bp => {
+            const sizeNum = parseFloat(bp.size) / 1e18;
+            const collateralNum = parseFloat(bp.collateral) / 1e18;
+            const entryPriceNum = parseFloat(bp.entry_price) / 1e18;
+            const leverageNum = collateralNum > 0 ? (sizeNum * entryPriceNum) / collateralNum : 1;
+
+            const markPrice = (bp.market_id === getMarketId(selectedPair.pair) && lastPrice > 0)
+              ? lastPrice
+              : entryPriceNum;
+
+            const isLong = bp.side === 'Buy';
+            const pnl = isLong
+              ? (markPrice - entryPriceNum) * sizeNum
+              : (entryPriceNum - markPrice) * sizeNum;
+            const pnlPercent = collateralNum > 0 ? (pnl / collateralNum) * 100 : 0;
+            const liqPrice = isLong ? entryPriceNum * 0.8 : entryPriceNum * 1.2;
+
+            return {
+              id: bp.position_id,
+              pair: bp.market_id,
+              type: isLong ? 'Long' : 'Short',
+              leverage: Math.round(leverageNum || 1),
+              size: sizeNum,
+              entryPrice: entryPriceNum,
+              markPrice,
+              liqPrice,
+              pnl,
+              pnlPercent,
+            } as Position;
+          });
+
+        if (mapped.length > 0) {
+          setPositions(mapped);
+        }
+      } catch {
+        // Backend not available — keep local positions
+      }
+    };
+
+    fetchPositions();
+    const interval = setInterval(fetchPositions, 5000);
+    return () => clearInterval(interval);
+  }, [walletAddress, selectedPair, lastPrice]);
+
+  const handlePlaceTrade = async (trade: { type: 'Long' | 'Short', leverage: number, sizeUsd: number, price?: number }) => {
     const tradePrice = trade.price || selectedPair.price;
     const sizeInAsset = trade.sizeUsd / tradePrice;
+    const marketId = getMarketId(selectedPair.pair);
+
+    // Try sending to backend
+    try {
+      await apiClient.createOrder({
+        market_id: marketId,
+        trader: walletAddress,
+        side: trade.type === 'Long' ? Side.Buy : Side.Sell,
+        order_type: trade.price ? OrderType.Limit : OrderType.Market,
+        price: tradePrice,
+        size: sizeInAsset,
+      });
+    } catch {
+      // Backend offline — create locally
+    }
+
+    // Always add locally for immediate feedback
     const newPos: Position = {
       id: Math.random().toString(36).substring(2, 9),
       pair: selectedPair.pair.replace('/USDC', '-PERP'),
@@ -71,11 +150,7 @@ function AppContent() {
     initial: { opacity: 0 },
     animate: {
       opacity: 1,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut",
-        staggerChildren: 0.1
-      }
+      transition: { duration: 0.3, ease: "easeOut", staggerChildren: 0.1 }
     },
     exit: { opacity: 0, transition: { duration: 0.2, ease: "easeIn" } }
   };
@@ -88,7 +163,7 @@ function AppContent() {
   return (
     <div className="min-h-screen lg:h-screen flex flex-row text-dm-text bg-dream-bg lg:overflow-hidden font-sans">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      
+
       <div className="flex-1 flex flex-col min-w-0">
         <Navbar />
 
@@ -170,6 +245,21 @@ function AppContent() {
                     onCloseAll={handleCloseAll}
                     layout="grid"
                   />
+                </motion.div>
+              </motion.div>
+            )}
+
+            {activeTab === 'Stats' && (
+              <motion.div
+                key="stats"
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4"
+              >
+                <motion.div variants={itemVariants} className="max-w-5xl mx-auto pt-6">
+                  <StatsPanel />
                 </motion.div>
               </motion.div>
             )}

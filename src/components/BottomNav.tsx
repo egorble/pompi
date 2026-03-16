@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Home, Briefcase, Star } from 'lucide-react';
+import { Home, Briefcase, Star, BarChart3 } from 'lucide-react';
 
 interface BottomNavProps {
-  activeTab: 'Trade' | 'Positions' | 'Points';
-  setActiveTab: (tab: 'Trade' | 'Positions' | 'Points') => void;
+  activeTab: 'Trade' | 'Positions' | 'Points' | 'Stats';
+  setActiveTab: (tab: 'Trade' | 'Positions' | 'Points' | 'Stats') => void;
   onOpenTrade: () => void;
 }
 
@@ -12,6 +12,7 @@ export function BottomNav({ activeTab, setActiveTab, onOpenTrade }: BottomNavPro
   const tabs = [
     { id: 'Trade', icon: Home, label: 'Trade' },
     { id: 'Positions', icon: Briefcase, label: 'Positions' },
+    { id: 'Stats', icon: BarChart3, label: 'Stats' },
     { id: 'Points', icon: Star, label: 'Points' },
   ] as const;
 
