@@ -1,6 +1,13 @@
-import { CreateOrderRequest, Order, SetBalanceRequest, BackendPosition } from './types';
+import { CreateOrderRequest, Order, BackendPosition } from './types';
 
 const API_BASE_URL = 'http://localhost:8080';
+
+export interface BackendMarket {
+  id: string;
+  base: string;
+  quote: string;
+  active: boolean;
+}
 
 class ApiClient {
   private baseUrl: string;
@@ -26,6 +33,14 @@ class ApiClient {
     return response.json();
   }
 
+  public async getHealth(): Promise<{ status: string; markets: string[] }> {
+    return this.request('/health');
+  }
+
+  public async getMarkets(): Promise<BackendMarket[]> {
+    return this.request<BackendMarket[]>('/markets');
+  }
+
   public async createOrder(order: CreateOrderRequest): Promise<Order> {
     return this.request<Order>('/orders', {
       method: 'POST',
@@ -39,13 +54,6 @@ class ApiClient {
 
   public async getOrdersByMarket(marketId: string): Promise<Order[]> {
     return this.request<Order[]>(`/markets/${marketId}/orders`);
-  }
-
-  public async setBalance(data: SetBalanceRequest): Promise<string> {
-    return this.request<string>('/debug/balance', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
   }
 
   public async getPositions(trader: string): Promise<BackendPosition[]> {
