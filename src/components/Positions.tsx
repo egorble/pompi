@@ -65,22 +65,22 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
         </div>
 
         {/* Info grid */}
-        <div className="grid grid-cols-4 gap-1 mb-3">
-          <div>
+        <div className="grid grid-cols-2 gap-y-3 gap-x-2 mb-4">
+          <div className="text-left">
             <p className="text-[8px] font-semibold text-dm-text3 uppercase tracking-wide">Entry</p>
-            <p className="text-[10px] sm:text-[11px] font-bold text-dm-text mt-0.5 whitespace-nowrap">{formatCurrency(pos.entryPrice)}</p>
+            <p className="text-[11px] font-bold text-dm-text mt-0.5 whitespace-nowrap">{formatCurrency(pos.entryPrice)}</p>
           </div>
-          <div>
+          <div className="text-right">
             <p className="text-[8px] font-semibold text-dm-text3 uppercase tracking-wide">Mark</p>
-            <p className="text-[10px] sm:text-[11px] font-bold text-dm-text mt-0.5 whitespace-nowrap">{formatCurrency(pos.markPrice)}</p>
+            <p className="text-[11px] font-bold text-dm-text mt-0.5 whitespace-nowrap">{formatCurrency(pos.markPrice)}</p>
           </div>
-          <div>
+          <div className="text-left">
             <p className="text-[8px] font-semibold text-dm-text3 uppercase tracking-wide">Liq.</p>
-            <p className="text-[10px] sm:text-[11px] font-bold text-orange-500 mt-0.5 whitespace-nowrap">{formatCurrency(pos.liqPrice)}</p>
+            <p className="text-[11px] font-bold text-orange-500 mt-0.5 whitespace-nowrap">{formatCurrency(pos.liqPrice)}</p>
           </div>
           <div className="text-right">
             <p className="text-[8px] font-semibold text-dm-text3 uppercase tracking-wide">Margin</p>
-            <p className="text-[10px] sm:text-[11px] font-bold text-dm-text mt-0.5 whitespace-nowrap">{formatCurrency(margin)}</p>
+            <p className="text-[11px] font-bold text-dm-text mt-0.5 whitespace-nowrap">{formatCurrency(margin)}</p>
           </div>
         </div>
 

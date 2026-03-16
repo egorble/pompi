@@ -167,7 +167,7 @@ function AppContent() {
       <div className="flex-1 flex flex-col min-w-0">
         <Navbar />
 
-        <main className="pl-0 pr-0 md:pr-4 lg:pr-6 py-0 md:py-4 lg:py-6 flex-1 overflow-y-auto lg:overflow-hidden relative pb-24 lg:pb-0">
+        <main className="pl-0 pr-0 md:pr-4 lg:pr-2 py-0 md:py-4 lg:py-6 flex-1 overflow-y-auto lg:overflow-hidden relative pb-24 lg:pb-0">
           <AnimatePresence mode="wait">
             {activeTab === 'Trade' && (
               <motion.div
@@ -197,7 +197,7 @@ function AppContent() {
                       </div>
                     </motion.div>
 
-                    <motion.div variants={itemVariants} className="col-span-3 flex flex-col gap-4 overflow-y-auto custom-scrollbar min-h-0 h-full pb-4 pr-2 lg:pr-0">
+                    <motion.div variants={itemVariants} className="col-span-3 flex flex-col gap-4 overflow-y-auto no-scrollbar min-h-0 h-full pb-4 pr-0">
                       <ExecutionPanel pair={selectedPair} onPlaceTrade={handlePlaceTrade} />
                       <Positions
                         positions={positions}

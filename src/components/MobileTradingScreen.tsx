@@ -317,8 +317,7 @@ export function MobileTradingScreen({ pair, pairs, onSelectPair, onOpenChart, ba
           </div>
 
           {/* TP/SL Checkbox */}
-          <div className="flex justify-between items-center mb-2 mt-4 cursor-pointer pl-1 group" onClick={() => setTpSlEnabled(!tpSlEnabled)}>
-            <span className="text-xs font-bold text-dm-text2">TP/SL</span>
+          <div className="flex justify-end items-center mb-2 mt-4 cursor-pointer group" onClick={() => setTpSlEnabled(!tpSlEnabled)}>
             <motion.div
               whileTap={{ scale: 0.8 }}
               className={`w-4 h-4 rounded flex items-center justify-center transition-colors relative ${tpSlEnabled ? 'bg-dream-blue' : 'border border-dm-border2 group-hover:bg-dm-surface-raised'}`}
@@ -330,6 +329,7 @@ export function MobileTradingScreen({ pair, pairs, onSelectPair, onOpenChart, ba
                 </>
               )}
             </motion.div>
+            <span className="ml-2 text-xs font-bold text-dm-text2 group-hover:text-dm-text transition-colors">TP/SL</span>
           </div>
 
           <AnimatePresence>

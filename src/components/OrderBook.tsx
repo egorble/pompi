@@ -24,15 +24,15 @@ export function OrderBook({ pair }: OrderBookProps) {
   const asks = useMemo(() => {
     if (hasRealData) {
       const maxSize = Math.max(...orderBook.asks.map(a => a.size), 0.1);
-      return orderBook.asks.slice(0, 12).map(a => ({
+      return orderBook.asks.slice(0, 10).map(a => ({
         price: a.price,
-        size: a.size.toFixed(6),
+        size: a.size.toFixed(4),
         depth: (a.size / maxSize) * 100,
       }));
     }
-    return Array.from({ length: 12 }).map((_, i) => ({
-      price: pair.price + spread * (12 - i),
-      size: (Math.random() * 2 + 0.1).toFixed(6),
+    return Array.from({ length: 10 }).map((_, i) => ({
+      price: pair.price + spread * (10 - i),
+      size: (Math.random() * 2 + 0.1).toFixed(4),
       depth: Math.random() * 100
     }));
   }, [hasRealData, orderBook.asks, pair.price, spread]);
@@ -40,29 +40,29 @@ export function OrderBook({ pair }: OrderBookProps) {
   const bids = useMemo(() => {
     if (hasRealData) {
       const maxSize = Math.max(...orderBook.bids.map(b => b.size), 0.1);
-      return orderBook.bids.slice(0, 12).map(b => ({
+      return orderBook.bids.slice(0, 10).map(b => ({
         price: b.price,
-        size: b.size.toFixed(6),
+        size: b.size.toFixed(4),
         depth: (b.size / maxSize) * 100,
       }));
     }
-    return Array.from({ length: 12 }).map((_, i) => ({
+    return Array.from({ length: 10 }).map((_, i) => ({
       price: pair.price - spread * (i + 1),
-      size: (Math.random() * 2 + 0.1).toFixed(6),
+      size: (Math.random() * 2 + 0.1).toFixed(4),
       depth: Math.random() * 100
     }));
   }, [hasRealData, orderBook.bids, pair.price, spread]);
 
   const trades = useMemo(() => {
     if (storeTrades.length > 0) {
-      return storeTrades.slice(0, 20).map(t => ({
+      return storeTrades.slice(0, 21).map(t => ({
         price: t.price,
         size: t.size.toFixed(4),
         time: new Date(t.time).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         isBuyerMaker: t.side === 'Sell',
       }));
     }
-    return Array.from({ length: 20 }).map((_, i) => ({
+    return Array.from({ length: 21 }).map((_, i) => ({
       price: pair.price + (Math.random() - 0.5) * spread * 10,
       size: (Math.random() * 0.5 + 0.01).toFixed(4),
       time: new Date(Date.now() - i * 5000).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }),
@@ -82,14 +82,14 @@ export function OrderBook({ pair }: OrderBookProps) {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, x: -10 },
-    show: { opacity: 1, x: 0 }
+    hidden: { opacity: 0 },
+    show: { opacity: 1 }
   };
 
   return (
-    <section className="bg-dm-surface rounded-2xl dream-shadow flex-grow overflow-hidden flex flex-col min-h-[400px]">
+    <section className="bg-dm-surface rounded-2xl dream-shadow flex-grow overflow-hidden flex flex-col">
       {/* Tabs */}
-      <div className="flex items-center justify-between px-4 pt-3 border-b border-dm-border shrink-0">
+      <div className="flex items-center justify-between px-3 pt-3 border-b border-dm-border shrink-0">
         <div className="flex gap-4">
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -125,16 +125,16 @@ export function OrderBook({ pair }: OrderBookProps) {
         {activeTab === 'ORDER_BOOK' ? (
           <motion.div
             key="orderbook"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
             className="flex flex-col flex-grow overflow-hidden"
           >
             {/* Headers */}
-            <div className="grid grid-cols-[1fr_1fr_40px] gap-2 px-4 py-2 text-[10px] font-bold text-dm-text3 shrink-0 border-b border-dm-border">
-              <div className="text-left whitespace-nowrap">Price <span className="border border-dm-border2 rounded px-1 py-0.5 ml-1">{quoteCurrency}</span></div>
-              <div className="text-right whitespace-nowrap">Size <span className="border border-dm-border2 rounded px-1 py-0.5 ml-1">{baseCurrency}</span></div>
+            <div className="grid grid-cols-[1.1fr_1fr_32px] gap-1 px-3 py-2 text-[9px] font-bold text-dm-text3 shrink-0 border-b border-dm-border">
+              <div className="text-left whitespace-nowrap">Price <span className="border border-dm-border2 rounded px-1 py-0.5 ml-0.5">{quoteCurrency}</span></div>
+              <div className="text-right whitespace-nowrap">Size <span className="border border-dm-border2 rounded px-1 py-0.5 ml-0.5">{baseCurrency}</span></div>
               <div className="text-right whitespace-nowrap">Mine</div>
             </div>
 
@@ -142,7 +142,7 @@ export function OrderBook({ pair }: OrderBookProps) {
               {/* Sells (Red) */}
               <motion.div variants={containerVariants} initial="hidden" animate="show" className="flex flex-col justify-end flex-1 overflow-hidden">
                 {asks.map((ask, i) => (
-                  <motion.div variants={itemVariants} key={`ask-${i}`} className="grid grid-cols-[1fr_1fr_40px] gap-2 items-center text-[11px] py-[2px] px-4 group cursor-pointer hover:bg-dm-surface-alt relative">
+                  <motion.div variants={itemVariants} key={`ask-${i}`} className="grid grid-cols-[1.1fr_1fr_32px] gap-1 items-center text-[10px] py-[3px] px-3 group cursor-pointer hover:bg-dm-surface-alt relative">
                     <motion.div initial={{ width: 0 }} animate={{ width: `${ask.depth}%` }} transition={{ duration: 0.5 }} className="absolute left-0 top-0 bottom-0 bg-dream-red/10"></motion.div>
                     <span className="text-left text-dream-red font-medium relative z-10">{ask.price.toFixed(1)}</span>
                     <span className="text-right text-dm-text2 font-medium relative z-10">{ask.size}</span>
@@ -164,7 +164,7 @@ export function OrderBook({ pair }: OrderBookProps) {
               {/* Buys (Green) */}
               <motion.div variants={containerVariants} initial="hidden" animate="show" className="flex flex-col justify-start flex-1 overflow-hidden">
                 {bids.map((bid, i) => (
-                  <motion.div variants={itemVariants} key={`bid-${i}`} className="grid grid-cols-[1fr_1fr_40px] gap-2 items-center text-[11px] py-[2px] px-4 group cursor-pointer hover:bg-dm-surface-alt relative">
+                  <motion.div variants={itemVariants} key={`bid-${i}`} className="grid grid-cols-[1.1fr_1fr_32px] gap-1 items-center text-[10px] py-[3px] px-3 group cursor-pointer hover:bg-dm-surface-alt relative">
                     <motion.div initial={{ width: 0 }} animate={{ width: `${bid.depth}%` }} transition={{ duration: 0.5 }} className="absolute left-0 top-0 bottom-0 bg-dream-green/10"></motion.div>
                     <span className="text-left text-dream-green font-medium relative z-10">{bid.price.toFixed(1)}</span>
                     <span className="text-right text-dm-text2 font-medium relative z-10">{bid.size}</span>
@@ -177,10 +177,10 @@ export function OrderBook({ pair }: OrderBookProps) {
         ) : (
           <motion.div
             key="trades"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
             className="flex flex-col flex-grow overflow-hidden"
           >
             {/* Headers */}
@@ -190,7 +190,7 @@ export function OrderBook({ pair }: OrderBookProps) {
               <div className="flex-1 text-right">Time</div>
             </div>
 
-            <motion.div variants={containerVariants} initial="hidden" animate="show" className="flex-grow overflow-y-auto pb-2">
+            <motion.div variants={containerVariants} initial="hidden" animate="show" className="flex-grow overflow-hidden pb-2">
               {trades.map((trade, i) => (
                 <motion.div variants={itemVariants} key={`trade-${i}`} className="flex justify-between items-center text-[11px] py-1 px-4 hover:bg-dm-surface-alt cursor-pointer">
                   <span className={`flex-1 text-left font-medium ${trade.isBuyerMaker ? 'text-dream-red' : 'text-dream-green'}`}>

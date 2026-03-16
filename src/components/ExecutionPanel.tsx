@@ -249,8 +249,7 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
       </div>
 
       {/* Checkboxes */}
-      <div className="flex justify-between items-center mb-2 pl-1 mt-4">
-        <span className="text-xs font-bold text-dm-text2 group-hover:text-dm-text transition-colors">TP/SL</span>
+      <div className="flex justify-start items-center mb-2 mt-4">
         <label className="flex items-center cursor-pointer group">
           <motion.div
             whileTap={{ scale: 0.8 }}
@@ -264,6 +263,7 @@ export function ExecutionPanel({ pair, onPlaceTrade }: ExecutionPanelProps) {
             )}
           </motion.div>
           <input type="checkbox" className="hidden" checked={tpsl} onChange={(e) => setTpsl(e.target.checked)} />
+          <span className="ml-2 text-xs font-bold text-dm-text2 group-hover:text-dm-text transition-colors">TP/SL</span>
         </label>
       </div>
         
