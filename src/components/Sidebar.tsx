@@ -4,8 +4,8 @@ import { LayoutDashboard, Wallet, LineChart, BookOpen, Settings, Box, BarChart3,
 import { useTheme } from '../context/ThemeContext';
 
 interface SidebarProps {
-  activeTab: 'dashboard' | 'Trade' | 'Positions' | 'Points' | 'Stats';
-  setActiveTab: (tab: 'dashboard' | 'Trade' | 'Positions' | 'Points' | 'Stats') => void;
+  activeTab: 'dashboard' | 'Trade' | 'Positions' | 'OpenOrders' | 'Stats';
+  setActiveTab: (tab: 'dashboard' | 'Trade' | 'Positions' | 'OpenOrders' | 'Stats') => void;
 }
 
 export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
@@ -15,8 +15,8 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
     { id: 'dashboard', icon: LayoutDashboard },
     { id: 'Trade', icon: LineChart },
     { id: 'Positions', icon: Wallet },
+    { id: 'OpenOrders', icon: Box },
     { id: 'Stats', icon: BarChart3 },
-    { id: 'Points', icon: Box },
     { id: 'settings', icon: Settings },
   ];
 
@@ -36,7 +36,7 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
             <div key={item.id} className="relative flex items-center justify-center w-full group">
               <button
                 onClick={() => {
-                  if (item.id === 'Trade' || item.id === 'Positions' || item.id === 'Points' || item.id === 'Stats' || item.id === 'dashboard') {
+                  if (item.id === 'Trade' || item.id === 'Positions' || item.id === 'OpenOrders' || item.id === 'Stats' || item.id === 'dashboard') {
                     setActiveTab(item.id as any);
                   }
                 }}

@@ -13,8 +13,9 @@ import { MobileTradingScreen } from './components/MobileTradingScreen';
 import { MobileChartScreen } from './components/MobileChartScreen';
 import { StatsPanel } from './components/StatsPanel';
 import { Dashboard } from './components/Dashboard';
-import { Pair, Position } from './types';
-import { initialPairs, initialPositions } from './data';
+import { OpenOrders } from './components/OpenOrders';
+import { Pair, Position, Order } from './types';
+import { initialPairs, initialPositions, initialOrders } from './data';
 import { getMarketId } from './utils';
 import { useWebSocket } from './hooks/useWebSocket';
 import { useStore } from './store';
@@ -22,10 +23,11 @@ import { apiClient } from './api/client';
 import { Side, OrderType } from './api/types';
 
 function AppContent() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'Trade' | 'Positions' | 'Points' | 'Stats'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'Trade' | 'Positions' | 'OpenOrders' | 'Stats'>('dashboard');
   const [balance, setBalance] = useState(12450.20);
   const [selectedPair, setSelectedPair] = useState<Pair>(initialPairs[0]);
   const [positions, setPositions] = useState<Position[]>(initialPositions);
+  const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [showMobileChart, setShowMobileChart] = useState(false);
 
   const { setCurrentMarketId, walletAddress } = useStore();
@@ -146,6 +148,14 @@ function AppContent() {
     });
     setBalance(prev => prev + totalReturn);
     setPositions([]);
+  };
+
+  const handleCancelOrder = (id: string) => {
+    setOrders(prev => prev.filter(o => o.id !== id));
+  };
+
+  const handleCancelAllOrders = () => {
+    setOrders([]);
   };
 
   const pageVariants = {
@@ -281,17 +291,22 @@ function AppContent() {
               </motion.div>
             )}
 
-            {activeTab === 'Points' && (
+            {activeTab === 'OpenOrders' && (
               <motion.div
-                key="points"
+                key="openorders"
                 variants={pageVariants}
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="flex items-center justify-center h-full text-dm-text3 font-medium"
+                className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4"
               >
-                <motion.div variants={itemVariants}>
-                  Points feature coming soon...
+                <motion.div variants={itemVariants} className="max-w-5xl flex flex-col mx-auto pt-6 pb-20 lg:pb-6">
+                  <OpenOrders
+                    orders={orders}
+                    onCancel={handleCancelOrder}
+                    onCancelAll={handleCancelAllOrders}
+                    layout="grid"
+                  />
                 </motion.div>
               </motion.div>
             )}

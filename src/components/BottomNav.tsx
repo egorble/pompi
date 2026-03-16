@@ -3,8 +3,8 @@ import { motion } from 'motion/react';
 import { LayoutDashboard, LineChart, Wallet, Star, BarChart3 } from 'lucide-react';
 
 interface BottomNavProps {
-  activeTab: 'dashboard' | 'Trade' | 'Positions' | 'Points' | 'Stats';
-  setActiveTab: (tab: 'dashboard' | 'Trade' | 'Positions' | 'Points' | 'Stats') => void;
+  activeTab: 'dashboard' | 'Trade' | 'Positions' | 'OpenOrders' | 'Stats';
+  setActiveTab: (tab: 'dashboard' | 'Trade' | 'Positions' | 'OpenOrders' | 'Stats') => void;
   onOpenTrade: () => void;
 }
 
@@ -13,8 +13,8 @@ export function BottomNav({ activeTab, setActiveTab, onOpenTrade }: BottomNavPro
     { id: 'dashboard', icon: LayoutDashboard, label: 'Overview' },
     { id: 'Trade', icon: LineChart, label: 'Trade' },
     { id: 'Positions', icon: Wallet, label: 'Positions' },
+    { id: 'OpenOrders', icon: Star, label: 'Orders' },
     { id: 'Stats', icon: BarChart3, label: 'Stats' },
-    { id: 'Points', icon: Star, label: 'Points' },
   ] as const;
 
   return (

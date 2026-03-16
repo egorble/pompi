@@ -20,3 +20,14 @@ export interface Position {
   pnl: number;
   pnlPercent: number;
 }
+
+export interface Order {
+  id: string;
+  pair: string;
+  type: 'Limit' | 'Take Profit' | 'Stop Loss';
+  side: 'Buy' | 'Sell';
+  price: number;
+  size: number;
+  filled: number;
+  status: 'Open' | 'Filled' | 'Cancelled';
+}
