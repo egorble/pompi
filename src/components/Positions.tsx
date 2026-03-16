@@ -36,10 +36,10 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
   return (
     <motion.div
       variants={cardVariants}
-      className="bg-dm-surface border border-dm-border rounded-2xl dream-shadow relative overflow-hidden"
+      className="bg-dm-surface border border-dm-border rounded-xl dream-shadow relative overflow-hidden"
     >
       {/* Accent stripe */}
-      <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl ${pos.type === 'Long' ? 'bg-dream-green' : 'bg-dream-red'}`} />
+      <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-xl ${pos.type === 'Long' ? 'bg-dream-green' : 'bg-dream-red'}`} />
 
       {/* Main content */}
       <div className="p-4 pl-5">
@@ -119,7 +119,7 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setExpanded('tpsl')}
-              className="flex-1 py-2.5 rounded-xl text-[12px] font-bold bg-dm-surface-alt border border-dm-border text-dm-text2 hover:text-dm-text hover:border-dm-border2 transition-colors"
+              className="flex-1 py-2.5 rounded-lg text-[12px] font-bold bg-transparent border border-dm-border text-dm-text2 hover:text-dm-text hover:border-dm-border2 transition-colors"
             >
               TP / SL
             </motion.button>
@@ -127,7 +127,7 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setExpanded('close')}
-              className="flex-1 py-2.5 rounded-xl text-[12px] font-bold bg-dm-surface-alt border border-dm-border text-dm-text2 hover:text-dm-text hover:border-dm-border2 transition-colors"
+              className="flex-1 py-2.5 rounded-lg text-[12px] font-bold bg-transparent border border-dm-border text-dm-text2 hover:text-dm-text hover:border-dm-border2 transition-colors"
             >
               Close
             </motion.button>
@@ -147,22 +147,22 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
           >
             <div className="px-5 pb-4 pt-2 border-t border-dm-border space-y-3">
               {/* Panel toggle: TP/SL ↔ Close — layoutId for shared animation */}
-              <div className="relative flex bg-dm-surface-alt rounded-xl p-0.5 border border-dm-border">
+              <div className="relative flex bg-transparent rounded-lg p-0.5 border border-dm-border">
                 <motion.div
-                  className="absolute inset-y-0.5 w-[calc(50%-2px)] bg-dm-surface rounded-lg shadow-sm z-0"
+                  className="absolute inset-y-0.5 w-[calc(50%-2px)] bg-brand-accent rounded-md shadow-sm z-0"
                   animate={{ left: expanded === 'tpsl' ? '2px' : 'calc(50%)' }}
                   transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                 />
                 <button
                   onClick={() => setExpanded('tpsl')}
-                  className={`relative z-10 flex-1 py-2 rounded-lg text-[11px] font-bold transition-colors ${expanded === 'tpsl' ? 'text-dm-text' : 'text-dm-text3 hover:text-dm-text2'
+                  className={`relative z-10 flex-1 py-2 rounded-lg text-[11px] font-bold transition-colors ${expanded === 'tpsl' ? 'text-white' : 'text-dm-text3 hover:text-dm-text2'
                     }`}
                 >
                   TP / SL
                 </button>
                 <button
                   onClick={() => setExpanded('close')}
-                  className={`relative z-10 flex-1 py-2 rounded-lg text-[11px] font-bold transition-colors ${expanded === 'close' ? 'text-dm-text' : 'text-dm-text3 hover:text-dm-text2'
+                  className={`relative z-10 flex-1 py-2 rounded-lg text-[11px] font-bold transition-colors ${expanded === 'close' ? 'text-white' : 'text-dm-text3 hover:text-dm-text2'
                     }`}
                 >
                   Close
@@ -203,7 +203,7 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
                           placeholder={`${(pos.entryPrice * (pos.type === 'Long' ? 1.05 : 0.95)).toFixed(1)}`}
                           value={tp}
                           onChange={(e) => setTp(e.target.value)}
-                          className="w-full bg-dm-surface-alt border border-dm-border rounded-lg px-2.5 py-2 text-[12px] font-bold text-dm-text outline-none focus:border-dream-green/50 placeholder:text-dm-text3 transition-all"
+                          className="w-full bg-transparent border border-dm-border rounded-lg px-2.5 py-2 text-[12px] font-bold text-dm-text outline-none focus:border-dream-green/50 placeholder:text-dm-text3 transition-all"
                         />
                       </div>
 
@@ -229,7 +229,7 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
                           placeholder={`${(pos.entryPrice * (pos.type === 'Long' ? 0.95 : 1.05)).toFixed(1)}`}
                           value={sl}
                           onChange={(e) => setSl(e.target.value)}
-                          className="w-full bg-dm-surface-alt border border-dm-border rounded-lg px-2.5 py-2 text-[12px] font-bold text-dm-text outline-none focus:border-dream-red/50 placeholder:text-dm-text3 transition-all"
+                          className="w-full bg-transparent border border-dm-border rounded-lg px-2.5 py-2 text-[12px] font-bold text-dm-text outline-none focus:border-dream-red/50 placeholder:text-dm-text3 transition-all"
                         />
                       </div>
                     </div>
@@ -285,9 +285,9 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
                     className="space-y-3"
                   >
                     {/* Market/Limit toggle */}
-                    <div className="relative flex bg-dm-surface-alt rounded-xl p-0.5 border border-dm-border">
+                    <div className="relative flex bg-transparent rounded-lg p-0.5 border border-dm-border">
                       <motion.div
-                        className="absolute inset-y-0.5 w-[calc(50%-2px)] bg-dm-surface rounded-lg shadow-sm z-0"
+                        className="absolute inset-y-0.5 w-[calc(50%-2px)] bg-brand-accent rounded-md shadow-sm z-0"
                         animate={{ left: closeType === 'Market' ? '2px' : 'calc(50%)' }}
                         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                       />
@@ -295,7 +295,7 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
                         <button
                           key={t}
                           onClick={() => setCloseType(t)}
-                          className={`relative z-10 flex-1 py-2 rounded-lg text-[11px] font-bold transition-colors ${closeType === t ? 'text-dm-text' : 'text-dm-text3 hover:text-dm-text2'
+                          className={`relative z-10 flex-1 py-2 rounded-lg text-[11px] font-bold transition-colors ${closeType === t ? 'text-white' : 'text-dm-text3 hover:text-dm-text2'
                             }`}
                         >
                           {t}
@@ -319,7 +319,7 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
                               value={limitPrice}
                               onChange={(e) => setLimitPrice(e.target.value)}
                               placeholder={pos.markPrice.toString()}
-                              className="w-full bg-dm-surface-alt border border-dm-border rounded-xl px-3 py-2.5 text-[12px] font-bold text-dm-text outline-none focus:border-dream-blue/50 placeholder:text-dm-text3 transition-all"
+                              className="w-full bg-transparent border border-dm-border rounded-lg px-3 py-2.5 text-[12px] font-bold text-dm-text outline-none focus:border-dream-blue/50 placeholder:text-dm-text3 transition-all"
                             />
                           </div>
                         </motion.div>
@@ -358,7 +358,7 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
                             onClick={() => setClosePercent(v)}
                             className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold transition-colors ${closePercent === v
                               ? 'bg-dream-blue text-white'
-                              : 'bg-dm-surface-alt border border-dm-border text-dm-text3 hover:text-dm-text hover:border-dm-border2'
+                              : 'bg-transparent border border-dm-border text-dm-text3 hover:text-dm-text hover:border-dm-border2'
                               }`}
                           >
                             {v}%
@@ -384,7 +384,7 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => onClose(pos.id)}
-                      className={`w-full font-bold py-3 rounded-xl text-[13px] uppercase tracking-wide text-white ${pos.type === 'Long' ? 'bg-dream-red hover:bg-dream-red/90' : 'bg-dream-green hover:bg-dream-green/90'
+                      className={`w-full font-bold py-3 rounded-lg text-[13px] uppercase tracking-wide text-white ${pos.type === 'Long' ? 'bg-dream-red hover:bg-dream-red/90' : 'bg-dream-green hover:bg-dream-green/90'
                         } transition-colors`}
                     >
                       Close {pos.type} — {closeType}{closePercent < 100 ? ` (${closePercent}%)` : ''}
@@ -437,7 +437,7 @@ export function Positions({ positions, onClose, onCloseAll, layout = 'list' }: P
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.95 }}
             onClick={onCloseAll}
-            className="bg-dm-surface-raised hover:bg-dm-surface-strong px-4 py-2 rounded-xl text-[12px] font-bold text-dm-text2 transition-colors"
+            className="bg-transparent border border-dm-border hover:border-dm-border2 px-4 py-2 rounded-lg text-[12px] font-bold text-dm-text2 transition-colors"
           >
             Close All
           </motion.button>

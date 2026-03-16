@@ -77,8 +77,6 @@ export function Dashboard() {
             {/* Background elements to match the reference */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-brand-accent/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
             <div className="absolute bottom-0 right-20 w-48 h-48 bg-dream-green/5 rounded-full blur-3xl -mb-10"></div>
-            
-            <img src="/wallet_3d_icon_1773604660043.png" alt="Wallet" className="absolute -right-8 top-1/2 -translate-y-1/2 w-80 object-contain opacity-80 mix-blend-luminosity drop-shadow-2xl" />
 
             <div className="relative z-10 w-2/3">
               <h2 className="text-dm-text2 font-semibold text-lg mb-2">Total Equity</h2>
@@ -107,14 +105,12 @@ export function Dashboard() {
           {/* Additional details */}
           <div className="grid grid-cols-2 gap-6">
             <motion.div variants={cardVariants} className="bg-dm-surface rounded-[32px] p-6 dream-shadow relative overflow-hidden">
-               <img src="/hand_3d_icon_1773604647563.png" alt="Hand" className="absolute -right-10 -bottom-10 w-40 object-contain opacity-40 mix-blend-luminosity" />
                <div className="relative z-10">
                   <div className="text-sm text-dm-text2 font-semibold mb-1">Free Collateral</div>
                   <div className="text-2xl font-bold text-dm-text">{formatCurrency(freeCollateral)}</div>
                </div>
             </motion.div>
             <motion.div variants={cardVariants} className="bg-dm-surface rounded-[32px] p-6 dream-shadow relative overflow-hidden">
-               <img src="/coin_3d_icon_1773604630375.png" alt="Coin" className="absolute -right-10 -bottom-10 w-40 object-contain opacity-40 mix-blend-luminosity" />
                <div className="relative z-10">
                   <div className="text-sm text-dm-text2 font-semibold mb-1">Maintenance Margin</div>
                   <div className="text-2xl font-bold text-dm-text">{formatCurrency(maintenanceMargin)}</div>
