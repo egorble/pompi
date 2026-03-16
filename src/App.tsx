@@ -24,13 +24,12 @@ import { Side, OrderType } from './api/types';
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'Trade' | 'Positions' | 'OpenOrders' | 'Stats'>('dashboard');
-  const [balance, setBalance] = useState(12450.20);
   const [selectedPair, setSelectedPair] = useState<Pair>(initialPairs[0]);
   const [positions, setPositions] = useState<Position[]>(initialPositions);
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [showMobileChart, setShowMobileChart] = useState(false);
 
-  const { setCurrentMarketId, walletAddress } = useStore();
+  const { setCurrentMarketId, walletAddress, setTicker, setUsdcBalance, usdcBalance } = useStore();
 
   // Initialize WebSocket connection
   useWebSocket();
@@ -39,6 +38,20 @@ function AppContent() {
   useEffect(() => {
     setCurrentMarketId(getMarketId(selectedPair.pair));
   }, [selectedPair, setCurrentMarketId]);
+
+  // Fetch tickers for ALL markets + account balance
+  useEffect(() => {
+    const fetchMarketData = async () => {
+      for (const pair of initialPairs) {
+        const mid = getMarketId(pair.pair);
+        try { const t = await apiClient.getTicker(mid); setTicker(mid, t); } catch {}
+      }
+      try { const a = await apiClient.getAccount(walletAddress); setUsdcBalance(a.usdc_balance); } catch {}
+    };
+    fetchMarketData();
+    const interval = setInterval(fetchMarketData, 3000);
+    return () => clearInterval(interval);
+  }, [walletAddress, setTicker, setUsdcBalance]);
 
   // Fetch positions from backend
   useEffect(() => {
@@ -127,7 +140,6 @@ function AppContent() {
       pnlPercent: 0,
     };
     setPositions(prev => [newPos, ...prev]);
-    setBalance(prev => prev - (trade.sizeUsd / trade.leverage));
     setActiveTab('Positions');
   };
 
@@ -248,7 +260,7 @@ function AppContent() {
                       pairs={initialPairs}
                       onSelectPair={setSelectedPair}
                       onOpenChart={() => setShowMobileChart(true)}
-                      balance={balance}
+                      balance={usdcBalance}
                       onPlaceTrade={handlePlaceTrade}
                     />
                   )}
