@@ -8,6 +8,7 @@ interface OpenOrdersProps {
   onCancel: (id: string) => void;
   onCancelAll: () => void;
   layout?: 'list' | 'grid';
+  customTitle?: React.ReactNode;
 }
 
 const cardVariants = {
@@ -27,11 +28,9 @@ function OrderCard({ order, onCancel }: { key?: string | number; order: Order; o
   return (
     <motion.div
       variants={cardVariants}
-      className="premium-card relative overflow-hidden"
+      className="bg-transparent border border-dm-border rounded-[24px] p-4 relative overflow-hidden"
     >
-      {/* Thinner, elegant accent stripe */}
-      <div className={`absolute left-0 top-0 bottom-0 w-[2px] ${isBuy ? 'bg-dream-green' : 'bg-dream-red'}`} />
-
+      {/* Main content */}
       <div className="p-3 pl-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2.5">
@@ -59,10 +58,10 @@ function OrderCard({ order, onCancel }: { key?: string | number; order: Order; o
 
         <div className="flex gap-2">
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
             onClick={() => onCancel(order.id)}
-            className="w-full py-1.5 rounded-sm text-[11px] font-bold uppercase tracking-wide bg-dm-surface-alt border border-dm-border text-dm-text2 hover:text-white hover:border-dream-red/50 hover:bg-dream-red transition-all"
+            className="flex-1 py-1.5 rounded-2xl text-[11px] font-bold border transition-all bg-transparent text-dream-red border-dream-red/30 hover:border-dream-red/60"
           >
             Cancel Order
           </motion.button>
@@ -77,18 +76,12 @@ const containerVariants = {
   show: { opacity: 1, transition: { staggerChildren: 0.06 } },
 };
 
-export function OpenOrders({ orders, onCancel, onCancelAll, layout = 'list' }: OpenOrdersProps) {
-  const [filterType, setFilterType] = useState<string>('All');
-  
-  const filteredOrders = filterType === 'All' 
-    ? orders 
-    : orders.filter(o => o.type === filterType);
-
+export function OpenOrders({ orders, onCancel, onCancelAll, layout = 'list', customTitle }: OpenOrdersProps) {
   return (
-    <section>
+    <section className="bg-dm-surface border border-dm-border rounded-[24px] p-4 lg:p-6 w-full flex flex-col flex-1 shrink-0 relative z-20">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
         <div className="flex items-center gap-3">
-          <h2 className="text-xs font-bold text-dm-text3 uppercase tracking-wider">Open Orders</h2>
+          {customTitle || <h2 className="text-xs font-bold text-dm-text3 uppercase tracking-wider">Open Orders</h2>}
           {orders.length > 0 && (
             <motion.span
               key={orders.length}
@@ -101,40 +94,16 @@ export function OpenOrders({ orders, onCancel, onCancelAll, layout = 'list' }: O
           )}
         </div>
         
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          {/* Order Type Filter */}
-          <div className="flex relative bg-dm-surface-alt rounded-sm p-0.5 border border-dm-border flex-1 sm:flex-none">
-            {['All', 'Limit', 'Take Profit', 'Stop Loss'].map((type, i) => (
-              <button
-                key={type}
-                onClick={() => setFilterType(type)}
-                className={`relative z-10 py-1.5 px-3 rounded-sm text-[10px] uppercase tracking-wide font-bold transition-all whitespace-nowrap flex-1 sm:flex-none ${
-                   filterType === type ? 'text-white' : 'text-dm-text3 hover:text-dm-text2'
-                }`}
-              >
-                {filterType === type && (
-                  <motion.div
-                    layoutId="openOrdersFilter"
-                    className="absolute inset-0 bg-dm-surface-strong border border-dm-border rounded-sm -z-10"
-                    transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                  />
-                )}
-                {type === 'Take Profit' ? 'TP' : type === 'Stop Loss' ? 'SL' : type}
-              </button>
-            ))}
-          </div>
-
           {orders.length > 0 && (
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={onCancelAll}
-              className="bg-transparent border border-dm-border hover:bg-dream-red hover:border-dream-red/50 hover:text-white px-3 py-1.5 rounded-sm text-[10px] uppercase tracking-wider font-bold text-dm-text2 transition-all shrink-0"
+              className="bg-transparent border border-dm-border hover:bg-dm-surface-strong hover:text-white px-3 py-1.5 rounded-sm text-[10px] uppercase tracking-wider font-bold text-dm-text3 transition-all shrink-0"
             >
               Cancel All
             </motion.button>
           )}
-        </div>
       </div>
 
       {layout === 'grid' ? (
@@ -142,17 +111,46 @@ export function OpenOrders({ orders, onCancel, onCancelAll, layout = 'list' }: O
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          className="flex flex-col md:flex-row items-start gap-4"
+          className="w-full"
         >
-          <div className="flex-1 flex flex-col gap-4 w-full">
-            {filteredOrders.filter((_, i) => i % 2 === 0).map((order) => (
+          {/* Mobile: 1 col */}
+          <div className="grid md:hidden grid-cols-1 gap-6">
+            {orders.map((order) => (
               <OrderCard key={order.id} order={order} onCancel={onCancel} />
             ))}
           </div>
-          <div className="flex-1 flex flex-col gap-4 w-full">
-            {filteredOrders.filter((_, i) => i % 2 === 1).map((order) => (
-              <OrderCard key={order.id} order={order} onCancel={onCancel} />
-            ))}
+
+          {/* Tablet: 2 cols */}
+          <div className="hidden md:grid lg:hidden grid-cols-2 gap-6 items-start">
+            <div className="flex flex-col gap-6">
+              {orders.filter((_, i) => i % 2 === 0).map((order) => (
+                <OrderCard key={order.id} order={order} onCancel={onCancel} />
+              ))}
+            </div>
+            <div className="flex flex-col gap-6">
+              {orders.filter((_, i) => i % 2 === 1).map((order) => (
+                <OrderCard key={order.id} order={order} onCancel={onCancel} />
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop: 3 cols */}
+          <div className="hidden lg:grid grid-cols-3 gap-6 items-start">
+            <div className="flex flex-col gap-6">
+              {orders.filter((_, i) => i % 3 === 0).map((order) => (
+                <OrderCard key={order.id} order={order} onCancel={onCancel} />
+              ))}
+            </div>
+            <div className="flex flex-col gap-6">
+              {orders.filter((_, i) => i % 3 === 1).map((order) => (
+                <OrderCard key={order.id} order={order} onCancel={onCancel} />
+              ))}
+            </div>
+            <div className="flex flex-col gap-6">
+              {orders.filter((_, i) => i % 3 === 2).map((order) => (
+                <OrderCard key={order.id} order={order} onCancel={onCancel} />
+              ))}
+            </div>
           </div>
         </motion.div>
       ) : (
@@ -162,13 +160,13 @@ export function OpenOrders({ orders, onCancel, onCancelAll, layout = 'list' }: O
           animate="show"
           className="flex flex-col gap-3"
         >
-          {filteredOrders.map((order) => (
+          {orders.map((order) => (
             <OrderCard key={order.id} order={order} onCancel={onCancel} />
           ))}
         </motion.div>
       )}
 
-      {filteredOrders.length === 0 && (
+      {orders.length === 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, transition: { delay: 0.2 } }}

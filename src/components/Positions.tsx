@@ -8,6 +8,7 @@ interface PositionsProps {
   onClose: (id: string) => void;
   onCloseAll: () => void;
   layout?: 'list' | 'grid';
+  customTitle?: React.ReactNode;
 }
 
 const cardVariants = {
@@ -386,12 +387,12 @@ const containerVariants = {
   show: { opacity: 1, transition: { staggerChildren: 0.06 } },
 };
 
-export function Positions({ positions, onClose, onCloseAll, layout = 'list' }: PositionsProps) {
+export function Positions({ positions, onClose, onCloseAll, layout = 'list', customTitle }: PositionsProps) {
   return (
     <section className="bg-dm-surface border border-dm-border rounded-[24px] p-4 lg:p-6 w-full flex flex-col flex-1 shrink-0 relative z-20">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
         <div className="flex items-center gap-3">
-          <h2 className="text-xs font-bold text-dm-text3 uppercase tracking-wider">Positions</h2>
+          {customTitle || <h2 className="text-xs font-bold text-dm-text3 uppercase tracking-wider">Positions</h2>}
           {positions.length > 0 && (
             <motion.span
               key={positions.length}

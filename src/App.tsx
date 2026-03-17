@@ -29,6 +29,7 @@ function AppContent() {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [showMobileChart, setShowMobileChart] = useState(false);
   const [showAccount, setShowAccount] = useState(false);
+  const [tradeActivityTab, setTradeActivityTab] = useState<'Positions' | 'OpenOrders'>('Positions');
 
   const { setCurrentMarketId, walletAddress, setTicker, setUsdcBalance, usdcBalance } = useStore();
 
@@ -190,7 +191,7 @@ function AppContent() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="h-full pl-4 md:pl-4 pr-4 md:pr-4 pt-4 lg:pt-0"
+                className="h-full pl-4 md:pl-4 pr-4 md:pr-4 pt-4 lg:pt-0 lg:overflow-y-auto no-scrollbar"
               >
                 <motion.div variants={itemVariants} className="max-w-7xl mx-auto h-full pb-20 lg:pb-6">
                   <Dashboard positions={positions} onNavigate={setActiveTab} />
@@ -225,14 +226,65 @@ function AppContent() {
                         </div>
                       </div>
                     </motion.div>
-
                     <motion.div variants={itemVariants} className="col-span-3 flex flex-col gap-4 overflow-y-auto no-scrollbar min-h-0 h-full pb-4 pr-0">
                       <ExecutionPanel pair={selectedPair} onPlaceTrade={handlePlaceTrade} />
-                      <Positions
-                        positions={positions}
-                        onClose={handleClosePosition}
-                        onCloseAll={handleCloseAll}
-                      />
+                      {tradeActivityTab === 'Positions' ? (
+                        <Positions
+                          positions={positions}
+                          onClose={handleClosePosition}
+                          onCloseAll={handleCloseAll}
+                          customTitle={
+                            <div className="flex relative bg-[#3366FF]/10 rounded-md p-0.5 border border-[#3366FF]/20">
+                              {['Positions', 'OpenOrders'].map((tab) => (
+                                <button
+                                  key={tab}
+                                  onClick={() => setTradeActivityTab(tab as any)}
+                                  className={`relative z-10 py-1 px-3 rounded-md text-[10px] uppercase tracking-wider font-bold transition-all ${
+                                    tradeActivityTab === tab ? 'text-white' : 'text-[#3366FF] hover:text-[#3366FF]/80'
+                                  }`}
+                                >
+                                  {tradeActivityTab === tab && (
+                                    <motion.div
+                                      layoutId="tradeActivityTabBg"
+                                      className="absolute inset-0 bg-[#3366FF] shadow-[0_0_10px_rgba(51,102,255,0.3)] rounded-md -z-10"
+                                      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                                    />
+                                  )}
+                                  {tab === 'OpenOrders' ? 'Open Orders' : tab}
+                                </button>
+                              ))}
+                            </div>
+                          }
+                        />
+                      ) : (
+                        <OpenOrders
+                          orders={orders}
+                          onCancel={(id) => setOrders(orders.filter(o => o.id !== id))}
+                          onCancelAll={() => setOrders([])}
+                          customTitle={
+                            <div className="flex relative bg-[#3366FF]/10 rounded-md p-0.5 border border-[#3366FF]/20">
+                              {['Positions', 'OpenOrders'].map((tab) => (
+                                <button
+                                  key={tab}
+                                  onClick={() => setTradeActivityTab(tab as any)}
+                                  className={`relative z-10 py-1 px-3 rounded-md text-[10px] uppercase tracking-wider font-bold transition-all ${
+                                    tradeActivityTab === tab ? 'text-white' : 'text-[#3366FF] hover:text-[#3366FF]/80'
+                                  }`}
+                                >
+                                  {tradeActivityTab === tab && (
+                                    <motion.div
+                                      layoutId="tradeActivityTabBg"
+                                      className="absolute inset-0 bg-[#3366FF] shadow-[0_0_10px_rgba(51,102,255,0.3)] rounded-md -z-10"
+                                      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                                    />
+                                  )}
+                                  {tab === 'OpenOrders' ? 'Open Orders' : tab}
+                                </button>
+                              ))}
+                            </div>
+                          }
+                        />
+                      )}
                     </motion.div>
                   </div>
                 </div>
@@ -265,7 +317,7 @@ function AppContent() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4"
+                className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4 lg:overflow-y-auto no-scrollbar"
               >
                 <motion.div variants={itemVariants} className="max-w-7xl w-full flex flex-col mx-auto px-4 lg:px-8 pt-6 pb-20 lg:pb-6">
                   <Positions
@@ -285,7 +337,7 @@ function AppContent() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4"
+                className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4 lg:overflow-y-auto no-scrollbar"
               >
                 <motion.div variants={itemVariants} className="max-w-5xl mx-auto pt-6">
                   <StatsPanel />
@@ -300,7 +352,7 @@ function AppContent() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4"
+                className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4 lg:overflow-y-auto no-scrollbar"
               >
                 <motion.div variants={itemVariants} className="max-w-5xl flex flex-col mx-auto pt-6 pb-20 lg:pb-6">
                   <OpenOrders
