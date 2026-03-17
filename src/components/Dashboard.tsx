@@ -4,6 +4,8 @@ import { useStore } from '../store';
 import { formatCurrency, formatPercent } from '../utils';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { LineChart, ArrowUpRight, ArrowDownRight, Activity, Calendar, Users, TrendingUp, ChevronLeft, ChevronRight, MoreHorizontal, Plus } from 'lucide-react';
+import { Position } from '../types';
+import { initialPairs } from '../data';
 
 const LiquidationRiskGauge = ({ risk }: { risk: number }) => {
   const totalBars = 20;
@@ -12,13 +14,6 @@ const LiquidationRiskGauge = ({ risk }: { risk: number }) => {
   
   return (
     <div className="relative flex flex-col items-center justify-end w-full mt-6" style={{ height: '110px' }}>
-      <div className="absolute top-4 w-full flex justify-between px-4 text-xs font-semibold text-dm-text3">
-        <span>0</span>
-        <span>25</span>
-        <span>50</span>
-        <span>75</span>
-        <span>100</span>
-      </div>
       <svg viewBox="0 0 200 100" className="w-[85%] overflow-visible">
         {Array.from({ length: totalBars }).map((_, i) => {
           const angle = -90 + (180 / (totalBars - 1)) * i;
@@ -45,20 +40,13 @@ const LiquidationRiskGauge = ({ risk }: { risk: number }) => {
   );
 };
 
-export function Dashboard() {
+export function Dashboard({ positions, onNavigate }: { positions: Position[], onNavigate: (tab: string) => void }) {
+  const { tickers } = useStore();
   const accountEquity = 1001.33;
   const pnlPercent = -18.95; // using the actual mock data
   const liquidationRisk = 11.51; // using the actual mock data
   const marginUsage = 17.28; // actual mock data
   const activeOrders = 260; // mock total
-  
-  const activePositions = [
-    { type: 'Long', pair: 'BTC/USDC', status: 'Active', entryPrice: 62100, time: '10:00AM', pnl: 165 },
-    { type: 'Short', pair: 'ETH/USDC', status: 'Active', entryPrice: 3500, time: '11:00AM', pnl: 125 },
-    { type: 'Long', pair: 'SOL/USDC', status: 'Active', entryPrice: 145, time: '12:30PM', pnl: 45 },
-    { type: 'Long', pair: 'DOGE/USDC', status: 'Active', entryPrice: 0.15, time: '15:00PM', pnl: -12 },
-    { type: 'Short', pair: 'AVAX/USDC', status: 'Closed', entryPrice: 35, time: '15:40PM', pnl: -8 },
-  ];
 
   const equityData = [
     { time: '03-07', value: 950 },
@@ -70,11 +58,7 @@ export function Dashboard() {
     { time: '17-21', value: 1001.33 },
   ];
 
-  const recentRequests = [
-    { pair: 'BTC/USDC', type: 'Limit Long', date: '02 Apr. 10:00 am' },
-    { pair: 'ETH/USDC', type: 'Stop Short', date: '04 Apr. 09:00 am' },
-    { pair: 'SOL/USDC', type: 'Take Profit', date: '04 Apr. 14:00 pm' },
-  ];
+
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -96,18 +80,6 @@ export function Dashboard() {
         <div>
           <h1 className="text-3xl font-bold text-dm-text">Overview ☀️</h1>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="bg-dm-surface rounded-[20px] px-4 py-2 flex items-center gap-2 border border-dm-border">
-            <span className="text-sm text-dm-text">Monthly</span>
-            <Calendar size={16} className="text-dm-text2" />
-          </div>
-          <button className="bg-dm-surface hover:bg-dm-surface-alt transition-colors rounded-[20px] px-4 py-2 flex items-center gap-2 border border-dm-border">
-            <span className="text-sm font-medium text-dm-text">Export data</span>
-            <div className="w-4 h-4 rounded-full border border-dm-text flex items-center justify-center">
-              <span className="text-[10px]">↓</span>
-            </div>
-          </button>
-        </div>
       </div>
 
       <motion.div 
@@ -127,7 +99,6 @@ export function Dashboard() {
                 </div>
                 <h3 className="text-sm font-semibold text-dm-text">Total Equity</h3>
               </div>
-              <button className="text-[#3366FF] text-xs font-medium hover:underline">View more</button>
             </div>
             
             <div className="flex items-end gap-2 my-2">
@@ -147,10 +118,10 @@ export function Dashboard() {
               <div className="w-20 h-20 rounded-full bg-[#3366FF] flex items-center justify-center text-white font-bold relative z-10 shadow-lg shadow-[#3366FF]/20">
                 55%
               </div>
-              <div className="w-28 h-28 rounded-full bg-[#3366FF]/30 flex items-center justify-center text-white font-bold relative z-20 -ml-6 shadow-lg backdrop-blur-sm border border-white/5">
+              <div className="w-28 h-28 rounded-full bg-[#3366FF]/30 flex items-center justify-center text-white font-bold relative z-0 -ml-8 shadow-lg backdrop-blur-md border border-[#3366FF]/30">
                 35%
               </div>
-              <div className="w-14 h-14 rounded-full bg-dm-surface-strong border border-dm-border flex items-center justify-center text-dm-text2 font-bold relative z-10 -ml-4 shadow-lg">
+              <div className="w-16 h-16 rounded-full bg-dm-surface-strong border border-dm-border flex items-center justify-center text-dm-text2 font-bold relative z-10 -ml-4 shadow-lg">
                 10%
               </div>
             </div>
@@ -165,7 +136,6 @@ export function Dashboard() {
                 </div>
                 <h3 className="text-sm font-semibold text-dm-text">Liq. Risk Rate</h3>
               </div>
-              <button className="text-[#3366FF] text-xs font-medium hover:underline">View more</button>
             </div>
             
             <div className="flex items-end gap-2 my-2">
@@ -187,7 +157,6 @@ export function Dashboard() {
                 </div>
                 <h3 className="text-sm font-semibold text-dm-text">Margin Usage</h3>
               </div>
-              <button className="text-[#3366FF] text-xs font-medium hover:underline">View more</button>
             </div>
             
             <div className="flex items-end gap-2 my-2">
@@ -225,7 +194,6 @@ export function Dashboard() {
                 </div>
                 <h3 className="text-sm font-semibold text-dm-text">Performance</h3>
               </div>
-              <button className="text-[#3366FF] text-xs font-medium hover:underline">View more</button>
             </div>
             
             <div className="flex items-end gap-2 my-2 mb-6">
@@ -278,131 +246,113 @@ export function Dashboard() {
                  </div>
                  
                  <div className="flex items-center gap-4 text-xs">
-                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-[#3366FF]"></div>Active</div>
-                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-dm-surface-strong"></div>Closed</div>
-                    <button className="text-[#3366FF] font-medium hover:underline ml-2">View more</button>
+                    <button onClick={() => onNavigate('Positions')} className="text-[#3366FF] font-medium hover:underline ml-2">View more</button>
                  </div>
               </div>
 
-              {/* Pagination/Date selector mockup (matching image) */}
-              <div className="flex items-center gap-2 mb-6 text-sm overflow-x-auto no-scrollbar pb-2">
-                 <button className="p-1 rounded-full hover:bg-dm-surface-alt shrink-0"><ChevronLeft size={16} className="text-dm-text2" /></button>
-                 {[14,15,16,17,18,19,20,21].map(n => (
-                    <div key={n} className={`w-8 h-8 rounded-full flex items-center justify-center font-medium cursor-pointer transition-colors shrink-0 bg-dm-surface-alt text-dm-text2 hover:bg-dm-border`}>
-                       {n}
-                    </div>
-                 ))}
-                 <div className="w-8 h-8 rounded-full flex items-center justify-center font-medium bg-[#3366FF] text-white shadow-lg shadow-[#3366FF]/30 cursor-pointer shrink-0">22</div>
-                 {[23,24,25,26,27,28,29,30,31].map(n => (
-                    <div key={n} className={`w-8 h-8 rounded-full flex items-center justify-center font-medium cursor-pointer transition-colors shrink-0 bg-dm-surface-alt text-dm-text2 hover:bg-dm-border`}>
-                       {n}
-                    </div>
-                 ))}
-                 <button className="p-1 rounded-full hover:bg-dm-surface-alt shrink-0"><ChevronRight size={16} className="text-dm-text2" /></button>
-              </div>
-
-              <div className="overflow-x-auto w-full">
+              <div className="overflow-x-auto w-full mt-2">
                  <table className="w-full text-left border-collapse min-w-[600px]">
                     <thead>
                        <tr className="text-xs text-dm-text2 border-b border-dm-border/50">
                           <th className="py-3 px-2 font-medium">Market ↑↓</th>
                           <th className="py-3 px-2 font-medium">Type ↑↓</th>
-                          <th className="py-3 px-2 font-medium">Status ↑↓</th>
-                          <th className="py-3 px-2 font-medium">Date</th>
-                          <th className="py-3 px-2 font-medium">Time ↑↓</th>
+                          <th className="py-3 px-2 font-medium">Size ↑↓</th>
+                          <th className="py-3 px-2 font-medium">Entry Price ↑↓</th>
+                          <th className="py-3 px-2 font-medium">Mark Price ↑↓</th>
+                          <th className="py-3 px-2 font-medium">PnL ↑↓</th>
                           <th className="py-3 px-2 font-medium text-right">Action</th>
                        </tr>
                     </thead>
                     <tbody>
-                       {activePositions.map((pos, i) => (
-                          <tr key={i} className="text-sm font-medium border-b border-dm-border/50 last:border-0 hover:bg-dm-surface-alt/50 transition-colors">
+                       {positions.map((pos) => {
+                          const isPositive = pos.pnl >= 0;
+                          const assetSymbol = pos.pair.split('-')[0];
+                          return (
+                          <tr key={pos.id} className="text-sm font-medium border-b border-dm-border/50 last:border-0 hover:bg-dm-surface-alt/50 transition-colors">
                              <td className="py-4 px-2 text-dm-text flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-full bg-dm-surface-strong border border-dm-border flex items-center justify-center text-[10px] font-bold">
-                                   {pos.pair.split('/')[0]}
+                                   {assetSymbol}
                                 </div>
-                                {pos.pair}
+                                <div>
+                                   <div>{pos.pair}</div>
+                                   <div className="text-[10px] text-dm-text3 font-medium mt-0.5">{pos.leverage}x Leverage</div>
+                                </div>
                              </td>
-                             <td className="py-4 px-2 text-dm-text2">{pos.type}</td>
                              <td className="py-4 px-2">
-                                <span className={`flex items-center gap-1.5 text-xs ${pos.status === 'Active' ? 'text-[#3366FF]' : 'text-dream-red'}`}>
-                                   <div className={`w-1.5 h-1.5 rounded-full ${pos.status === 'Active' ? 'bg-[#3366FF]' : 'bg-dream-red'}`}></div>
-                                   {pos.status}
+                                <span className={`flex items-center gap-1.5 text-xs ${pos.type === 'Long' ? 'text-dream-green' : 'text-dream-red'}`}>
+                                   {pos.type}
                                 </span>
                              </td>
-                             <td className="py-4 px-2 text-dm-text">Mar. 22</td>
-                             <td className="py-4 px-2 text-dm-text">{pos.time}</td>
+                             <td className="py-4 px-2 text-dm-text">{pos.size.toFixed(4)} <span className="text-xs text-dm-text3">{assetSymbol}</span></td>
+                             <td className="py-4 px-2 text-dm-text">{formatCurrency(pos.entryPrice)}</td>
+                             <td className="py-4 px-2 text-dm-text">{formatCurrency(pos.markPrice)}</td>
+                             <td className="py-4 px-2">
+                                <div className={`flex flex-col ${isPositive ? 'text-dream-green' : 'text-dream-red'}`}>
+                                   <span>{isPositive ? '+' : ''}{formatCurrency(pos.pnl)}</span>
+                                   <span className="text-[10px]">{isPositive ? '+' : ''}{formatPercent(pos.pnlPercent)}</span>
+                                </div>
+                             </td>
                              <td className="py-4 px-2 flex justify-end gap-2">
-                                <button className="w-8 h-8 rounded-full bg-[#3366FF] flex items-center justify-center text-white hover:bg-[#3366FF]/80 transition-colors shadow-lg shadow-[#3366FF]/20">
-                                   <Plus size={16} />
-                                </button>
-                                <button className="w-8 h-8 rounded-[12px] border border-dm-border flex items-center justify-center text-dm-text2 hover:bg-dm-surface-strong transition-colors">
+                                <button className="w-8 h-8 rounded-full bg-dm-surface-alt border border-dm-border flex items-center justify-center text-dm-text hover:bg-dm-surface-strong transition-colors">
                                    <MoreHorizontal size={16} />
                                 </button>
                              </td>
                           </tr>
-                       ))}
+                       )})}
+                       {positions.length === 0 && (
+                          <tr>
+                             <td colSpan={7} className="py-8 text-center text-dm-text3 text-sm">No active positions found</td>
+                          </tr>
+                       )}
                     </tbody>
                  </table>
               </div>
            </motion.div>
 
-           {/* Open Requests */}
+           {/* Markets / Available Tokens */}
            <motion.div variants={cardVariants} className="bg-dm-surface border border-dm-border rounded-[24px] p-6 flex flex-col">
               <div className="flex justify-between items-center mb-6">
                  <div className="flex items-center gap-2">
                     <div className="bg-[#3366FF]/20 p-1.5 rounded-full">
-                       <Calendar size={16} className="text-[#3366FF]" />
+                       <TrendingUp size={16} className="text-[#3366FF]" />
                     </div>
-                    <h3 className="text-base font-semibold text-dm-text">Open Orders</h3>
+                    <h3 className="text-base font-semibold text-dm-text">Available Markets</h3>
                  </div>
-                 <button className="text-[#3366FF] text-xs font-medium hover:underline">View more</button>
+                 <button onClick={() => onNavigate('Trade')} className="text-[#3366FF] text-xs font-medium hover:underline">Trade all</button>
               </div>
 
               <div className="flex flex-col gap-4">
-                 {recentRequests.map((req, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-[16px] border border-dm-border bg-dm-surface-alt/20 hover:bg-dm-surface-alt transition-colors">
-                       <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-dm-surface-strong border border-dm-border flex items-center justify-center text-xs text-dm-text font-bold">
-                             {req.pair.split('/')[0]}
+                 {initialPairs.map((pair) => {
+                    const marketId = pair.pair.replace('/', '-'); // Rough mapping to market id, or just split
+                    const symbol = pair.pair.split('/')[0];
+                    const ticker = tickers[marketId] || tickers[`${symbol}-USD`];
+                    
+                    const price = ticker ? parseFloat(ticker.price) / 10**6 : pair.price;
+                    const changeStr = ticker ? ticker.price_change_24h : '0';
+                    const change = ticker ? parseFloat(changeStr) : pair.change;
+                    const isPositive = change >= 0;
+
+                    return (
+                       <div key={pair.id} className="flex items-center justify-between p-3 rounded-[16px] border border-dm-border bg-dm-surface-alt/20 hover:bg-dm-surface-alt transition-colors cursor-pointer group">
+                          <div className="flex items-center gap-3">
+                             <div className="w-10 h-10 rounded-full bg-dm-surface-strong border border-dm-border flex items-center justify-center text-xs text-dm-text font-bold">
+                                {symbol}
+                             </div>
+                             <div>
+                                <div className="text-sm font-semibold text-dm-text group-hover:text-[#3366FF] transition-colors">{pair.name}</div>
+                                <div className="text-[11px] text-dm-text3">{pair.pair}</div>
+                             </div>
                           </div>
-                          <div>
-                             <div className="text-sm font-semibold text-dm-text">{req.pair}</div>
-                             <div className="text-[11px] text-dm-text3">{req.type}</div>
-                             <div className="flex items-center gap-1 text-[10px] text-dm-text2 mt-1">
-                                <Calendar size={10} />
-                                {req.date}
+                          <div className="text-right">
+                             <div className="text-sm font-bold text-dm-text">{formatCurrency(price)}</div>
+                             <div className={`text-[11px] font-medium flex items-center justify-end gap-1 ${isPositive ? 'text-dream-green' : 'text-dream-red'}`}>
+                                {isPositive ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+                                {Math.abs(change).toFixed(2)}%
                              </div>
                           </div>
                        </div>
-                       <div className="flex gap-2">
-                          <button className="w-8 h-8 rounded-full bg-dm-surface border border-dm-border flex items-center justify-center text-dm-text2 hover:text-dream-red hover:border-dream-red/50 transition-colors">
-                             ✖
-                          </button>
-                          <button className="w-8 h-8 rounded-full bg-[#3366FF] flex items-center justify-center text-white shadow-lg shadow-[#3366FF]/20 hover:bg-[#3366FF]/80 transition-colors">
-                             ✓
-                          </button>
-                       </div>
-                    </div>
-                 ))}
-                 
-                 {/* Mockup disabled item (like the image) */}
-                 <div className="flex items-center justify-between p-3 rounded-[16px] border border-dm-border opacity-50 grayscale select-none pointer-events-none">
-                    <div className="flex items-center gap-3">
-                       <div className="w-10 h-10 rounded-full bg-dm-surface-strong border border-dm-border flex items-center justify-center text-xs font-bold text-dm-text">SOL</div>
-                       <div>
-                          <div className="text-sm font-semibold text-dm-text">SOL/USDC</div>
-                          <div className="text-[11px] text-dm-text3">Trailing Stop</div>
-                          <div className="flex items-center gap-1 text-[10px] text-dm-text2 mt-1">
-                             <Calendar size={10} />
-                             05 Apr. 12:00 pm
-                          </div>
-                       </div>
-                    </div>
-                    <div className="flex gap-2">
-                       <div className="w-8 h-8 rounded-full bg-dm-surface border border-dm-border flex items-center justify-center">✖</div>
-                       <div className="w-8 h-8 rounded-full bg-[#3366FF] flex items-center justify-center text-white">✓</div>
-                    </div>
-                 </div>
+                    );
+                 })}
               </div>
            </motion.div>
 

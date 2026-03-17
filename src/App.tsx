@@ -193,7 +193,7 @@ function AppContent() {
                 className="h-full pl-4 md:pl-4 pr-4 md:pr-4 pt-4 lg:pt-0"
               >
                 <motion.div variants={itemVariants} className="max-w-7xl mx-auto h-full pb-20 lg:pb-6">
-                  <Dashboard />
+                  <Dashboard positions={positions} onNavigate={setActiveTab} />
                 </motion.div>
               </motion.div>
             )}
@@ -267,7 +267,7 @@ function AppContent() {
                 exit="exit"
                 className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4"
               >
-                <motion.div variants={itemVariants} className="max-w-5xl flex flex-col mx-auto pt-6 pb-20 lg:pb-6">
+                <motion.div variants={itemVariants} className="max-w-7xl w-full flex flex-col mx-auto px-4 lg:px-8 pt-6 pb-20 lg:pb-6">
                   <Positions
                     positions={positions}
                     onClose={handleClosePosition}

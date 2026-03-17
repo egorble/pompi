@@ -22,10 +22,10 @@ export function Sidebar({ activeTab, setActiveTab, onSettingsClick }: SidebarPro
   ];
 
   return (
-    <div className="hidden lg:flex flex-col w-[64px] shrink-0 bg-transparent border-r border-dm-border h-screen py-4 items-center z-50">
-      <div className="mb-8 text-dm-bg w-10 h-10 bg-brand-accent rounded-sm flex items-center justify-center">
+    <div className="hidden lg:flex flex-col w-[64px] shrink-0 bg-transparent h-screen py-4 items-center z-50">
+      <div className="mb-8 text-[#3366FF] w-10 h-10 flex items-center justify-center">
         {/* Placeholder for Logo */}
-        <Box size={20} className="text-black fill-current" />
+        <Box size={24} className="text-[#3366FF] fill-current" />
       </div>
       
       <div className="flex flex-col gap-2 flex-1">
@@ -43,8 +43,8 @@ export function Sidebar({ activeTab, setActiveTab, onSettingsClick }: SidebarPro
                     setActiveTab(item.id as any);
                   }
                 }}
-                className={`relative w-10 h-10 rounded-sm flex items-center justify-center transition-all duration-200 border border-transparent overflow-hidden ${
-                  isActive ? 'bg-brand-accent text-black' : 'bg-transparent text-dm-text hover:bg-dm-surface-alt'
+                className={`relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 overflow-hidden ${
+                  isActive ? 'bg-[#3366FF] text-white shadow-lg shadow-[#3366FF]/20' : 'text-dm-text hover:text-dm-text2 hover:scale-110 hover:bg-dm-surface-strong'
                 }`}
               >
                 <Icon size={18} className="relative z-10" strokeWidth={isActive ? 2.5 : 2} />
@@ -57,11 +57,11 @@ export function Sidebar({ activeTab, setActiveTab, onSettingsClick }: SidebarPro
       <div className="mt-auto flex flex-col gap-2 relative z-50">
         <button 
           onClick={toggle}
-          className="w-10 h-10 rounded-sm flex items-center justify-center bg-transparent text-dm-text2 hover:text-dm-text hover:bg-dm-surface-alt transition-all duration-200"
+          className="w-10 h-10 rounded-xl flex items-center justify-center bg-transparent text-dm-text2 hover:text-dm-text hover:bg-dm-surface-strong transition-all duration-200"
         >
           {isDark ? <Sun size={18} /> : <Moon size={18} />}
         </button>
-        <button className="w-10 h-10 rounded-sm flex items-center justify-center bg-transparent text-dm-text2 hover:text-dm-text hover:bg-dm-surface-alt transition-all duration-200">
+        <button className="w-10 h-10 rounded-xl flex items-center justify-center bg-transparent text-dm-text2 hover:text-dm-text hover:bg-dm-surface-strong transition-all duration-200">
            <HeadphonesIcon size={18} />
         </button>
       </div>
