@@ -75,7 +75,7 @@ export function Dashboard({ positions, onNavigate }: { positions: Position[], on
   };
 
   return (
-    <div className="flex flex-col h-full w-full p-2">
+    <div className="flex flex-col h-full w-full">
       {/* Header */}
       <div className="flex justify-between items-center mb-6 shrink-0 px-2 mt-4">
         <div>

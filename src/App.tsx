@@ -197,9 +197,9 @@ function AppContent() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="h-full pl-4 md:pl-4 pr-4 md:pr-4 pt-4 lg:pt-0 lg:overflow-y-auto no-scrollbar"
+                className="h-full pt-4 lg:pt-0 lg:overflow-y-auto no-scrollbar"
               >
-                <motion.div variants={itemVariants} className="max-w-7xl mx-auto h-full pb-20 lg:pb-6">
+                <motion.div variants={itemVariants} className="w-full h-full pb-20 lg:pb-6">
                   <Dashboard positions={positions} onNavigate={setActiveTab} />
                 </motion.div>
               </motion.div>
@@ -240,12 +240,12 @@ function AppContent() {
                           onClose={handleClosePosition}
                           onCloseAll={handleCloseAll}
                           customTitle={
-                            <div className="flex relative bg-white rounded-md p-0.5 border border-dm-border">
+                            <div className="flex relative bg-dm-surface rounded-md p-0.5 border border-dm-border2">
                               {['Positions', 'OpenOrders'].map((tab) => (
                                 <button
                                   key={tab}
                                   onClick={() => handleTradeActivityTab(tab as any)}
-                                  className={`relative z-10 py-1 px-3 rounded-md text-[10px] uppercase tracking-wider font-bold transition-all ${tradeActivityTab === tab ? 'text-white' : 'text-[#3366FF] hover:text-[#3366FF]/80'
+                                  className={`relative z-10 py-1 px-3 rounded-md text-[10px] uppercase tracking-wider font-bold transition-all ${tradeActivityTab === tab ? 'text-white' : 'text-dream-blue hover:text-dream-blue/80'
                                     }`}
                                 >
                                   {tradeActivityTab === tab && (
@@ -267,12 +267,12 @@ function AppContent() {
                           onCancel={(id) => setOrders(orders.filter(o => o.id !== id))}
                           onCancelAll={() => setOrders([])}
                           customTitle={
-                            <div className="flex relative bg-white rounded-md p-0.5 border border-dm-border">
+                            <div className="flex relative bg-dm-surface rounded-md p-0.5 border border-dm-border2">
                               {['Positions', 'OpenOrders'].map((tab) => (
                                 <button
                                   key={tab}
                                   onClick={() => handleTradeActivityTab(tab as any)}
-                                  className={`relative z-10 py-1 px-3 rounded-md text-[10px] uppercase tracking-wider font-bold transition-all ${tradeActivityTab === tab ? 'text-white' : 'text-[#3366FF] hover:text-[#3366FF]/80'
+                                  className={`relative z-10 py-1 px-3 rounded-md text-[10px] uppercase tracking-wider font-bold transition-all ${tradeActivityTab === tab ? 'text-white' : 'text-dream-blue hover:text-dream-blue/80'
                                     }`}
                                 >
                                   {tradeActivityTab === tab && (
@@ -321,9 +321,9 @@ function AppContent() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4 lg:overflow-y-auto no-scrollbar"
+                className="h-full pt-16 lg:pt-4 lg:overflow-y-auto no-scrollbar"
               >
-                <motion.div variants={itemVariants} className="max-w-7xl w-full flex flex-col mx-auto px-4 lg:px-8 pt-6 pb-20 lg:pb-6">
+                <motion.div variants={itemVariants} className="w-full flex flex-col pb-20 lg:pb-6">
                   <Positions
                     positions={positions}
                     onClose={handleClosePosition}
@@ -341,9 +341,9 @@ function AppContent() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4 lg:overflow-y-auto no-scrollbar"
+                className="h-full pt-16 lg:pt-4 lg:overflow-y-auto no-scrollbar"
               >
-                <motion.div variants={itemVariants} className="max-w-5xl mx-auto pt-6">
+                <motion.div variants={itemVariants} className="w-full">
                   <StatsPanel />
                 </motion.div>
               </motion.div>
@@ -356,9 +356,9 @@ function AppContent() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="h-full pl-0 md:pl-0 pr-4 md:pr-4 pt-16 lg:pt-4 lg:overflow-y-auto no-scrollbar"
+                className="h-full pt-16 lg:pt-4 lg:overflow-y-auto no-scrollbar"
               >
-                <motion.div variants={itemVariants} className="max-w-5xl flex flex-col mx-auto pt-6 pb-20 lg:pb-6">
+                <motion.div variants={itemVariants} className="w-full flex flex-col pb-20 lg:pb-6">
                   <OpenOrders
                     orders={orders}
                     onCancel={handleCancelOrder}
