@@ -256,12 +256,17 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
                     className="space-y-3"
                   >
                     {/* Market/Limit toggle */}
-                    <div className="flex gap-2">
+                    <div className="relative flex bg-transparent border border-[#3366FF]/30 rounded-[12px] p-[3px]">
+                      <motion.div
+                        className="absolute bottom-[3px] top-[3px] w-[calc(50%-3px)] bg-[#3366FF] rounded-[10px] shadow-sm z-0"
+                        animate={{ left: closeType === 'Market' ? '3px' : 'calc(50%)' }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                      />
                       {(['Market', 'Limit'] as const).map(t => (
                         <button
                           key={t}
                           onClick={() => setCloseType(t)}
-                          className={`flex-1 py-1.5 rounded-full text-[11px] font-bold border transition-all ${closeType === t ? 'bg-[#3366FF] border-[#3366FF] text-white shadow-sm' : 'bg-transparent border-[#3366FF]/30 text-[#3366FF] hover:bg-[#3366FF]/5'
+                          className={`relative z-10 flex-1 py-1.5 text-[11px] font-bold transition-colors ${closeType === t ? 'text-white' : 'text-[#3366FF] hover:text-[#3366FF]/80'
                             }`}
                         >
                           {t}
@@ -309,7 +314,12 @@ function PositionCard({ pos, onClose }: { key?: string; pos: Position; onClose: 
                           <span className="text-dm-text3">{assetSymbol}</span>
                         </div>
                       </div>
-
+                      <input
+                        type="range" min="1" max="100" value={closePercent}
+                        onChange={(e) => setClosePercent(parseInt(e.target.value))}
+                        className="w-full dream-slider text-dream-blue mb-1.5"
+                        style={{ background: `linear-gradient(to right, color-mix(in srgb, currentColor 10%, transparent) 0%, currentColor ${closePercent}%, var(--dm-surface-strong) ${closePercent}%)` }}
+                      />
                       <div className="flex gap-1.5 mt-2">
                         {[25, 50, 75, 100].map(v => (
                           <motion.button
@@ -378,7 +388,7 @@ const containerVariants = {
 
 export function Positions({ positions, onClose, onCloseAll, layout = 'list' }: PositionsProps) {
   return (
-    <section className="bg-dm-surface border border-dm-border rounded-[24px] p-4 lg:p-6 w-full flex flex-col h-full relative z-20">
+    <section className="bg-dm-surface border border-dm-border rounded-[24px] p-4 lg:p-6 w-full flex flex-col flex-1 shrink-0 relative z-20">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <h2 className="text-xs font-bold text-dm-text3 uppercase tracking-wider">Positions</h2>
@@ -410,11 +420,47 @@ export function Positions({ positions, onClose, onCloseAll, layout = 'list' }: P
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full"
+          className="w-full"
         >
-          {positions.map((pos) => (
-            <PositionCard key={pos.id} pos={pos} onClose={onClose} />
-          ))}
+          {/* Mobile: 1 col */}
+          <div className="grid md:hidden grid-cols-1 gap-6">
+            {positions.map((pos) => (
+              <PositionCard key={pos.id} pos={pos} onClose={onClose} />
+            ))}
+          </div>
+
+          {/* Tablet: 2 cols */}
+          <div className="hidden md:grid lg:hidden grid-cols-2 gap-6 items-start">
+            <div className="flex flex-col gap-6">
+              {positions.filter((_, i) => i % 2 === 0).map((pos) => (
+                <PositionCard key={pos.id} pos={pos} onClose={onClose} />
+              ))}
+            </div>
+            <div className="flex flex-col gap-6">
+              {positions.filter((_, i) => i % 2 === 1).map((pos) => (
+                <PositionCard key={pos.id} pos={pos} onClose={onClose} />
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop: 3 cols */}
+          <div className="hidden lg:grid grid-cols-3 gap-6 items-start">
+            <div className="flex flex-col gap-6">
+              {positions.filter((_, i) => i % 3 === 0).map((pos) => (
+                <PositionCard key={pos.id} pos={pos} onClose={onClose} />
+              ))}
+            </div>
+            <div className="flex flex-col gap-6">
+              {positions.filter((_, i) => i % 3 === 1).map((pos) => (
+                <PositionCard key={pos.id} pos={pos} onClose={onClose} />
+              ))}
+            </div>
+            <div className="flex flex-col gap-6">
+              {positions.filter((_, i) => i % 3 === 2).map((pos) => (
+                <PositionCard key={pos.id} pos={pos} onClose={onClose} />
+              ))}
+            </div>
+          </div>
         </motion.div>
       ) : (
         <motion.div
