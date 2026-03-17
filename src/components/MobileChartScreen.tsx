@@ -5,6 +5,7 @@ import { formatCurrency, getMarketId } from '../utils';
 import { ArrowLeft, Star, TrendingUp, Activity, PieChart } from 'lucide-react';
 import { Chart } from './Chart';
 import { useStore } from '../store';
+import { getTokenLogo } from '../tokenLogos';
 
 interface MobileChartScreenProps {
   pair: Pair;
@@ -44,8 +45,12 @@ export function MobileChartScreen({ pair, onBack }: MobileChartScreenProps) {
               {isPositive ? '↑' : '↓'}{Math.abs(pair.change)}% past day
             </div>
           </div>
-          <div className="w-16 h-16 rounded-full bg-dm-surface-alt flex items-center justify-center font-black text-3xl text-dm-text3 border-4 border-dm-surface shadow-sm -mt-2">
-            {pair.pair.charAt(0)}
+          <div className="w-16 h-16 rounded-full bg-dm-surface-alt flex items-center justify-center font-black text-3xl text-dm-text3 border-4 border-dm-surface shadow-sm -mt-2 overflow-hidden">
+            {getTokenLogo(pair.pair) ? (
+              <img src={getTokenLogo(pair.pair)!} alt={pair.pair} className="w-full h-full object-cover p-2.5" />
+            ) : (
+              pair.pair.charAt(0)
+            )}
           </div>
         </div>
 

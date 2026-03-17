@@ -5,6 +5,7 @@ import { formatCurrency, getMarketId } from '../utils';
 import { ArrowLeft, Star, TrendingUp, Activity, PieChart } from 'lucide-react';
 import { Chart } from './Chart';
 import { useStore } from '../store';
+import { getTokenLogo } from '../tokenLogos';
 
 interface MobileCoinDetailProps {
   pair: Pair;
@@ -44,8 +45,12 @@ export function MobileCoinDetail({ pair, onBack, onOpenTrade }: MobileCoinDetail
               {isPositive ? '↑' : '↓'}{Math.abs(pair.change)}% past day
             </div>
           </div>
-          <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center font-black text-3xl text-slate-400 border-4 border-white shadow-sm -mt-2">
-            {pair.pair.charAt(0)}
+          <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center font-black text-3xl text-slate-400 border-4 border-white shadow-sm -mt-2 overflow-hidden">
+            {getTokenLogo(pair.pair) ? (
+              <img src={getTokenLogo(pair.pair)!} alt={pair.pair} className="w-full h-full object-cover p-2.5" />
+            ) : (
+              pair.pair.charAt(0)
+            )}
           </div>
         </div>
 

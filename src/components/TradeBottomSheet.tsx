@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, Settings, ChevronDown, Delete } from 'lucide-react';
 import { Pair } from '../types';
 import { formatCurrency } from '../utils';
+import { getTokenLogo } from '../tokenLogos';
 
 interface TradeBottomSheetProps {
   isOpen: boolean;
@@ -127,8 +128,12 @@ export function TradeBottomSheet({ isOpen, onClose, pair, side, onPlaceTrade, ba
                     <ArrowLeft size={24} />
                   </button>
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs text-slate-400">
-                      {pair.pair.charAt(0)}
+                    <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs text-slate-400 overflow-hidden">
+                      {getTokenLogo(pair.pair) ? (
+                        <img src={getTokenLogo(pair.pair)!} alt={pair.pair} className="w-full h-full object-cover p-1" />
+                      ) : (
+                        pair.pair.charAt(0)
+                      )}
                     </div>
                     <span className="font-extrabold text-slate-900">{pair.pair.split('/')[0]}</span>
                     <span className="text-slate-400 font-medium">{formatCurrency(pair.price)}</span>

@@ -94,7 +94,7 @@ export function OpenOrders({ orders, onCancel, onCancelAll, layout = 'list', cus
           )}
         </div>
         
-          {orders.length > 0 && (
+        {!customTitle && orders.length > 0 && (
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}

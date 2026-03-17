@@ -4,6 +4,7 @@ import { Pair } from '../types';
 import { formatCurrency, getMarketId } from '../utils';
 import { BarChart2, ChevronDown, MoreHorizontal, Plus, Minus, Info, X, Check, ArrowLeft, Search } from 'lucide-react';
 import { useStore } from '../store';
+import { getTokenLogo } from '../tokenLogos';
 
 interface MobileTradingScreenProps {
   pair: Pair;
@@ -127,8 +128,12 @@ export function MobileTradingScreen({ pair, pairs, onSelectPair, onOpenChart, ba
                 className="w-full flex items-center justify-between px-4 py-3.5 border-b border-dm-border hover:bg-dm-surface-alt active:bg-dm-surface-raised transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-dm-surface-raised flex items-center justify-center font-bold text-sm text-dm-text2">
-                    {p.pair.charAt(0)}
+                  <div className="w-9 h-9 rounded-full bg-white border border-dm-border flex items-center justify-center font-bold text-sm text-dm-text2 overflow-hidden shadow-sm">
+                    {getTokenLogo(p.pair) ? (
+                      <img src={getTokenLogo(p.pair)!} alt={p.pair} className="w-full h-full object-contain p-2" />
+                    ) : (
+                      p.pair.charAt(0)
+                    )}
                   </div>
                   <div className="text-left">
                     <span className="font-bold text-dm-text block text-sm">{p.pair.replace('/USDC', '')}</span>

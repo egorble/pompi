@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { useStore } from '../store';
 import { formatCurrency, formatPercent } from '../utils';
+import { getTokenLogo } from '../tokenLogos';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { LineChart, ArrowUpRight, ArrowDownRight, Activity, Calendar, Users, TrendingUp, ChevronLeft, ChevronRight, MoreHorizontal, Plus } from 'lucide-react';
 import { Position } from '../types';
@@ -270,8 +271,8 @@ export function Dashboard({ positions, onNavigate }: { positions: Position[], on
                           return (
                           <tr key={pos.id} className="text-sm font-medium border-b border-dm-border/50 last:border-0 hover:bg-dm-surface-alt/50 transition-colors">
                              <td className="py-4 px-2 text-dm-text flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full bg-dm-surface-strong border border-dm-border flex items-center justify-center text-[10px] font-bold">
-                                   {assetSymbol}
+                                <div className="w-8 h-8 rounded-full bg-dm-surface-strong border border-dm-border flex items-center justify-center text-[10px] font-bold overflow-hidden">
+                                   {getTokenLogo(assetSymbol) ? <img src={getTokenLogo(assetSymbol)!} alt={assetSymbol} className="w-full h-full object-cover" /> : assetSymbol}
                                 </div>
                                 <div>
                                    <div>{pos.pair}</div>
@@ -327,16 +328,15 @@ export function Dashboard({ positions, onNavigate }: { positions: Position[], on
                     const symbol = pair.pair.split('/')[0];
                     const ticker = tickers[marketId] || tickers[`${symbol}-USD`];
                     
-                    const price = ticker ? parseFloat(ticker.price) / 10**6 : pair.price;
-                    const changeStr = ticker ? ticker.price_change_24h : '0';
-                    const change = ticker ? parseFloat(changeStr) : pair.change;
+                    const price = ticker ? parseFloat(String(ticker.price)) / 10**6 : pair.price;
+                    const change = ticker ? ticker.change_24h_pct : pair.change;
                     const isPositive = change >= 0;
 
                     return (
                        <div key={pair.id} className="flex items-center justify-between p-3 rounded-[16px] border border-dm-border bg-dm-surface-alt/20 hover:bg-dm-surface-alt transition-colors cursor-pointer group">
                           <div className="flex items-center gap-3">
-                             <div className="w-10 h-10 rounded-full bg-dm-surface-strong border border-dm-border flex items-center justify-center text-xs text-dm-text font-bold">
-                                {symbol}
+                             <div className="w-10 h-10 rounded-full bg-white border border-dm-border flex items-center justify-center text-xs text-dm-text font-bold overflow-hidden shadow-sm">
+                                {getTokenLogo(symbol) ? <img src={getTokenLogo(symbol)!} alt={symbol} className="w-full h-full object-contain p-2" /> : symbol}
                              </div>
                              <div>
                                 <div className="text-sm font-semibold text-dm-text group-hover:text-[#3366FF] transition-colors">{pair.name}</div>

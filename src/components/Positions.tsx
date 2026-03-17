@@ -404,7 +404,7 @@ export function Positions({ positions, onClose, onCloseAll, layout = 'list', cus
             </motion.span>
           )}
         </div>
-        {positions.length > 0 && (
+        {!customTitle && positions.length > 0 && (
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

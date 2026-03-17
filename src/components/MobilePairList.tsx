@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Pair } from '../types';
 import { formatCurrency } from '../utils';
 import { Search, Menu } from 'lucide-react';
+import { getTokenLogo } from '../tokenLogos';
 
 interface MobilePairListProps {
   pairs: Pair[];
@@ -27,6 +28,7 @@ export function MobilePairList({ pairs, onSelect }: MobilePairListProps) {
       <div className="flex-1 overflow-y-auto pb-24 px-2">
         {pairs.map((pair) => {
           const isPositive = pair.change >= 0;
+          const logo = getTokenLogo(pair.pair);
           return (
             <motion.div
               key={pair.pair}
@@ -35,8 +37,12 @@ export function MobilePairList({ pairs, onSelect }: MobilePairListProps) {
               className="flex items-center justify-between px-4 py-4 border-b border-slate-50 cursor-pointer rounded-2xl"
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center font-black text-xl text-slate-400 border border-slate-100 shadow-sm">
-                  {pair.pair.charAt(0)}
+                <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center font-black text-xl text-slate-400 border border-slate-100 shadow-sm overflow-hidden">
+                  {logo ? (
+                    <img src={logo} alt={pair.pair} className="w-full h-full object-cover p-2" />
+                  ) : (
+                    pair.pair.charAt(0)
+                  )}
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-0.5">

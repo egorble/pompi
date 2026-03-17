@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useStore } from '../store';
 import { getMarketId } from '../utils';
 
+import { getTokenLogo } from '../tokenLogos';
+
 interface MarketInfoProps {
   pair: Pair;
   pairs: Pair[];
@@ -39,11 +41,17 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
     p.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const logo = getTokenLogo(pair.pair);
+
   return (
     <section className="premium-card rounded-[16px] p-3 md:p-4 flex flex-col lg:flex-row items-center justify-between gap-4 shrink-0 relative z-40 w-full mb-2">
       <div className="flex items-center gap-3 relative" ref={dropdownRef}>
-        <div className="w-12 h-12 bg-[#1A2540] rounded-[10px] flex items-center justify-center shrink-0">
-          <span className="text-[#3366FF] font-bold text-xl">{pair.name.charAt(0)}</span>
+        <div className="w-12 h-12 bg-white rounded-[10px] border border-dm-border/50 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+          {logo ? (
+            <img src={logo} alt={pair.name} className="w-full h-full object-contain p-2" />
+          ) : (
+            <span className="text-[#3366FF] font-bold text-xl">{pair.name.charAt(0)}</span>
+          )}
         </div>
 
         <div
@@ -89,6 +97,7 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
                   const itemPrice = itemTicker?.price || item.price;
                   const itemChange = itemTicker?.change_24h_pct ?? item.change;
                   const itemIsPositive = itemChange >= 0;
+                  const itemLogo = getTokenLogo(item.pair);
 
                   return (
                     <motion.button
@@ -100,12 +109,21 @@ export function MarketInfo({ pair, pairs, onSelectPair }: MarketInfoProps) {
                         setShowDropdown(false);
                         setSearchQuery('');
                       }}
-                       className={`w-full flex items-center justify-between p-2.5 rounded-[10px] transition-colors group ${isSelected ? 'bg-brand-accent/10 border border-brand-accent/20' : 'hover:bg-dm-surface-alt border border-transparent'
+                      className={`w-full flex items-center justify-between p-2.5 rounded-[10px] transition-colors group ${isSelected ? 'bg-brand-accent/10 border border-brand-accent/20' : 'hover:bg-dm-surface-alt border border-transparent'
                         }`}
                     >
-                      <div className="text-left">
-                        <p className="text-sm font-bold text-dm-text">{item.pair}</p>
-                        <p className="text-[10px] text-dm-text3 font-medium">{item.name}</p>
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-white border border-dm-border/50 rounded-[6px] flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+                          {itemLogo ? (
+                            <img src={itemLogo} alt={item.name} className="w-full h-full object-contain p-1.5" />
+                          ) : (
+                            <span className="text-[#3366FF] font-bold text-xs">{item.name.charAt(0)}</span>
+                          )}
+                        </div>
+                        <div className="text-left">
+                          <p className="text-sm font-bold text-dm-text">{item.pair}</p>
+                          <p className="text-[10px] text-dm-text3 font-medium">{item.name}</p>
+                        </div>
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-bold text-dm-text">{formatCurrency(itemPrice).replace('$', '')}</p>

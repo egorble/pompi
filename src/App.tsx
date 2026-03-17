@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ThemeProvider } from './context/ThemeContext';
 import { Navbar } from './components/Navbar';
@@ -30,6 +30,12 @@ function AppContent() {
   const [showMobileChart, setShowMobileChart] = useState(false);
   const [showAccount, setShowAccount] = useState(false);
   const [tradeActivityTab, setTradeActivityTab] = useState<'Positions' | 'OpenOrders'>('Positions');
+  const tradeRightPanelRef = useRef<HTMLDivElement>(null);
+
+  const handleTradeActivityTab = useCallback((tab: 'Positions' | 'OpenOrders') => {
+    setTradeActivityTab(tab);
+    tradeRightPanelRef.current?.scrollTo({ top: 0 });
+  }, []);
 
   const { setCurrentMarketId, walletAddress, setTicker, setUsdcBalance, usdcBalance } = useStore();
 
@@ -46,9 +52,9 @@ function AppContent() {
     const fetchMarketData = async () => {
       for (const pair of initialPairs) {
         const mid = getMarketId(pair.pair);
-        try { const t = await apiClient.getTicker(mid); setTicker(mid, t); } catch {}
+        try { const t = await apiClient.getTicker(mid); setTicker(mid, t); } catch { }
       }
-      try { const a = await apiClient.getAccount(walletAddress); setUsdcBalance(a.usdc_balance); } catch {}
+      try { const a = await apiClient.getAccount(walletAddress); setUsdcBalance(a.usdc_balance); } catch { }
     };
     fetchMarketData();
     const interval = setInterval(fetchMarketData, 3000);
@@ -219,14 +225,14 @@ function AppContent() {
                       />
                       <div className="flex gap-4 h-full min-h-0 pb-4">
                         <div className="flex-1 flex flex-col gap-4">
-                           <Chart pair={selectedPair} />
+                          <Chart pair={selectedPair} />
                         </div>
                         <div className="w-[260px] flex-shrink-0">
-                           <OrderBook pair={selectedPair} />
+                          <OrderBook pair={selectedPair} />
                         </div>
                       </div>
                     </motion.div>
-                    <motion.div variants={itemVariants} className="col-span-3 flex flex-col gap-4 overflow-y-auto no-scrollbar min-h-0 h-full pb-4 pr-0">
+                    <motion.div ref={tradeRightPanelRef} variants={itemVariants} className="col-span-3 flex flex-col gap-4 overflow-y-auto no-scrollbar min-h-0 h-full pb-4 pr-0">
                       <ExecutionPanel pair={selectedPair} onPlaceTrade={handlePlaceTrade} />
                       {tradeActivityTab === 'Positions' ? (
                         <Positions
@@ -234,14 +240,13 @@ function AppContent() {
                           onClose={handleClosePosition}
                           onCloseAll={handleCloseAll}
                           customTitle={
-                            <div className="flex relative bg-[#3366FF]/10 rounded-md p-0.5 border border-[#3366FF]/20">
+                            <div className="flex relative bg-white rounded-md p-0.5 border border-dm-border">
                               {['Positions', 'OpenOrders'].map((tab) => (
                                 <button
                                   key={tab}
-                                  onClick={() => setTradeActivityTab(tab as any)}
-                                  className={`relative z-10 py-1 px-3 rounded-md text-[10px] uppercase tracking-wider font-bold transition-all ${
-                                    tradeActivityTab === tab ? 'text-white' : 'text-[#3366FF] hover:text-[#3366FF]/80'
-                                  }`}
+                                  onClick={() => handleTradeActivityTab(tab as any)}
+                                  className={`relative z-10 py-1 px-3 rounded-md text-[10px] uppercase tracking-wider font-bold transition-all ${tradeActivityTab === tab ? 'text-white' : 'text-[#3366FF] hover:text-[#3366FF]/80'
+                                    }`}
                                 >
                                   {tradeActivityTab === tab && (
                                     <motion.div
@@ -262,14 +267,13 @@ function AppContent() {
                           onCancel={(id) => setOrders(orders.filter(o => o.id !== id))}
                           onCancelAll={() => setOrders([])}
                           customTitle={
-                            <div className="flex relative bg-[#3366FF]/10 rounded-md p-0.5 border border-[#3366FF]/20">
+                            <div className="flex relative bg-white rounded-md p-0.5 border border-dm-border">
                               {['Positions', 'OpenOrders'].map((tab) => (
                                 <button
                                   key={tab}
-                                  onClick={() => setTradeActivityTab(tab as any)}
-                                  className={`relative z-10 py-1 px-3 rounded-md text-[10px] uppercase tracking-wider font-bold transition-all ${
-                                    tradeActivityTab === tab ? 'text-white' : 'text-[#3366FF] hover:text-[#3366FF]/80'
-                                  }`}
+                                  onClick={() => handleTradeActivityTab(tab as any)}
+                                  className={`relative z-10 py-1 px-3 rounded-md text-[10px] uppercase tracking-wider font-bold transition-all ${tradeActivityTab === tab ? 'text-white' : 'text-[#3366FF] hover:text-[#3366FF]/80'
+                                    }`}
                                 >
                                   {tradeActivityTab === tab && (
                                     <motion.div
