@@ -26,6 +26,9 @@ interface StoreState {
   isConnected: boolean;
   setIsConnected: (status: boolean) => void;
 
+  hasSeenDashboardAnimation: boolean;
+  setHasSeenDashboardAnimation: (seen: boolean) => void;
+
   walletAddress: string;
   setWalletAddress: (address: string) => void;
 
@@ -52,6 +55,9 @@ export const useStore = create<StoreState>()(
   devtools((set) => ({
     isConnected: false,
     setIsConnected: (status) => set({ isConnected: status }),
+
+    hasSeenDashboardAnimation: false,
+    setHasSeenDashboardAnimation: (seen) => set({ hasSeenDashboardAnimation: seen }),
 
     walletAddress: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', // Anvil account 0
     setWalletAddress: (address) => set({ walletAddress: address }),

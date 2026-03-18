@@ -14,12 +14,12 @@ export function Sidebar({ activeTab, setActiveTab, onSettingsClick }: SidebarPro
   const { isDark, toggle } = useTheme();
 
   const navItems = [
-    { id: 'dashboard', icon: LayoutDashboard },
-    { id: 'Trade', icon: LineChart },
-    { id: 'Positions', icon: Wallet },
-    { id: 'OpenOrders', icon: Box },
-    { id: 'Stats', icon: BarChart3 },
-    { id: 'settings', icon: CircleUserRound },
+    { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { id: 'Trade', icon: LineChart, label: 'Trade' },
+    { id: 'Positions', icon: Wallet, label: 'Positions' },
+    { id: 'OpenOrders', icon: Box, label: 'Open Orders' },
+    { id: 'Stats', icon: BarChart3, label: 'Statistics' },
+    { id: 'settings', icon: CircleUserRound, label: 'Settings' },
   ];
 
   return (
@@ -49,21 +49,36 @@ export function Sidebar({ activeTab, setActiveTab, onSettingsClick }: SidebarPro
               >
                 <Icon size={18} className="relative z-10" strokeWidth={isActive ? 2.5 : 2} />
               </button>
+              
+              <div className="absolute left-[calc(100%+12px)] px-3 py-1.5 bg-dm-surface text-dm-text text-sm font-medium rounded-lg opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 border border-dm-border shadow-lg">
+                {item.label}
+              </div>
             </div>
           );
         })}
       </div>
 
       <div className="mt-auto flex flex-col gap-2 relative z-50">
-        <button 
-          onClick={toggle}
-          className="w-10 h-10 rounded-xl flex items-center justify-center bg-transparent text-dm-text2 hover:text-dm-text hover:bg-dm-surface-strong transition-all duration-200"
-        >
-          {isDark ? <Sun size={18} /> : <Moon size={18} />}
-        </button>
-        <button className="w-10 h-10 rounded-xl flex items-center justify-center bg-transparent text-dm-text2 hover:text-dm-text hover:bg-dm-surface-strong transition-all duration-200">
-           <HeadphonesIcon size={18} />
-        </button>
+        <div className="relative flex items-center justify-center w-full group">
+          <button 
+            onClick={toggle}
+            className="w-10 h-10 rounded-xl flex items-center justify-center bg-transparent text-dm-text2 hover:text-dm-text hover:bg-dm-surface-strong transition-all duration-200"
+          >
+            {isDark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+          <div className="absolute left-[calc(100%+8px)] px-3 py-1.5 bg-dm-surface text-dm-text text-sm font-medium rounded-lg opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 border border-dm-border shadow-lg">
+            {isDark ? 'Light Mode' : 'Dark Mode'}
+          </div>
+        </div>
+
+        <div className="relative flex items-center justify-center w-full group">
+          <button className="w-10 h-10 rounded-xl flex items-center justify-center bg-transparent text-dm-text2 hover:text-dm-text hover:bg-dm-surface-strong transition-all duration-200">
+             <HeadphonesIcon size={18} />
+          </button>
+          <div className="absolute left-[calc(100%+8px)] px-3 py-1.5 bg-dm-surface text-dm-text text-sm font-medium rounded-lg opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 border border-dm-border shadow-lg">
+            Support
+          </div>
+        </div>
       </div>
     </div>
   );
