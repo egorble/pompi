@@ -12,12 +12,32 @@ const LiquidationRiskGauge = ({ risk }: { risk: number }) => {
   const totalBars = 20;
   // Risk goes from 0 to 100
   const activeBars = Math.floor((risk / 100) * totalBars);
+  const targetAngle = risk * 1.8 - 90;
+  
+  const [angle, setAngle] = React.useState(90);
+
+  React.useEffect(() => {
+    // Start swinging to -90 almost immediately
+    const t1 = setTimeout(() => {
+       setAngle(-90);
+    }, 50);
+
+    // After 1 second (when it reaches -90), swing to the actual target
+    const t2 = setTimeout(() => {
+       setAngle(targetAngle);
+    }, 1050);
+
+    return () => {
+       clearTimeout(t1);
+       clearTimeout(t2);
+    };
+  }, [targetAngle]);
   
   return (
     <div className="relative flex flex-col items-center justify-end w-full mt-6" style={{ height: '110px' }}>
       <svg viewBox="0 0 200 100" className="w-[85%] overflow-visible">
         {Array.from({ length: totalBars }).map((_, i) => {
-          const angle = -90 + (180 / (totalBars - 1)) * i;
+          const barAngle = -90 + (180 / (totalBars - 1)) * i;
           const isActive = i <= activeBars;
           return (
             <line 
@@ -26,13 +46,13 @@ const LiquidationRiskGauge = ({ risk }: { risk: number }) => {
               stroke={isActive ? '#3366FF' : 'var(--dm-surface-alt)'}
               strokeWidth="6"
               strokeLinecap="round"
-              transform={`rotate(${angle} 100 100) translate(0, -25)`}
+              transform={`rotate(${barAngle} 100 100) translate(0, -25)`}
               className="transition-all duration-500"
             />
           );
         })}
         {/* Needle */}
-        <g style={{ transform: `rotate(${risk * 1.8 - 90}deg)`, transformOrigin: '100px 100px', transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+        <g style={{ transform: `rotate(${angle}deg)`, transformOrigin: '100px 100px', transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)' }}>
            <circle cx="100" cy="100" r="8" fill="var(--dm-text)" />
            <path d="M 96 100 L 104 100 L 100 25 Z" fill="var(--dm-text)" />
         </g>

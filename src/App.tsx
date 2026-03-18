@@ -22,6 +22,8 @@ import { useStore } from './store';
 import { apiClient } from './api/client';
 import { Side, OrderType } from './api/types';
 import { AccountPanel } from './components/AccountPanel';
+import { SplashScreen } from './components/SplashScreen';
+
 function AppContent() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'Trade' | 'Positions' | 'OpenOrders' | 'Stats'>('dashboard');
   const [selectedPair, setSelectedPair] = useState<Pair>(initialPairs[0]);
@@ -384,9 +386,14 @@ function AppContent() {
 }
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
   return (
     <ThemeProvider>
-      <AppContent />
+      <AnimatePresence>
+        {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
+      </AnimatePresence>
+      {!showSplash && <AppContent />}
     </ThemeProvider>
   );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { LayoutDashboard, Wallet, LineChart, BookOpen, CircleUserRound, Box, BarChart3, HeadphonesIcon, Sun, Moon } from 'lucide-react';
+import { PompiLogo } from './PompiLogo';
 import { useTheme } from '../context/ThemeContext';
 
 interface SidebarProps {
@@ -23,9 +24,8 @@ export function Sidebar({ activeTab, setActiveTab, onSettingsClick }: SidebarPro
 
   return (
     <div className="hidden lg:flex flex-col w-[64px] shrink-0 bg-transparent h-screen py-4 items-center z-50">
-      <div className="mb-8 text-[#3366FF] w-10 h-10 flex items-center justify-center">
-        {/* Placeholder for Logo */}
-        <Box size={24} className="text-[#3366FF] fill-current" />
+      <div className="mb-8 w-10 h-10 flex items-center justify-center">
+        <PompiLogo size={28} animated={false} />
       </div>
       
       <div className="flex flex-col gap-2 flex-1">
